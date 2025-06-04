@@ -2,10 +2,11 @@ import { useRef } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Beranda from './pages/Beranda';
 import Profil from './pages/Profil';
-import Navbar from './components/Navbar'; // Pastikan path ini sesuai dengan struktur folder Anda
+import Navbar from './components/Navbar';
 import './App.css';
 import Layanan from './pages/Layanan';
 import Tentang from './pages/Tentang';
+import Footer from './components/Footer';
 
 function App() {
   // Membuat ref untuk setiap section
@@ -40,7 +41,6 @@ function App() {
 
   return (
     <div className="App">
-      {/* Pass fungsi scroll ke Navbar */}
       <Router>
         <Navbar scrollFunctions={scrollFunctions} />
         
@@ -76,6 +76,10 @@ function App() {
         <div ref={hubungiRef} id="hubungi">
           {/* Konten Hubungi */}
         </div>
+
+        {/* Footer di bagian paling bawah */}
+        <Footer />
+        
       </Router>
     </div>
   );
