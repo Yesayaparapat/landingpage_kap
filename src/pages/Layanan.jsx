@@ -122,7 +122,7 @@ const ServiceCard = ({ service, isHovered, onHover, onLeave, isDesktop = true })
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
     >
-      <div className={`${isDesktop ? 'mb-3 -m-4 mb-4' : 'mb-0'} ${service.color} p-4 ${isDesktop ? 'rounded-t-xl' : ''}`}>
+      <div className={`${isDesktop ? 'mb-3 -m-4 m' : 'mb-0'} ${service.color} p-4 ${isDesktop ? 'rounded-t-xl' : ''}`}>
         <h3 className={`font-bold ${service.textColor} ${isDesktop ? 'text-base' : 'text-sm'} mb-1 tracking-wide ${isDesktop ? '' : 'leading-tight'}`}>
           {service.title}
         </h3>
