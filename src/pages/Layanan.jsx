@@ -1,100 +1,354 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useAnimation, useInView } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
 
-// Helper hook for scroll-triggered animations
-const useScrollAnimation = (threshold = 0.1, once = true) => {
-  const controls = useAnimation();
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once, amount: threshold });
+// 1. Service Data Configuration
+const servicesData = [
+  {
+    id: 'audit',
+    title: 'AUDIT',
+    color: 'bg-green-500',
+    dotColor: 'bg-gray-500',
+    textColor: 'text-white',
+    contentColor: 'text-gray-600',
+    position: { top: '70%', right: '2%' },
+    items: [
+      'General Audit',
+      'Due Diligence',
+      'Management Audit',
+      'Other Attestation Services'
+    ]
+  },
+  {
+    id: 'ppl',
+    title: 'PPL',
+    subtitle: '(Pendidikan & Pelatihan)',
+    color: 'bg-orange-500',
+    dotColor: 'bg-gray-500',
+    textColor: 'text-white',
+    contentColor: 'text-gray-600',
+    position: { top: '0%', right: '2%' },
+    items: [
+      'Akuntansi (Penyusunan Laporan Keuangan)',
+      'Perpajakan'
+    ]
+  },
+  {
+    id: 'accounting',
+    title: 'ACCOUNTING ADVISOR',
+    color: 'bg-gray-600',
+    dotColor: 'bg-gray-500',
+    textColor: 'text-white',
+    contentColor: 'text-gray-600',
+    position: { top: '38.5%', right: '2%' },
+    items: [
+      'IFRS Convergence',
+      'Accounting Advice'
+    ]
+  },
+  {
+    id: 'business',
+    title: 'BUSINESS MANAGEMENT CONSULT',
+    color: 'bg-red-500',
+    dotColor: 'bg-gray-500',
+    textColor: 'text-white',
+    contentColor: 'text-gray-600',
+    position: { bottom: '-22%', left: '2%' },
+    items: [
+      'Financial Consulting',
+      'Capital Restriction',
+      'Merger (Acquisition)',
+      'Design Information Accounting System'
+    ]
+  },
+  {
+    id: 'taxation',
+    title: 'TAXATION',
+    color: 'bg-cyan-500',
+    dotColor: 'bg-gray-500',
+    textColor: 'text-white',
+    contentColor: 'text-gray-600',
+    position: { bottom: '36%', left: '2%' },
+    items: [
+      'Tax Advisor',
+      'Examination of Tax Compliance',
+      'Tax Administration',
+      'Tax Planning',
+      'Transfer Pricing',
+      'Legal Tax'
+    ]
+  }
+];
 
-  useEffect(() => {
-    if (isInView) {
-      controls.start("visible");
-    } else if (!once) {
-      controls.start("hidden");
-    }
-  }, [controls, isInView, once]);
+// 2. Background Component
+const AnimatedBackground = () => (
+  <div className="absolute inset-0 overflow-hidden">
+    <div className="absolute top-6 left-6 w-12 h-12 bg-gray-200/30 rounded-full backdrop-blur-sm border border-gray-300/40" />
+    <div className="absolute top-20 right-12 w-10 h-10 bg-gray-100/40 rounded-lg rotate-45 backdrop-blur-sm border border-gray-300/30" />
+    <div className="absolute bottom-16 left-12 w-8 h-8 bg-slate-200/35 rounded-full backdrop-blur-sm border border-slate-300/45" />
+    <div className="absolute bottom-20 right-20 w-16 h-16 bg-gray-50/50 rounded-lg backdrop-blur-sm border border-gray-200/35" />
+    
+    <div 
+      className="absolute inset-0 opacity-15"
+      style={{
+        backgroundImage: `radial-gradient(circle at 1px 1px, rgba(148, 163, 184, 0.25) 1px, transparent 0)`,
+        backgroundSize: '20px 20px'
+      }}
+    />
+    
+    <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-gray-100/15 backdrop-blur-[1px]" />
+  </div>
+);
 
-  return [ref, controls];
+// 3. Service Card Component
+const ServiceCard = ({ service, isHovered, onHover, onLeave, isDesktop = true }) => {
+  const cardClasses = isDesktop
+    ? `absolute bg-white mt-20 rounded-xl shadow-lg border border-gray-200 p-4 cursor-pointer w-64 backdrop-blur-lg transition-all duration-300 ${
+        isHovered ? 'shadow-xl z-30 transform scale-105 -translate-y-1' : 'z-10'
+      }`
+    : `bg-white rounded-lg shadow-md border border-gray-200 p-0 hover:shadow-lg transition-all duration-300 backdrop-blur-lg hover:scale-102 overflow-hidden`;
+
+  const shadowStyle = isDesktop ? {
+    boxShadow: isHovered 
+      ? '0 20px 40px -10px rgba(0, 0, 0, 0.2), 0 0 25px rgba(0, 0, 0, 0.06)'
+      : '0 8px 20px -2px rgba(0, 0, 0, 0.12), 0 0 12px rgba(0, 0, 0, 0.04)',
+    ...service.position // Apply position from service data
+  } : {
+    boxShadow: '0 6px 20px -4px rgba(0, 0, 0, 0.12), 0 0 12px rgba(0, 0, 0, 0.04)'
+  };
+
+  return (
+    <div
+      className={cardClasses}
+      style={shadowStyle}
+      onMouseEnter={onHover}
+      onMouseLeave={onLeave}
+    >
+      <div className={`${isDesktop ? 'mb-3 -m-4 mb-4' : 'mb-0'} ${service.color} p-4 ${isDesktop ? 'rounded-t-xl' : ''}`}>
+        <h3 className={`font-bold ${service.textColor} ${isDesktop ? 'text-base' : 'text-sm'} mb-1 tracking-wide ${isDesktop ? '' : 'leading-tight'}`}>
+          {service.title}
+        </h3>
+        {service.subtitle && (
+          <div className={`text-xs ${service.textColor} opacity-90 font-medium`}>
+            {service.subtitle}
+          </div>
+        )}
+      </div>
+      
+      <div className={isDesktop ? '' : 'p-4'}>
+        <ul className='space-y-2'>
+          {service.items.map((item, idx) => (
+            <li 
+              key={idx} 
+              className={`text-xs ${service.contentColor} flex items-start leading-relaxed`}
+            >
+              <span className={`w-1.5 h-1.5 ${service.dotColor} rounded-full mt-1.5 mr-2 flex-shrink-0 shadow-sm`} />
+              <span className='font-medium'>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
 };
 
-function RotatingServicesDiagram() {
+// 4. Desktop Service Cards Component
+const DesktopServiceCards = ({ services, hoveredService, setHoveredService }) => (
+  <div className='hidden lg:block relative h-[500px]'>
+    {services.map((service) => (
+      <ServiceCard
+        key={service.id}
+        service={service}
+        isHovered={hoveredService === service.id}
+        onHover={() => setHoveredService(service.id)}
+        onLeave={() => setHoveredService(null)}
+        isDesktop={true}
+      />
+    ))}
+  </div>
+);
+
+// 5. Mobile Service Cards Component
+const MobileServiceCards = ({ services }) => (
+  <div className='lg:hidden max-w-3xl mx-auto px-2'>
+    <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+      {services.map((service) => (
+        <ServiceCard
+          key={service.id}
+          service={service}
+          isHovered={false}
+          onHover={() => {}}
+          onLeave={() => {}}
+          isDesktop={false}
+        />
+      ))}
+    </div>
+  </div>
+);
+
+// 6. Central Hub Component
+const CentralHub = () => (
+  <div 
+    className='absolute top-1/2 left-1/2 w-16 h-16 bg-blue-800 rounded-full transform -translate-x-1/2 -translate-y-1/2 z-30'
+    style={{
+      boxShadow: '0 8px 16px rgba(0,0,0,0.15), 0 0 15px rgba(59, 130, 246, 0.3)'
+    }}
+  >
+    <div className='absolute inset-2 bg-white rounded-full flex items-center justify-center'>
+      <div className='w-6 h-6 bg-red-500 rounded-full'></div>
+    </div>
+  </div>
+);
+
+// 7. Connection Arms Component
+const ConnectionArms = ({ services, hoveredService, getColorValue }) => (
+  <svg className='absolute inset-0 w-full h-full' viewBox="0 0 400 400">
+    {services.map((service, index) => {
+      const centerX = 200;
+      const centerY = 200;
+      const angle = (index * (360 / services.length)) * (Math.PI / 180);
+      const radius = 140;
+      const x = centerX + radius * Math.cos(angle);
+      const y = centerY + radius * Math.sin(angle);
+      
+      const lineColor = hoveredService === service.id 
+                        ? getColorValue(service.color)
+                        : 'rgba(100, 116, 139, 0.6)';
+      const lineStrokeWidth = hoveredService === service.id ? "4" : "2";
+
+      return (
+        <g key={service.id}>
+          <line
+            x1={centerX}
+            y1={centerY}
+            x2={x}
+            y2={y}
+            stroke={lineColor}
+            strokeWidth={lineStrokeWidth}
+            className='transition-all duration-300'
+            style={{
+              filter: hoveredService === service.id ? `drop-shadow(0 0 6px ${lineColor})` : 'none'
+            }}
+          />
+          <circle
+            cx={x}
+            cy={y}
+            r="4"
+            fill={lineColor}
+            className='transition-all duration-300'
+          />
+        </g>
+      );
+    })}
+  </svg>
+);
+
+// 8. Service Node Circles Component
+const ServiceNodeCircles = ({ services, hoveredService, setHoveredService, getColorValue }) => (
+  <>
+    {services.map((service, index) => {
+      const angle = (index * (360 / services.length)) * (Math.PI / 180);
+      const radius = 140;
+      const x = 200 + radius * Math.cos(angle);
+      const y = 200 + radius * Math.sin(angle);
+      
+      const getAbbreviation = (serviceId) => {
+        const abbreviations = {
+          'business': 'BMC',
+          'accounting': 'ACC',
+          'audit': 'AUD',
+          'taxation': 'TAX',
+          'ppl': 'PPL'
+        };
+        return abbreviations[serviceId] || serviceId.substring(0,3).toUpperCase();
+      };
+      
+      return (
+        <div
+          key={service.id}
+          className={`absolute w-20 h-20 ${service.color} rounded-full flex items-center justify-center text-white cursor-pointer z-20 transition-all duration-300 ${
+            hoveredService === service.id ? 'transform scale-110' : ''
+          }`}
+          style={{
+            left: `${x - 40}px`,
+            top: `${y - 40}px`,
+            boxShadow: hoveredService === service.id 
+              ? `0 12px 28px rgba(0, 0, 0, 0.18), 0 0 20px ${getColorValue(service.color)}30`
+              : '0 6px 18px rgba(0, 0, 0, 0.12), 0 0 12px rgba(0, 0, 0, 0.04)',
+          }}
+          onMouseEnter={() => setHoveredService(service.id)}
+          onMouseLeave={() => setHoveredService(null)}
+        >
+          <div className='text-center'>
+            <div className='font-bold text-sm leading-tight px-1'>
+              {getAbbreviation(service.id)}
+            </div>
+          </div>
+          
+          {hoveredService === service.id && (
+            <>
+              <div className='absolute inset-0 rounded-full border-2 border-white opacity-60' />
+              <div className='absolute -inset-2 rounded-full border-2 border-current opacity-30' />
+            </>
+          )}
+        </div>
+      );
+    })}
+  </>
+);
+
+// 9. Central Rotating Mechanism Component
+const CentralRotatingMechanism = ({ services, hoveredService, setHoveredService, rotation, getColorValue }) => (
+  <div className='hidden lg:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
+    <div className='relative w-[400px] h-[400px]'>
+      
+      {/* Outer Ring */}
+      <div 
+        className='absolute inset-0 rounded-full border-2 border-gray-300/60 shadow-inner backdrop-blur-lg'
+        style={{
+          background: 'linear-gradient(145deg, rgba(255,255,255,0.4), rgba(248,250,252,0.2))',
+          boxShadow: 'inset 0 3px 12px rgba(0, 0, 0, 0.06), 0 6px 24px rgba(0, 0, 0, 0.03)'
+        }}
+      />
+      
+      {/* Rotating Container */}
+      <div 
+        className='absolute inset-0 transition-transform duration-75 ease-linear'
+        style={{ transform: `rotate(${rotation}deg)` }}
+      >
+        <CentralHub />
+        <ConnectionArms 
+          services={services} 
+          hoveredService={hoveredService} 
+          getColorValue={getColorValue} 
+        />
+        <ServiceNodeCircles 
+          services={services} 
+          hoveredService={hoveredService} 
+          setHoveredService={setHoveredService}
+          getColorValue={getColorValue}
+        />
+      </div>
+    </div>
+  </div>
+);
+
+// 10. Main Title Component
+const MainTitle = () => (
+  <h1 
+    className='text-center text-2xl md:text-3xl font-bold text-gray-800 uppercase mb-8 lg:mb-0 lg:absolute lg:left-1/2 lg:transform lg:-translate-x-1/2 px-2'
+    style={{
+      textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
+    }}
+  >
+    our range of services 
+  </h1>
+);
+
+// 11. Main Services Diagram Component
+function ModularServicesDiagram() {
   const [hoveredService, setHoveredService] = useState(null);
   const [rotation, setRotation] = useState(0);
 
-  const services = [
-    {
-      id: 'audit',
-      title: 'AUDIT',
-      color: 'bg-green-500',
-      dotColor: 'bg-white',
-      textColor: 'text-white',
-      position: { top: '20%', left: '-2%' },
-      items: [
-        'General Audit',
-        'Due Diligence',
-        'Management Audit',
-        'Other Attestation Services'
-      ]
-    },
-    {
-      id: 'ppl',
-      title: 'PPL',
-      subtitle: '(Pendidikan & Pelatihan)',
-      color: 'bg-orange-500',
-      dotColor: 'bg-white',
-      textColor: 'text-white',
-      position: { top: '15%', right: '-4%' },
-      items: [
-        'Akuntansi (Penyusunan Laporan Keuangan)',
-        'Perpajakan'
-      ]
-    },
-    {
-      id: 'accounting',
-      title: 'ACCOUNTING ADVISOR',
-      color: 'bg-gray-600',
-      dotColor: 'bg-white',
-      textColor: 'text-white',
-      position: { top: '45%', right: '-4%' },
-      items: [
-        'IFRS Convergence',
-        'Accounting Advice'
-      ]
-    },
-    {
-      id: 'business',
-      title: 'BUSINESS MANAGEMENT CONSULT',
-      color: 'bg-red-500',
-      dotColor: 'bg-white',
-      textColor: 'text-white',
-      position: { bottom: '-4%', right: '-4%' },
-      items: [
-        'Financial Consulting',
-        'Capital Restriction',
-        'Merger (Acquisition)',
-        'Design Information Accounting System'
-      ]
-    },
-    {
-      id: 'taxation',
-      title: 'TAXATION',
-      color: 'bg-cyan-500',
-      dotColor: 'bg-white',
-      textColor: 'text-white',
-      position: { bottom: '5%', left: '-2%' },
-      items: [
-        'Tax Advisor',
-        'Examination of Tax Compliance',
-        'Tax Administration',
-        'Tax Planning',
-        'Transfer Pricing',
-        'Legal Tax'
-      ]
-    }
-  ];
-
-  // Smooth auto rotation for the central diagram (desktop only)
+  // Auto rotation effect
   useEffect(() => {
     const interval = setInterval(() => {
       if (!hoveredService) {
@@ -104,162 +358,6 @@ function RotatingServicesDiagram() {
 
     return () => clearInterval(interval);
   }, [hoveredService]);
-
-  // Animation variants
-  const titleVariants = {
-    hidden: { opacity: 0, y: -50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut"
-      }
-    }
-  };
-
-  const sectionWrapperVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-      }
-    }
-  };
-  
-  const cardVariants = {
-    hidden: { opacity: 0, scale: 0.8, y: 20 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut"
-      }
-    },
-    hover: {
-      scale: 1.05,
-      y: -5,
-      boxShadow: "0px 20px 30px -10px rgba(0, 0, 0, 0.3)",
-      transition: {
-        duration: 0.2,
-        ease: "easeOut"
-      }
-    }
-  };
-
-  const mobileCardVariants = {
-    hidden: { opacity: 0, x: -30 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut"
-      }
-    },
-    hover: {
-      scale: 1.02,
-      boxShadow: "0px 10px 20px -5px rgba(0, 0, 0, 0.2)",
-      transition: {
-        duration: 0.2
-      }
-    }
-  };
-  
-  const itemVariants = {
-    hidden: { opacity: 0, x: -10 },
-    visible: (i) => ({
-      opacity: 1,
-      x: 0,
-      transition: {
-        delay: i * 0.05,
-        duration: 0.3
-      }
-    })
-  };
-
-  const centralMechanismParentVariants = {
-    hidden: { opacity: 0, scale: 0.5 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { 
-        duration: 0.8, 
-        ease: "easeOut", 
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
-  };
-
-  const outerRingVariants = {
-    hidden: { scale: 0, opacity: 0 },
-    visible: { scale: 1, opacity: 1, transition: { duration: 0.8, type: "spring", stiffness: 100 } }
-  };
-
-  const rotatingElementVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.5 } }
-  };
-
-  const centerHubVariants = {
-    hidden: { scale: 0, opacity: 0 },
-    visible: { scale: 1, opacity: 1, transition: { duration: 0.6, type: "spring", stiffness: 200, delay:0.1 } }
-  };
-  
-  const svgArmsVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.5, staggerChildren: 0.08 } }
-  };
-
-  const lineVariants = {
-    hidden: { pathLength: 0, opacity: 0 },
-    visible: { pathLength: 1, opacity: 1, transition: { duration: 0.7 } }
-  };
-
-  const nodeVariants = {
-    hidden: { opacity: 0, scale: 0.5 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.4, type: "spring", stiffness: 150 }
-    },
-    hover: {
-      scale: 1.25,
-      transition: {
-        duration: 0.3,
-        ease: "easeOut"
-      }
-    },
-    tap: {
-      scale: 0.95,
-      transition: {
-        duration: 0.1
-      }
-    }
-  };
-
-  const pulseVariants = {
-    initial: { scale: 1, opacity: 0.6 },
-    animate: {
-      scale: [1, 1.4, 1],
-      opacity: [0.6, 0, 0.6],
-      transition: {
-        duration: 2,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }
-  };
-
-  // Setup scroll animations for different sections
-  const [titleRef, titleControls] = useScrollAnimation(0.5);
-  const [desktopSectionRef, desktopSectionControls] = useScrollAnimation(0.1);
-  const [mobileSectionRef, mobileSectionControls] = useScrollAnimation(0.05);
-  const [centralMechanismRef, centralMechanismControls] = useScrollAnimation(0.25);
 
   // Helper function to get Tailwind color values for SVG
   const getColorValue = (bgClass) => {
@@ -274,317 +372,37 @@ function RotatingServicesDiagram() {
   };
 
   return (
-    <motion.div 
-      className='bg-white py-8 lg:py-16 overflow-hidden mt-20'
+    <div 
+      className="relative py-4 lg:py-8 overflow-hidden pt-16 lg:pt-28 px-4"
+      style={{
+        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.92) 30%, rgba(241, 245, 249, 0.88) 70%, rgba(226, 232, 240, 0.85) 100%)',
+        backdropFilter: 'blur(20px)',
+        minHeight: '100vh'
+      }}
     >
-      <div className='relative w-full max-w-7xl mx-auto px-4 lg:h-[800px]'>
+      <AnimatedBackground />
 
-        {/* Main Title */}
-        <motion.h1 
-          ref={titleRef}
-          className='text-center text-4xl md:text-5xl font-bold text-gray-800 uppercase mb-12 lg:mb-0 lg:absolute lg:left-1/2 lg:transform lg:-translate-x-1/2  px-4'
-          initial="hidden"
-          animate={titleControls}
-          variants={titleVariants}
-        >
-          our range of services 
-        </motion.h1>
+      <div className='relative w-full max-w-6xl mx-auto px-2 lg:h-[550px]'>
+        <MainTitle />
         
-        {/* Desktop Service Cards */}
-        <motion.div
-          ref={desktopSectionRef}
-          className='hidden lg:block relative h-[700px]'
-          initial="hidden"
-          animate={desktopSectionControls}
-          variants={sectionWrapperVariants}
-        >
-          <AnimatePresence>
-            {services.map((service) => (
-              <motion.div
-                key={service.id}
-                className={`absolute ${service.color} rounded-2xl shadow-lg border-2 border-opacity-20 border-white p-6 cursor-pointer w-80 ${
-                  hoveredService === service.id 
-                    ? 'shadow-2xl z-30' 
-                    : 'z-10'
-                }`}
-                style={{...service.position}}
-                variants={cardVariants}
-                whileHover="hover"
-                onMouseEnter={() => setHoveredService(service.id)}
-                onMouseLeave={() => setHoveredService(null)}
-              >
-                {/* Card Title Section */}
-                <motion.div 
-                  className='mb-4'
-                  initial={{ opacity: 0 }} 
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.2 }}
-                >
-                  <h3 className={`font-bold ${service.textColor} text-lg mb-1 tracking-wide`}>
-                    {service.title}
-                  </h3>
-                  {service.subtitle && (
-                    <div className={`text-sm ${service.textColor} opacity-90 font-medium`}>{service.subtitle}</div>
-                  )}
-                </motion.div>
-                
-                {/* List of services within the card */}
-                <motion.ul className='space-y-3'>
-                  {service.items.map((item, idx) => (
-                    <motion.li 
-                      key={idx} 
-                      className={`text-sm ${service.textColor} flex items-start leading-relaxed`}
-                      variants={itemVariants}
-                      initial="hidden"
-                      animate="visible"
-                      custom={idx}
-                    >
-                      <motion.span 
-                        className={`w-2 h-2 ${service.dotColor} rounded-full mt-2 mr-3 flex-shrink-0 shadow-sm`}
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ delay: 0.3 + idx * 0.05, type: "spring", stiffness: 200 }}
-                      ></motion.span>
-                      <span className='font-medium opacity-95'>{item}</span>
-                    </motion.li>
-                  ))}
-                </motion.ul>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+        <DesktopServiceCards 
+          services={servicesData} 
+          hoveredService={hoveredService} 
+          setHoveredService={setHoveredService} 
+        />
 
-        {/* Mobile Service Cards */}
-        <motion.div 
-          ref={mobileSectionRef}
-          className='lg:hidden max-w-4xl mx-auto px-4'
-          initial="hidden"
-          animate={mobileSectionControls}
-          variants={sectionWrapperVariants}
-        >
-          <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
-            {services.map((service, index) => (
-              <motion.div
-                key={service.id}
-                className={`${service.color} rounded-xl shadow-md border border-white border-opacity-20 p-6 hover:shadow-lg transition-all duration-300`}
-                variants={mobileCardVariants}
-                whileHover="hover"
-              >
-                {/* Mobile Card Header with Icon and Title */}
-                <motion.div 
-                  className='mb-5 flex items-start'
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  {/* Service Icon */}
-                  
-                  {/* Service Title and Subtitle */}
-                  <div className='flex-1'>
-                    <h3 className={`font-bold ${service.textColor} text-lg mb-1 tracking-wide leading-tight`}>
-                      {service.title}
-                    </h3>
-                    {service.subtitle && (
-                      <div className={`text-sm ${service.textColor} opacity-90 font-medium`}>{service.subtitle}</div>
-                    )}
-                  </div>
-                </motion.div>
-                
-                {/* List of services within the mobile card */}
-                <motion.ul className='space-y-3'>
-                  {service.items.map((item, idx) => (
-                    <motion.li 
-                      key={idx} 
-                      className={`text-sm ${service.textColor} flex items-start leading-relaxed`}
-                      variants={itemVariants}
-                      initial="hidden"
-                      animate="visible"
-                      custom={idx}
-                    >
-                      <motion.span 
-                        className={`w-2 h-2 ${service.dotColor} rounded-full mt-2 mr-3 flex-shrink-0 shadow-sm`}
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ delay: 0.1 + idx * 0.03, type: "spring" }}
-                      ></motion.span>
-                      <span className='font-medium opacity-95'>{item}</span>
-                    </motion.li>
-                  ))}
-                </motion.ul>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+        <MobileServiceCards services={servicesData} />
 
-        {/* Central Rotating Mechanism */}
-        <motion.div 
-          ref={centralMechanismRef}
-          className='hidden lg:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
-          initial="hidden"
-          animate={centralMechanismControls}
-          variants={centralMechanismParentVariants}
-        >
-          <div className='relative w-[600px] h-[600px]'>
-            
-            {/* Outer Ring */}
-            <motion.div 
-              className='absolute inset-0 rounded-full border-4 border-gray-200 bg-gradient-to-br from-white to-gray-50 shadow-inner'
-              variants={outerRingVariants}
-            ></motion.div>
-            
-            {/* Rotating Container */}
-            <motion.div 
-              className='absolute inset-0 transition-transform duration-75 ease-linear'
-              style={{ transform: `rotate(${rotation}deg)` }}
-              variants={rotatingElementVariants}
-            >
-              
-              {/* Center Hub */}
-              <motion.div 
-                className='absolute top-1/2 left-1/2 w-24 h-24 bg-blue-800 rounded-full transform -translate-x-1/2 -translate-y-1/2 z-30 shadow-2xl'
-                variants={centerHubVariants}
-              >
-                <div className='absolute inset-3 bg-white rounded-full flex items-center justify-center'>
-                  <motion.div 
-                    className='w-10 h-10 bg-red-500 rounded-full'
-                    animate={{ 
-                      boxShadow: [
-                        "0 0 0 0 rgba(239, 68, 68, 0.7)",
-                        "0 0 0 10px rgba(239, 68, 68, 0)",
-                        "0 0 0 0 rgba(239, 68, 68, 0)"
-                      ]
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  ></motion.div>
-                </div>
-              </motion.div>
-
-              {/* Connection Arms */}
-              <motion.svg 
-                className='absolute inset-0 w-full h-full' 
-                viewBox="0 0 600 600"
-                variants={svgArmsVariants}
-              >
-                {services.map((service, index) => {
-                  const centerX = 300;
-                  const centerY = 300;
-                  const angle = (index * (360 / services.length)) * (Math.PI / 180);
-                  const radius = 220;
-                  const x = centerX + radius * Math.cos(angle);
-                  const y = centerY + radius * Math.sin(angle);
-                  
-                  const lineColor = hoveredService === service.id 
-                                    ? getColorValue(service.color)
-                                    : '#d1d5db';
-                  const lineStrokeWidth = hoveredService === service.id ? "6" : "3";
-
-                  return (
-                    <g key={service.id}>
-                      <motion.line
-                        x1={centerX}
-                        y1={centerY}
-                        x2={x}
-                        y2={y}
-                        stroke={lineColor}
-                        strokeWidth={lineStrokeWidth}
-                        className='transition-all duration-300'
-                        style={{
-                          filter: hoveredService === service.id ? `drop-shadow(0 0 8px ${lineColor})` : 'none'
-                        }}
-                        variants={lineVariants}
-                      />
-                      <motion.circle
-                        cx={x}
-                        cy={y}
-                        r="6"
-                        fill={lineColor}
-                        className='transition-all duration-300'
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ duration: 0.3, type: "spring", delay: 0.3 }}
-                      />
-                    </g>
-                  );
-                })}
-              </motion.svg>
-
-              {/* Service Node Circles */}
-              {services.map((service, index) => {
-                const angle = (index * (360 / services.length)) * (Math.PI / 180);
-                const radius = 220;
-                const x = 300 + radius * Math.cos(angle);
-                const y = 300 + radius * Math.sin(angle);
-                
-                return (
-                  <motion.div
-                    key={service.id}
-                    className={`absolute w-28 h-28 ${service.color} rounded-full flex items-center justify-center text-white shadow-xl cursor-pointer z-20`}
-                    style={{
-                      left: `${x - 56}px`,
-                      top: `${y - 56}px`,
-                      filter: hoveredService === service.id 
-                        ? 'drop-shadow(0 0 20px rgba(0,0,0,0.4))' 
-                        : 'drop-shadow(0 4px 12px rgba(0,0,0,0.2))',
-                    }}
-                    variants={nodeVariants}
-                    whileHover="hover"
-                    whileTap="tap"
-                    animate={hoveredService === service.id ? "hover" : "visible"}
-                    onMouseEnter={() => setHoveredService(service.id)}
-                    onMouseLeave={() => setHoveredService(null)}
-                  >
-                    <div className='text-center'>
-                      <div className='font-bold text-lg leading-tight px-1'>
-                        {service.id === 'business' ? 'BMC' : 
-                         service.id === 'accounting' ? 'ACC' : 
-                         service.id === 'audit' ? 'AUD' :
-                         service.id === 'taxation' ? 'TAX' :
-                         service.id === 'ppl' ? 'PPL' : service.title.substring(0,3).toUpperCase()}
-                      </div>
-                    </div>
-                    
-                    {/* Animated Ring on Hover */}
-                    <AnimatePresence>
-                      {hoveredService === service.id && (
-                        <>
-                          <motion.div 
-                            className='absolute inset-0 rounded-full border-3 border-white'
-                            variants={pulseVariants}
-                            initial="initial"
-                            animate="animate"
-                            exit={{ opacity: 0, scale: 1 }}
-                          />
-                          <motion.div 
-                            className='absolute -inset-3 rounded-full border-2 border-current opacity-30'
-                            initial={{ scale: 0.8, opacity: 0 }}
-                            animate={{ scale: 1.15, opacity: 0.3 }}
-                            exit={{ scale: 0.8, opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                          />
-                        </>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-          </div>
-        </motion.div>
-
+        <CentralRotatingMechanism 
+          services={servicesData}
+          hoveredService={hoveredService}
+          setHoveredService={setHoveredService}
+          rotation={rotation}
+          getColorValue={getColorValue}
+        />
       </div>
-
-      <style jsx>{`
-        @keyframes float {
-          0% { opacity: 0.4; transform: scale(0.8); }
-          100% { opacity: 1; transform: scale(1.2); }
-        }
-      `}</style>
-    </motion.div>
+    </div>
   );
 }
 
-export default RotatingServicesDiagram;
+export default ModularServicesDiagram;

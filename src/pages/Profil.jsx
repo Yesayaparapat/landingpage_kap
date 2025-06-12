@@ -1,446 +1,194 @@
-import React from 'react'
-import { motion, useInView } from "framer-motion";
-import { useRef } from 'react';
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion"; // Mengimpor framer-motion untuk efek gerakan
+import Gambarkantor from "../assets/logo kap.png";
+import { useNavigate } from 'react-router-dom'; 
 
 function Profil() {
-  // Create refs for each section to track scroll position
-  const headerRef = useRef(null);
-  const introRef = useRef(null);
-  const historyRef = useRef(null);
-  const visionRef = useRef(null);
-  const valuesRef = useRef(null);
-  const footerRef = useRef(null);
+  const [inView, setInView] = useState(false); // State untuk mengecek apakah elemen ada di dalam viewport
+    const navigate = useNavigate();
+  // Fungsi untuk menangani event scroll
+  const handleScroll = () => {
+    const scrollPosition = window.scrollY; // Mendapatkan posisi scroll saat ini
+    const triggerPosition = window.innerHeight / 1.3; // Menentukan posisi trigger animasi saat elemen berada 1/3 di viewport
 
-  // Track which sections are in view
-  const isHeaderInView = useInView(headerRef, { once: true, margin: "-100px" });
-  const isIntroInView = useInView(introRef, { once: true, margin: "-100px" });
-  const isHistoryInView = useInView(historyRef, { once: true, margin: "-100px" });
-  const isVisionInView = useInView(visionRef, { once: true, margin: "-100px" });
-  const isValuesInView = useInView(valuesRef, { once: true, margin: "-100px" });
-  const isFooterInView = useInView(footerRef, { once: true, margin: "-100px" });
-
-  // Animation variants
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 60 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut"
-      }
+    if (scrollPosition > triggerPosition) {
+      setInView(true); // Menetapkan state inView menjadi true saat elemen masuk ke dalam viewport
+    } else {
+      setInView(false); // Mengatur inView ke false saat elemen keluar dari viewport
     }
   };
 
-  const fadeInLeft = {
-    hidden: { opacity: 0, x: -50 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut"
-      }
-    }
-  };
+  useEffect(() => {
+    // Menambahkan event listener untuk scroll
+    window.addEventListener("scroll", handleScroll);
 
-  const fadeInRight = {
-    hidden: { opacity: 0, x: 50 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut"
-      }
-    }
-  };
+    // Membersihkan event listener ketika komponen tidak lagi digunakan
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
-  const scaleIn = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut"
-      }
-    }
-  };
+  // Menangani navigasi untuk tombol 'Selengkapnya'
+  const handleSelengkapnyaClick = () => {
+  try {
+      // Navigasi ke halaman '/profil-kami' menggunakan React Router
+      navigate('/profil-kami'); // Pastikan route ini sudah ada di konfigurasi React Router Anda
 
-  const staggerContainer = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.1
-      }
-    }
-  };
-
-  const cardHover = {
-    hover: {
-      scale: 1.02,
-      y: -5,
-      boxShadow: "0 15px 30px rgba(0,0,0,0.15)",
-      transition: {
-        duration: 0.3,
-        ease: "easeOut"
-      }
+      console.log("Navigating to profil-kami page...");
+    } catch (error) {
+      console.error("Error navigating:", error);
+      alert("Halaman sedang dalam pengembangan");
     }
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-white overflow-hidden">
-      {/* Header */}
-      <motion.div 
-        ref={headerRef}
-        className="text-center mb-12"
-        initial="hidden"
-        animate={isHeaderInView ? "visible" : "hidden"}
-        variants={fadeInUp}
+    <div className="min-h-screen max-w-6xl mx-auto p-6 bg-white overflow-hidden pt-32 lg:pt-25 px-6">
+      {/* Header dengan efek motion */}
+      <motion.div
+        className="text-center mt-12"
+        initial={{ opacity: 0, x: -100 }} // Status awal untuk animasi gerakan dari kiri ke kanan
+        animate={{ opacity: inView ? 1 : 0, x: inView ? 0 : -100 }} // Memicu animasi saat elemen muncul di viewport
+        transition={{ duration: 0.5 }} // Durasi transisi
       >
-        <motion.h1 
-          className="text-4xl font-bold text-blue-900 mb-4"
-          variants={scaleIn}
-        >
-          Kantor Akuntan Publik Jamaster Simanullang
-        </motion.h1>
-        <motion.div 
-          className="w-24 h-1 bg-blue-600 mx-auto"
-          initial={{ width: 0, opacity: 0 }}
-          animate={isHeaderInView ? { width: 96, opacity: 1 } : { width: 0, opacity: 0 }}
-          transition={{ duration: 1, delay: 0.5 }}
-        />
+        <h1 className="text-4xl font-bold">
+          Kantor Akuntan Publik <br />
+          <span className="text-blue-900 inline-block">
+            Jamaster Simanullang
+          </span>
+        </h1>
       </motion.div>
 
-      {/* Pendahuluan dan Sejarah Section - Side by Side */}
-      <section className="mb-12">
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Pendahuluan */}
-          <motion.div
-            ref={introRef}
-            initial="hidden"
-            animate={isIntroInView ? "visible" : "hidden"}
-            variants={fadeInLeft}
-            whileHover="hover"
-          >
-            <motion.h2 
-              className="text-2xl font-semibold text-gray-800 mb-6 border-l-4 border-blue-600 pl-4"
-              variants={fadeInLeft}
-            >
-              Pendahuluan
-            </motion.h2>
-            <motion.div 
-              className="bg-gray-50 p-6 rounded-lg h-full"
-              variants={{
-                ...cardHover,
-                visible: {
-                  opacity: 1,
-                  scale: 1,
-                  transition: {
-                    duration: 0.8,
-                    delay: 0.2
-                  }
-                },
-                hidden: {
-                  opacity: 0,
-                  scale: 0.95
-                }
-              }}
-              whileHover="hover"
-            >
-              <motion.p 
-                className="text-gray-700 leading-relaxed mb-4"
-                initial={{ opacity: 0 }}
-                animate={isIntroInView ? { opacity: 1 } : { opacity: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-              >
-                Kantor Akuntan Publik Jamaster Simanullang (KAP Jamaster Simanullang) berdiri sejak November 2017. 
-                Sejak awal berdiri, kami telah berkomitmen untuk berperan serta dalam meningkatkan kemajuan 
-                perekonomian nasional dengan menjalankan setiap layanan akuntansi dengan penuh independensi, 
-                integritas, dan kompetensi.
-              </motion.p>
-              <motion.p 
-                className="text-gray-700 leading-relaxed"
-                initial={{ opacity: 0 }}
-                animate={isIntroInView ? { opacity: 1 } : { opacity: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-              >
-                Kami menyediakan berbagai layanan seperti audit laporan keuangan, konsultasi perpajakan, 
-                dan penyusunan laporan keuangan yang handal, terpercaya, serta tertib administrasi perpajakan. 
-                Semua layanan kami berpedoman pada Standar Akuntansi Keuangan (SAK), yang diakui secara luas di Indonesia.
-              </motion.p>
-            </motion.div>
-          </motion.div>
-
-          {/* Sejarah Perusahaan */}
-          <motion.div
-            ref={historyRef}
-            initial="hidden"
-            animate={isHistoryInView ? "visible" : "hidden"}
-            variants={fadeInRight}
-            whileHover="hover"
-          >
-            <motion.h2 
-              className="text-2xl font-semibold text-gray-800 mb-6 border-l-4 border-blue-600 pl-4"
-              variants={fadeInRight}
-            >
-              Sejarah Perusahaan
-            </motion.h2>
-            <motion.div 
-              className="bg-gray-50 p-6 rounded-lg h-full"
-              variants={{
-                ...cardHover,
-                visible: {
-                  opacity: 1,
-                  scale: 1,
-                  transition: {
-                    duration: 0.8,
-                    delay: 0.2
-                  }
-                },
-                hidden: {
-                  opacity: 0,
-                  scale: 0.95
-                }
-              }}
-              whileHover="hover"
-            >
-              <motion.p 
-                className="text-gray-700 leading-relaxed"
-                initial={{ opacity: 0 }}
-                animate={isHistoryInView ? { opacity: 1 } : { opacity: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-              >
-                KAP Jamaster Simanullang didirikan oleh Jamaster Simanullang, seorang akuntan publik berlisensi 
-                yang memiliki visi untuk membantu entitas di Indonesia dalam memastikan laporan keuangan mereka 
-                dapat diyakini dan memenuhi standar yang diterima umum. Seiring berjalannya waktu, kantor kami 
-                berkembang dengan layanan yang terus meningkat sesuai dengan kebutuhan dunia bisnis yang semakin kompleks.
-              </motion.p>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Visi dan Misi Section */}
-      <motion.section 
-        ref={visionRef}
-        className="mb-12"
-        initial="hidden"
-        animate={isVisionInView ? "visible" : "hidden"}
-        variants={staggerContainer}
+      {/* Bagian konten utama dengan efek motion */}
+      <motion.section
+        className="mb-12 relative"
+        initial={{ opacity: 0 }} // Status awal
+        animate={{ opacity: inView ? 1 : 0 }} // Memicu animasi saat elemen muncul di viewport
+        transition={{ duration: 0.6 }} // Durasi transisi
       >
-        <motion.h2 
-          className="text-2xl font-semibold text-gray-800 mb-6 border-l-4 border-blue-600 pl-4"
-          variants={fadeInUp}
-        >
-          Visi dan Misi
-        </motion.h2>
         <div className="grid md:grid-cols-2 gap-8">
-          {/* Visi */}
-          <motion.div 
-            className="p-6 rounded-lg"
-            variants={fadeInLeft}
-            whileHover="hover"
+          {/* Konten dengan efek motion */}
+          <motion.div
+            className="p-6 rounded-lg h-full mt-15"
+            initial={{ opacity: 0, x: -100 }} // Status awal untuk animasi gerakan kiri ke kanan
+            animate={{ opacity: inView ? 1 : 0, x: inView ? 0 : -100 }} // Memicu animasi saat elemen masuk ke dalam viewport
+            transition={{ duration: 0.7 }} // Durasi transisi
           >
-            <motion.h3 
-              className="text-xl font-semibold mb-4 flex items-center bg-gradient-to-br from-blue-600 to-blue-800 text-white p-2 rounded-xl"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.2 }}
+            {/* Judul dengan efek motion */}
+            <motion.h2
+              className="text-2xl font-bold text-blue-900 mb-4"
+              initial={{ opacity: 0, x: -100 }} // Status awal untuk judul
+              animate={{ opacity: inView ? 1 : 0, x: inView ? 0 : -100 }} // Memicu animasi saat elemen muncul
+              transition={{ duration: 0.6, delay: 0.3 }} // Durasi transisi dengan penundaan
             >
-              <motion.span 
-                className="bg-white text-blue-600 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3"
-                whileHover={{ rotate: 360 }}
-                transition={{ duration: 0.5 }}
-              >
-                V
-              </motion.span>
-              Visi
-            </motion.h3>
-            <motion.p 
-              className="leading-relaxed"
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { 
-                  opacity: 1, 
-                  y: 0,
-                  transition: { duration: 0.6, delay: 0.3 }
-                }
-              }}
+              Profile kami
+            </motion.h2>
+
+            {/* Paragraf pertama dengan efek motion */}
+            <motion.p
+              className="text-gray-700 leading-relaxed mb-4"
+              initial={{ opacity: 0, x: -100 }} // Status awal untuk paragraf pertama
+              animate={{ opacity: inView ? 1 : 0, x: inView ? 0 : -100 }} // Memicu animasi saat elemen muncul
+              transition={{ duration: 0.6, delay: 0.5 }} // Durasi transisi dengan penundaan
             >
-              Menjadi kantor akuntan yang profesional, handal, terpercaya, dan berwatak sosial, 
-              berlandaskan kepada Tuhan Yang Maha Esa, serta mendukung tercapainya kemajuan klien 
-              dengan tetap memegang prinsip independensi.
+              <strong>
+                Kantor Akuntan Publik Jamaster Simanullang (KAP Jamaster
+                Simanullang)
+              </strong>{" "}
+              berdiri sejak November 2017. Sejak awal berdiri, kami telah
+              berkomitmen untuk berperan serta dalam meningkatkan kemajuan
+              perekonomian nasional dengan menjalankan setiap layanan akuntansi
+              dengan penuh independensi, integritas, dan kompetensi.
             </motion.p>
+
+            {/* Paragraf kedua dengan efek motion */}
+            <motion.p
+              className="text-gray-700 leading-relaxed mb-6"
+              initial={{ opacity: 0, x: -100 }} // Status awal untuk paragraf kedua
+              animate={{ opacity: inView ? 1 : 0, x: inView ? 0 : -100 }} // Memicu animasi saat elemen muncul
+              transition={{ duration: 0.6, delay: 0.7 }} // Durasi transisi dengan penundaan
+            >
+              Kami menyediakan berbagai layanan seperti audit laporan keuangan,
+              konsultasi perpajakan, dan penyusunan laporan keuangan yang
+              handal, terpercaya, serta tertib administrasi perpajakan. Semua
+              layanan kami berpedoman pada Standar Akuntansi Keuangan (SAK),
+              yang diakui secara luas di Indonesia.
+            </motion.p>
+
+            {/* Tombol dengan efek motion */}
+            <motion.button 
+  className="mt-5 bg-gradient-to-r from-blue-900 to-blue-700 hover:from-blue-800 hover:to-blue-600 text-white font-semibold py-3 px-8 rounded-lg shadow-lg flex items-center group cursor-pointer"
+  onClick={handleSelengkapnyaClick}
+  initial={{ 
+    opacity: 0, 
+    x: -150, // Diperbesar jarak awal dari kiri
+    scale: 0.8 // Tambahan efek scale untuk dramatis
+  }}
+  animate={{ 
+    opacity: inView ? 1 : 0, 
+    x: inView ? 0 : -150,
+    scale: inView ? 1 : 0.8
+  }}
+  whileHover={{
+    scale: 1.05,
+    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+  }}
+  whileTap={{ scale: 0.98 }}
+  transition={{
+    duration: 1.5, // Diperlama dari 0.6 menjadi 1.2 detik
+    ease: [0.25, 0.46, 0.45, 0.94], // Easing yang lebih smooth dan natural
+    delay: 0.3 // Tambahan delay sebelum animasi dimulai
+  }}
+>
+  Selengkapnya
+  <motion.svg
+    className="w-5 h-5 ml-2"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    initial={{ x: -10, opacity: 0 }} // Animasi terpisah untuk ikon
+    animate={{ 
+      x: inView ? 0 : -10, 
+      opacity: inView ? 1 : 0 
+    }}
+    whileHover={{ x: 4 }}
+    transition={{ 
+      duration: 1.2,
+      delay: 0.6, // Ikon muncul setelah button mulai slide
+      ease: [0.25, 0.46, 0.45, 0.94]
+    }}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M9 5l7 7-7 7"
+    />
+  </motion.svg>
+</motion.button>
           </motion.div>
 
-          {/* Misi */}
-          <motion.div 
-            className="p-6 rounded-lg"
-            variants={fadeInRight}
-            whileHover="hover"
+          {/* Gambar dengan efek motion dari kanan ke kiri */}
+          <motion.div
+            className="flex justify-center items-center"
+            initial={{ opacity: 0, x: 100 }} // Status awal untuk gerakan kanan ke kiri
+            animate={{ opacity: inView ? 1 : 0, x: inView ? 0 : 100 }} // Memicu animasi saat elemen muncul
+            transition={{ duration: 0.6 }} // Durasi transisi
           >
-            <motion.h3 
-              className="text-xl font-semibold mb-4 flex items-center bg-gradient-to-br from-green-600 to-green-800 text-white p-2 rounded-xl"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.2 }}
-            >
-              <motion.span 
-                className="bg-white text-green-600 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3"
-                whileHover={{ rotate: 360 }}
-                transition={{ duration: 0.5 }}
-              >
-                M
-              </motion.span>
-              Misi
-            </motion.h3>
-            <motion.p 
-              className="leading-relaxed"
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { 
-                  opacity: 1, 
-                  y: 0,
-                  transition: { duration: 0.6, delay: 0.3 }
-                }
-              }}
-            >
-              Memberikan jasa profesional berkualitas dan berstandar tinggi dengan menjunjung tinggi 
-              integritas, independensi, dan kompetisi demi mencapai tujuan bisnis klien secara 
-              efektif dan efisien.
-            </motion.p>
+            <div>
+              {/* Logo KAP Jamaster Simanullang */}
+              <div className="flex justify-center items-center ">
+                <img
+                  className="w-[400px] mt-10 "
+                  src={Gambarkantor}
+                  alt="gambar kantor"
+                />
+              </div>
+            </div>
           </motion.div>
         </div>
       </motion.section>
-
-      {/* Key Values */}
-      <motion.section 
-        ref={valuesRef}
-        className="mb-12"
-        initial="hidden"
-        animate={isValuesInView ? "visible" : "hidden"}
-        variants={staggerContainer}
-      >
-        <motion.h2 
-          className="text-2xl font-semibold text-gray-800 mb-6 border-l-4 border-blue-600 pl-4"
-          variants={fadeInUp}
-        >
-          Nilai-Nilai Utama
-        </motion.h2>
-        <motion.div 
-          className="grid md:grid-cols-3 gap-6"
-          variants={staggerContainer}
-        >
-          {[
-            { color: 'blue', letter: 'I', title: 'Independensi', desc: 'Menjaga objektivitas dalam setiap layanan profesional' },
-            { color: 'green', letter: 'I', title: 'Integritas', desc: 'Berkomitmen pada kejujuran dan transparansi' },
-            { color: 'purple', letter: 'K', title: 'Kompetensi', desc: 'Memberikan layanan dengan keahlian profesional tinggi' }
-          ].map((value, index) => (
-            <motion.div 
-              key={index}
-              className="text-center p-6 bg-white border-2 border-gray-200 rounded-lg hover:border-blue-400 transition-colors"
-              variants={{
-                hidden: { 
-                  opacity: 0, 
-                  y: 80,
-                  scale: 0.8
-                },
-                visible: { 
-                  opacity: 1, 
-                  y: 0,
-                  scale: 1,
-                  transition: {
-                    duration: 0.8,
-                    ease: "easeOut"
-                  }
-                }
-              }}
-              whileHover={{ 
-                y: -10,
-                scale: 1.05,
-                boxShadow: "0 15px 30px rgba(0,0,0,0.15)",
-                transition: { duration: 0.3 }
-              }}
-            >
-              <motion.div 
-                className={`w-16 h-16 bg-${value.color}-100 rounded-full flex items-center justify-center mx-auto mb-4`}
-                whileHover={{ scale: 1.2, rotate: 10 }}
-                transition={{ duration: 0.3 }}
-              >
-                <span className={`text-${value.color}-600 font-bold text-xl`}>{value.letter}</span>
-              </motion.div>
-              <motion.h3 
-                className="font-semibold text-gray-800 mb-2"
-                variants={{
-                  hidden: { opacity: 0 },
-                  visible: { 
-                    opacity: 1,
-                    transition: { duration: 0.5, delay: 0.2 }
-                  }
-                }}
-              >
-                {value.title}
-              </motion.h3>
-              <motion.p 
-                className="text-gray-600 text-sm"
-                variants={{
-                  hidden: { opacity: 0 },
-                  visible: { 
-                    opacity: 1,
-                    transition: { duration: 0.5, delay: 0.3 }
-                  }
-                }}
-              >
-                {value.desc}
-              </motion.p>
-            </motion.div>
-          ))}
-        </motion.div>
-      </motion.section>
-
-      {/* Contact Info Footer */}
-      <motion.div 
-        ref={footerRef}
-        className="text-center pt-8 border-t border-gray-200"
-        initial="hidden"
-        animate={isFooterInView ? "visible" : "hidden"}
-        variants={fadeInUp}
-      >
-        <motion.p 
-          className="text-gray-600"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.2 }}
-          variants={{
-            hidden: { opacity: 0, y: 20 },
-            visible: { 
-              opacity: 1, 
-              y: 0,
-              transition: { duration: 0.6 }
-            }
-          }}
-        >
-          <span className="font-semibold">Berdiri sejak:</span> November 2017
-        </motion.p>
-        <motion.p 
-          className="text-gray-600 mt-2"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.2 }}
-          variants={{
-            hidden: { opacity: 0, y: 20 },
-            visible: { 
-              opacity: 1, 
-              y: 0,
-              transition: { duration: 0.6, delay: 0.2 }
-            }
-          }}
-        >
-          <span className="font-semibold">Standar:</span> Standar Akuntansi Keuangan (SAK)
-        </motion.p>
-      </motion.div>
     </div>
-  )
+  );
 }
 
-export default Profil
+export default Profil;

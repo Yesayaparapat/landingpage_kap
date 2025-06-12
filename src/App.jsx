@@ -1,29 +1,41 @@
-import { useRef } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Beranda from './pages/Beranda';
-import Profil from './pages/Profil';
-import Navbar from './components/Navbar';
-import './App.css';
-import Layanan from './pages/Layanan';
-import Tentang from './pages/Tentang';
-import Footer from './components/Footer';
+import { useRef, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
+import Beranda from "./pages/Beranda";
+import Profil from "./pages/Profil";
+import Navbar from "./components/Navbar";
+import "./App.css";
+import Layanan from "./pages/Layanan";
+import Tentang from "./pages/Tentang";
+import Footer from "./components/Footer";
+import ProfilKami from "./pages/ProfilKami";
+import Tentangkami from "./pages/Tentangkami";
+import Legal from "./pages/Legal";
+import Klien from "./pages/Klien";
+import Hubungi from "./pages/Hubungi";
 
-function App() {
+// Komponen untuk halaman utama (single page)
+function HomePage() {
+  const location = useLocation();
+
   // Membuat ref untuk setiap section
   const berandaRef = useRef(null);
   const profilRef = useRef(null);
   const tentangRef = useRef(null);
   const layananRef = useRef(null);
-  const rekananRef = useRef(null);
+  const legalRef = useRef(null);
   const klienRef = useRef(null);
-  const beritaRef = useRef(null);
   const hubungiRef = useRef(null);
 
   // Fungsi untuk scroll ke section tertentu
   const scrollToSection = (sectionRef) => {
-    sectionRef.current?.scrollIntoView({ 
-      behavior: 'smooth',
-      block: 'start'
+    sectionRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
     });
   };
 
@@ -33,53 +45,105 @@ function App() {
     profil: () => scrollToSection(profilRef),
     tentang: () => scrollToSection(tentangRef),
     layanan: () => scrollToSection(layananRef),
-    rekanan: () => scrollToSection(rekananRef),
+    legal: () => scrollToSection(legalRef),
     klien: () => scrollToSection(klienRef),
-    berita: () => scrollToSection(beritaRef),
+
     hubungi: () => scrollToSection(hubungiRef),
   };
 
+  // Handle hash navigation
+  useEffect(() => {
+    const hash = location.hash.replace("#", "");
+    if (hash && scrollFunctions[hash]) {
+      // Delay sedikit untuk memastikan komponen sudah ter-render
+      setTimeout(() => {
+        scrollFunctions[hash]();
+      }, 100);
+    }
+  }, [location.hash]);
+
+  return (
+    <>
+      <Navbar scrollFunctions={scrollFunctions} />
+
+      {/* Semua section dalam satu halaman */}
+      <div ref={berandaRef} id="beranda">
+        <Beranda />
+      </div>
+
+      <div ref={profilRef} id="profil">
+        <Profil />
+      </div>
+
+      <div ref={tentangRef} id="tentang">
+        <Tentang />
+      </div>
+
+      <div ref={layananRef} id="layanan">
+        <Layanan />
+      </div>
+
+      <div ref={legalRef} id="legal">
+        <Legal />
+      </div>
+
+      <div ref={klienRef} id="klien">
+        <Klien />
+      </div>
+
+      <div ref={hubungiRef} id="hubungi">
+        <Hubungi />
+      </div>
+
+      {/* Footer di bagian paling bawah */}
+      <Footer />
+    </>
+  );
+}
+
+function App() {
   return (
     <div className="App">
       <Router>
-        <Navbar scrollFunctions={scrollFunctions} />
-        
-        {/* Semua section dalam satu halaman */}
-        <div ref={berandaRef} id="beranda">
-          <Beranda />
-        </div>
-        
-        <div ref={profilRef} id="profil">
-          <Profil />
-        </div>
+        <Routes>
+          {/* Route untuk halaman utama */}
+          <Route path="/" element={<HomePage />} />
 
-        <div ref={tentangRef} id="tentang">
-          <Tentang />
-        </div>
+          {/* Route untuk halaman detail profil */}
+          <Route
+            path="/profil-kami"
+            element={
+              <>
+                <Navbar />
+                <ProfilKami />
+                <Footer />
+              </>
+            }
+          />
 
-        <div ref={layananRef} id="layanan">
-          <Layanan />
-        </div>
+          {/* Route untuk halaman tentang kami */}
+          <Route
+            path="/tentang-kami"
+            element={
+              <>
+                <Navbar />
+                <Tentangkami />
+                <Footer />
+              </>
+            }
+          />
 
-        <div ref={rekananRef} id="rekanan">
-          {/* Konten Rekanan */}
-        </div>
-
-        <div ref={klienRef} id="klien">
-          {/* Konten Klien */}
-        </div>
-
-        <div ref={beritaRef} id="berita">
-          {/* Konten Berita */}
-        </div>
-
-        <div ref={hubungiRef} id="hubungi">
-          {/* Konten Hubungi */}
-        </div>
-
-        {/* Footer di bagian paling bawah */}
-        <Footer />
-        
+          {/* Route testing - hapus setelah berhasil */}
+          <Route
+            path="/test"
+            element={
+              <div style={{ padding: "20px" }}>
+                <h1>Test Route Berhasil!</h1>
+                <p>Jika Anda melihat halaman ini, routing sudah berfungsi.</p>
+              </div>
+            }
+          />
+        </Routes>
       </Router>
     </div>
   );

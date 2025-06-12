@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import LogoKap from "../assets/logo kap.png";
 
 const Navbar = ({ textColor = 'gray', bgColor = 'bg-white md:bg-transparent', scrollFunctions }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Effect untuk mendeteksi scroll
   useEffect(() => {
@@ -35,12 +38,83 @@ const Navbar = ({ textColor = 'gray', bgColor = 'bg-white md:bg-transparent', sc
     setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
   };
 
-  // Handle scroll ke section
-  const handleScrollClick = (sectionName) => {
-    if (scrollFunctions && scrollFunctions[sectionName]) {
+  // Handle navigasi - mendukung scroll dan routing
+  const handleNavigation = (sectionName) => {
+    // Jika ada scrollFunctions dan kita di halaman utama, gunakan scroll
+    if (scrollFunctions && scrollFunctions[sectionName] && location.pathname === '/') {
       scrollFunctions[sectionName]();
-      setIsMenuOpen(false); // Tutup mobile menu setelah klik
+      setIsMenuOpen(false);
+      return;
     }
+
+    // Jika tidak ada scrollFunctions atau bukan di halaman utama, navigate ke route yang sesuai
+    switch (sectionName) {
+      case 'beranda':
+        navigate('/');
+        break;
+      case 'profil':
+        if (location.pathname === '/') {
+          // Jika di halaman utama, scroll ke section
+          if (scrollFunctions && scrollFunctions[sectionName]) {
+            scrollFunctions[sectionName]();
+          }
+        } else {
+          // Jika di halaman lain, kembali ke halaman utama dengan hash
+          navigate('/#profil');
+        }
+        break;
+      case 'tentang':
+        if (location.pathname === '/') {
+          // Jika di halaman utama, scroll ke section
+          if (scrollFunctions && scrollFunctions[sectionName]) {
+            scrollFunctions[sectionName]();
+          }
+        } else {
+          // Jika di halaman lain, kembali ke halaman utama dengan hash
+          navigate('/#tentang');
+        }
+        break;
+      case 'layanan':
+        if (location.pathname === '/') {
+          if (scrollFunctions && scrollFunctions[sectionName]) {
+            scrollFunctions[sectionName]();
+          }
+        } else {
+          navigate('/#layanan');
+        }
+        break;
+      case 'legal':
+        if (location.pathname === '/') {
+          if (scrollFunctions && scrollFunctions[sectionName]) {
+            scrollFunctions[sectionName]();
+          }
+        } else {
+          navigate('/#legal');
+        }
+        break;
+      case 'klien':
+        if (location.pathname === '/') {
+          if (scrollFunctions && scrollFunctions[sectionName]) {
+            scrollFunctions[sectionName]();
+          }
+        } else {
+          navigate('/#klien');
+        }
+        break;
+      case 'hubungi':
+        if (location.pathname === '/') {
+          if (scrollFunctions && scrollFunctions[sectionName]) {
+            scrollFunctions[sectionName]();
+          }
+        } else {
+          navigate('/#hubungi');
+        }
+        break;
+      default:
+        break;
+    }
+    
+    setIsMenuOpen(false);
   };
 
   const menuItems = [   
@@ -50,9 +124,8 @@ const Navbar = ({ textColor = 'gray', bgColor = 'bg-white md:bg-transparent', sc
       section: 'tentang',
     },
     { name: 'LAYANAN', section: 'layanan' },
-    { name: 'REKANAN', section: 'rekanan' },
+    { name: 'LEGALITAS', section: 'legal' },
     { name: 'KLIEN', section: 'klien' },
-    { name: 'BERITA', section: 'berita' },
     { name: 'HUBUNGI KAMI', section: 'hubungi' }
   ];
 
@@ -61,7 +134,6 @@ const Navbar = ({ textColor = 'gray', bgColor = 'bg-white md:bg-transparent', sc
   const textColorClass = isScrolled ? 'text-gray-800' : 'text-white';
   const logoTextColor = isScrolled ? 'text-gray-800' : 'text-white';
   const brandTextColor = isScrolled ? 'text-blue-700' : 'text-blue-700';
-  const mobileButtonColor = isScrolled ? 'text-gray-800 hover:text-blue-400 hover:bg-gray-100' : 'text-white hover:text-blue-400 hover:bg-gray-100 hover:bg-opacity-10';
 
   return (
     <>
@@ -73,7 +145,7 @@ const Navbar = ({ textColor = 'gray', bgColor = 'bg-white md:bg-transparent', sc
             <div className="flex-shrink-0 flex items-center">
               <div 
                 className="flex items-center space-x-3 cursor-pointer"
-                onClick={() => handleScrollClick('beranda')}
+                onClick={() => handleNavigation('beranda')}
               >
                 {/* Logo Container */}
                 <div className="w-20 h-20 flex items-center justify-center">
@@ -108,7 +180,7 @@ const Navbar = ({ textColor = 'gray', bgColor = 'bg-white md:bg-transparent', sc
                     <button
                       style={{ fontFamily: 'Open Sans, sans-serif' }}
                       className="flex items-center px-3 py-2 text-sm text-white hover:text-blue-400 hover:bg-gray-50 hover:bg-opacity-10 rounded-md transition-all duration-300"
-                      onClick={() => handleScrollClick(item.section)}
+                      onClick={() => handleNavigation(item.section)}
                     >
                       {item.name}
                     </button>
@@ -122,7 +194,7 @@ const Navbar = ({ textColor = 'gray', bgColor = 'bg-white md:bg-transparent', sc
                           <button
                             key={subIndex}
                             className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200"
-                            onClick={() => handleScrollClick(subItem.section)}
+                            onClick={() => handleNavigation(subItem.section)}
                           >
                             {subItem.name}
                           </button>
@@ -145,7 +217,7 @@ const Navbar = ({ textColor = 'gray', bgColor = 'bg-white md:bg-transparent', sc
             <div className="flex-shrink-0 flex items-center">
               <div 
                 className="flex items-center space-x-3 cursor-pointer"
-                onClick={() => handleScrollClick('beranda')}
+                onClick={() => handleNavigation('beranda')}
               >
                 {/* Logo Container */}
                 <div className="w-20 h-20 flex items-center justify-center">
@@ -180,7 +252,7 @@ const Navbar = ({ textColor = 'gray', bgColor = 'bg-white md:bg-transparent', sc
                     <button
                       style={{ fontFamily: 'Open Sans, sans-serif' }}
                       className={`flex items-center px-3 py-2 text-sm hover:text-blue-400 rounded-md transition-all duration-300 ${textColorClass} ${isScrolled ? 'hover:bg-gray-100' : 'hover:bg-gray-50 hover:bg-opacity-10'}`}
-                      onClick={() => handleScrollClick(item.section)}
+                      onClick={() => handleNavigation(item.section)}
                     >
                       {item.name}
                     </button>
@@ -194,7 +266,7 @@ const Navbar = ({ textColor = 'gray', bgColor = 'bg-white md:bg-transparent', sc
                           <button
                             key={subIndex}
                             className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200"
-                            onClick={() => handleScrollClick(subItem.section)}
+                            onClick={() => handleNavigation(subItem.section)}
                           >
                             {subItem.name}
                           </button>
@@ -217,7 +289,7 @@ const Navbar = ({ textColor = 'gray', bgColor = 'bg-white md:bg-transparent', sc
             <div className="flex-shrink-0 flex items-center">
               <div 
                 className="flex items-center space-x-3 cursor-pointer"
-                onClick={() => handleScrollClick('beranda')}
+                onClick={() => handleNavigation('beranda')}
               >
                 {/* Logo Container */}
                 <div className="w-20 h-20 flex items-center justify-center">
@@ -268,7 +340,7 @@ const Navbar = ({ textColor = 'gray', bgColor = 'bg-white md:bg-transparent', sc
                 ) : (
                   <button
                     className="flex items-center justify-between w-full px-3 py-2 text-left text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
-                    onClick={() => handleScrollClick(item.section)}
+                    onClick={() => handleNavigation(item.section)}
                   >
                     {item.name}
                   </button>
@@ -279,7 +351,7 @@ const Navbar = ({ textColor = 'gray', bgColor = 'bg-white md:bg-transparent', sc
                       <button
                         key={subIndex}
                         className="block w-full text-left px-3 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors duration-200"
-                        onClick={() => handleScrollClick(subItem.section)}
+                        onClick={() => handleNavigation(subItem.section)}
                       >
                         {subItem.name}
                       </button>
