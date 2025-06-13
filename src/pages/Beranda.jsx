@@ -32,7 +32,7 @@ function Beranda() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <span className=" text-white px-6 py-2 rounded-full text-3xl font-medium tracking-wider uppercase shadow-lg">
+              <span className=" text-white px-6 py-2  text-3xl font-medium tracking-wider uppercase">
                 Kantor Akuntan Publik
               </span>
             </motion.div>

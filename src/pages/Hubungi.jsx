@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MapPin, Clock, Phone, Mail, Calendar, ChevronDown, ChevronUp } from 'lucide-react';
-import { FaPhone, FaEnvelope, FaInstagram, FaLinkedin } from 'react-icons/fa';
+import { FaPhone, FaEnvelope, FaInstagram } from 'react-icons/fa';
 
 
 function HubungiKami() {
@@ -25,7 +25,7 @@ function HubungiKami() {
             Hubungi Kami
           </h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
-            Kami siap melayani Anda dengan sepenuh hati. Kunjungi toko kami atau hubungi melalui kontak di bawah ini.
+            Kami siap melayani Anda dengan sepenuh hati. Kunjungi kantor kami atau hubungi melalui kontak di bawah ini.
           </p>
         </div>
 
@@ -39,7 +39,7 @@ function HubungiKami() {
                   <MapPin className="w-6 h-6 text-blue-600" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-lg lg:text-xl font-bold text-gray-900 mb-2">Alamat Toko</h3>
+                  <h3 className="text-lg lg:text-xl font-bold text-gray-900 mb-2">Alamat Kantor</h3>
                   <p className="text-gray-600 leading-relaxed text-sm lg:text-base">
                     Ruko Cikarang Central City Blok E No.08<br />
                     Ciantra, Cikarang Sel., Kabupaten Bekasi<br />
@@ -124,7 +124,7 @@ function HubungiKami() {
                 <Calendar className="w-10 lg:w-12 h-10 lg:h-12 mx-auto mb-4 opacity-90" />
                 <h3 className="text-lg lg:text-xl font-bold mb-2">Ingin Berkunjung?</h3>
                 <p className="text-blue-100 mb-4 text-sm lg:text-base">
-                  Kunjungi toko kami untuk pelayanan terbaik dan konsultasi langsung dengan tim ahli kami.
+                  Kunjungi kantor kami untuk pelayanan terbaik dan konsultasi langsung dengan tim ahli kami.
                 </p>
                 <button 
                   onClick={() => {
@@ -146,7 +146,7 @@ function HubungiKami() {
               <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 lg:p-6 text-white">
                 <h3 className="text-lg lg:text-xl font-bold flex items-center">
                   <MapPin className="w-5 h-5 mr-2 flex-shrink-0" />
-                  Lokasi Toko
+                  Lokasi Kantor
                 </h3>
                 <p className="text-blue-100 mt-1 text-sm lg:text-base">Ruko Cikarang Central City</p>
               </div>
@@ -210,64 +210,50 @@ function HubungiKami() {
         </div>
 
         {/* Bottom CTA */}
-     
-
-<div className="mt-12 lg:mt-16 text-center">
-  <div className="bg-white rounded-2xl shadow-lg p-6 lg:p-8 border border-gray-100">
-    <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-4">
-      Siap Membantu Anda
-    </h3>
-    <p className="text-gray-600 mb-6 max-w-2xl mx-auto text-sm lg:text-base">
-      Tim customer service kami selalu siap membantu dan menjawab pertanyaan Anda.
-      Hubungi kami sekarang untuk informasi produk, konsultasi, atau layanan purna jual.
-    </p>
-    <div className="flex flex-wrap gap-4 justify-center items-center">
-      <a
-        href="tel:(021)89774251"
-        className="inline-flex items-center justify-center px-4 lg:px-6 py-2 lg:py-3 bg-green-600 text-white font-semibold rounded-full hover:bg-green-700 transition-all duration-300 transform hover:scale-105 text-sm lg:text-base"
-      >
-        <FaPhone className="w-4 lg:w-5 h-4 lg:h-5 mr-2" />
-        Telepon
-      </a>
-      <a
-        href="https://wa.me/6281234567890"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center justify-center px-4 lg:px-6 py-2 lg:py-3 bg-green-500 text-white font-semibold rounded-full hover:bg-green-600 transition-all duration-300 transform hover:scale-105 text-sm lg:text-base"
-      >
-        <FaPhone className="w-4 lg:w-5 h-4 lg:h-5 mr-2" />
-        WhatsApp
-      </a>
-      <a
-        href="mailto:emailanda@gmail.com"
-        className="inline-flex items-center justify-center px-4 lg:px-6 py-2 lg:py-3 bg-red-500 text-white font-semibold rounded-full hover:bg-red-600 transition-all duration-300 transform hover:scale-105 text-sm lg:text-base"
-      >
-        <FaEnvelope className="w-4 lg:w-5 h-4 lg:h-5 mr-2" />
-        Gmail
-      </a>
-      <a
-        href="https://www.instagram.com/akunanda"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center justify-center px-4 lg:px-6 py-2 lg:py-3 bg-pink-500 text-white font-semibold rounded-full hover:bg-pink-600 transition-all duration-300 transform hover:scale-105 text-sm lg:text-base"
-      >
-        <FaInstagram className="w-4 lg:w-5 h-4 lg:h-5 mr-2" />
-        Instagram
-      </a>
-      <a
-        href="https://www.linkedin.com/in/akunanda"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center justify-center px-4 lg:px-6 py-2 lg:py-3 bg-blue-700 text-white font-semibold rounded-full hover:bg-blue-800 transition-all duration-300 transform hover:scale-105 text-sm lg:text-base"
-      >
-        <FaLinkedin className="w-4 lg:w-5 h-4 lg:h-5 mr-2" />
-        LinkedIn
-      </a>
-    </div>
-  </div>
-</div>
-
-
+        <div className="mt-12 lg:mt-16">
+          <div className="w-full max-w-7xl mx-auto px-4 py-6 bg-white rounded-2xl shadow-lg">
+            <div className="flex flex-row flex-wrap gap-4 justify-center items-stretch w-full">
+              <a
+                href="tel:(021)89774251"
+                className="group bg-white rounded-xl shadow-md p-4 flex items-center transform transition-transform duration-300 hover:scale-105 hover:bg-green-100"
+              >
+                <div className="bg-green-100 p-2 rounded-xl mr-3 group-hover:bg-green-200 transition-all duration-300">
+                  <FaPhone className="w-8 h-8 text-green-600" />
+                </div>
+                <div className="text-left">
+                  <div className="text-xs text-gray-500 mb-0.5">Telepon</div>
+                  <div className="font-bold text-base text-gray-800">(021) 89774251/89774251</div>
+                </div>
+              </a>
+              <a
+                href="mailto:kap.jamasterjams@gmail.com"
+                className="group bg-white rounded-xl shadow-md p-4 flex items-center transform transition-transform duration-300 hover:scale-105 hover:bg-red-100"
+              >
+                <div className="bg-red-100 p-2 rounded-xl mr-3 group-hover:bg-red-200 transition-all duration-300">
+                  <FaEnvelope className="w-8 h-8 text-red-600" />
+                </div>
+                <div className="text-left">
+                  <div className="text-xs text-gray-500 mb-0.5">Email</div>
+                  <div className="font-bold text-base text-gray-800">kap.jamasterjams@gmail.com</div>
+                </div>
+              </a>
+              <a
+                href="https://www.instagram.com/kap_jamastersimanullang/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group bg-white rounded-xl shadow-md p-4 flex items-center transform transition-transform duration-300 hover:scale-105 hover:bg-pink-100"
+              >
+                <div className="bg-pink-100 p-2 rounded-xl mr-3 group-hover:bg-pink-200 transition-all duration-300">
+                  <FaInstagram className="w-8 h-8 text-pink-600" />
+                </div>
+                <div className="text-left">
+                  <div className="text-xs text-gray-500 mb-0.5">Instagram</div>
+                  <div className="font-bold text-base text-gray-800">@kap_jamastersimanullang</div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -151,28 +151,6 @@ function Footer() {
     },
   };
 
-  // Data social media dengan penanganan email yang diperbaiki
-  const socialMediaDataCDN = [
-    { 
-      name: "LinkedIn", 
-      icon: LinkedIcon,
-      link: "https://linkedin.com/company/your-company",
-      type: "external"
-    },
-    { 
-      name: "Email", 
-      icon: EmailIcon,
-      email: "kap.jamasterjams@gmail.com", // Simpan email terpisah
-      type: "email"
-    },
-    { 
-      name: "WhatsApp", 
-      icon: WhatsappIcon,
-      link: "https://wa.me/6221897742530",
-      type: "external"
-    },
-  ];
-
   return (
     <motion.footer
       ref={footerRef}
@@ -334,67 +312,6 @@ function Footer() {
                   +62 21 -8977 4253/ 8977 4251
                 </p>
               </motion.div>
-            </motion.div>
-
-            {/* Social Media Icons - dengan penanganan email yang diperbaiki */}
-            <motion.div
-              className="flex space-x-4 pt-10"
-              variants={containerVariants}
-            >
-              {socialMediaDataCDN.map((social, index) => (
-                <motion.a
-                  key={index}
-                  href={social.type === 'email' ? '#' : social.link}
-                  onClick={(e) => {
-                    if (social.type === 'email') {
-                      handleEmailClick(e, social.email);
-                    }
-                    // Untuk link external, biarkan default behavior
-                  }}
-                  target={social.type === 'external' ? "_blank" : undefined}
-                  rel={social.type === 'external' ? "noopener noreferrer" : undefined}
-                  className={`w-13 h-13 rounded-full flex items-center justify-center cursor-pointer group relative overflow-hidden`}
-                  variants={socialIconVariants}
-                  whileHover="hover"
-                  whileTap={{ scale: 0.9 }}
-                >
-                  {/* Background Gradient on Hover */}
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100"
-                    transition={{ duration: 0.3 }}
-                  />
-                  
-                  {/* Icon Image */}
-                  <img 
-                    src={social.icon} 
-                    alt={social.name}
-                    className="w-15 h-15 rounded object-cover relative z-10"
-                    onError={(e) => {
-                      // Fallback jika gambar tidak load
-                      e.target.style.display = 'none';
-                      e.target.nextSibling.style.display = 'block';
-                    }}
-                  />
-                  
-                  {/* Fallback text jika gambar tidak load */}
-                  <span 
-                    className="text-white text-xs font-bold relative z-10"
-                    style={{ display: 'none' }}
-                  >
-                    {social.name.charAt(0)}
-                  </span>
-                  
-                  {/* Tooltip */}
-                  <motion.div
-                    className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap"
-                    initial={{ opacity: 0, y: 5 }}
-                    whileHover={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {social.name}
-                  </motion.div>
-                </motion.a>
-              ))}
             </motion.div>
           </motion.div>
         </div>

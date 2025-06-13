@@ -154,7 +154,7 @@ function Tentang() {
   return (
     <>
       <div
-        className="h-screen overflow-hidden pt-15"
+        className="h-screen overflow-hidden lg:pt-15 "
         style={{ backgroundColor: "#3c4c5c" }}
       >
         {/* Main Content */}
@@ -169,7 +169,7 @@ function Tentang() {
             {/* Main Flex Container */}
             <div className="flex-1 flex flex-col lg:flex-row gap-8 items-center min-h-0">
               {/* Left Side - Profiles Stack Container */}
-              <div className="lg:w-3/5 w-full h-full flex items-center justify-center">
+              <div className="lg:w-3/5 w-full h-full lg:flex items-center justify-center hidden">
                 <div
                   ref={sectionRef}
                   className="relative w-full max-w-4xl h-full flex justify-center items-center overflow-hidden"

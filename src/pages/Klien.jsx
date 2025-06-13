@@ -2,13 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   Shirt, Ship, Heart, Users, GraduationCap, Shield, Utensils, Printer, MapPin,
   Handshake, ShoppingCart, Car, Factory, Wheat, Building2, HardHat, Fuel, Beef,
-  Radio, Package, UserCheck, Truck, Recycle, Home, Landmark
+  Radio, Package, UserCheck, Truck, Recycle, Home, Landmark, ChevronDown, ChevronUp
 } from 'lucide-react';
 
 function Klien() {
   const [isVisible, setIsVisible] = useState(false);
   const [visibleItems, setVisibleItems] = useState(new Set());
   const [headerVisible, setHeaderVisible] = useState(false);
+  const [showAll, setShowAll] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const headerRef = useRef(null);
   const gridRef = useRef(null);
@@ -19,6 +22,17 @@ function Klien() {
       setIsVisible(true);
     }, 300);
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   useEffect(() => {
@@ -63,9 +77,15 @@ function Klien() {
       headerObserver.disconnect();
       itemObserver.disconnect();
     };
-  }, []);
+  }, [showAll]);
 
-  
+  const handleShowAll = () => {
+    setIsAnimating(true);
+    setShowAll(!showAll);
+    setTimeout(() => {
+      setIsAnimating(false);
+    }, 500);
+  };
 
   const clients = [
     { name: 'Tekstil', icon: Shirt }, { name: 'Perkapalan', icon: Ship },
@@ -82,6 +102,8 @@ function Klien() {
     { name: 'Pengolahan Limbah', icon: Recycle }, { name: 'Properti/Perumahan', icon: Home },
     { name: 'Perbankan', icon: Landmark }
   ];
+
+  const displayedClients = isMobile && !showAll ? clients.slice(0, 5) : clients;
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 relative overflow-hidden">
@@ -105,16 +127,14 @@ function Klien() {
         </div>
 
         <div className="relative">
-          <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
-            <span className="text-9xl font-bold text-gray-400 transform -rotate-12">
-              BUSINESS
-            </span>
-          </div>
-
-          <div ref={gridRef} className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
-            {clients.map((client, index) => {
+          <div 
+            ref={gridRef} 
+            className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto"
+          >
+            {displayedClients.map((client, index) => {
               const IconComponent = client.icon;
               const isItemVisible = visibleItems.has(index);
+              const isAdditionalItem = isMobile && index >= 5;
 
               return (
                 <div
@@ -122,13 +142,16 @@ function Klien() {
                   ref={el => itemRefs.current[index] = el}
                   className={`group flex items-center space-x-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-2xl hover:scale-[1.03] hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-100 border border-gray-100 hover:border-blue-300 cursor-pointer transform hover:-translate-y-3 ${
                     (isVisible && isItemVisible) ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-90'
+                  } ${
+                    isAdditionalItem ? 'transition-all duration-500 ease-in-out' : ''
                   }`}
                   style={{
                     transitionDelay: (isVisible && isItemVisible) ? `${(index % 8) * 100}ms` : '0ms',
                     transitionDuration: '800ms',
-                    transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
+                    transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                    height: '100%',
+                    minHeight: '80px'
                   }}
-                  
                 >
                   <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-gradient-to-br group-hover:from-blue-500 group-hover:to-indigo-600 group-hover:scale-125 group-hover:rotate-[15deg] transition-all duration-500 ease-out shadow-sm group-hover:shadow-lg">
                     <IconComponent className="w-6 h-6 text-blue-600 group-hover:text-white transition-all duration-500 ease-out group-hover:scale-110" />
@@ -140,6 +163,25 @@ function Klien() {
               );
             })}
           </div>
+
+          {isMobile && (
+            <div className="flex justify-center mt-6">
+              <button
+                onClick={handleShowAll}
+                disabled={isAnimating}
+                className={`flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1 ${
+                  isAnimating ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
+              >
+                <span>{showAll ? 'Tampilkan Sedikit' : 'Lihat Lainnya'}</span>
+                {showAll ? (
+                  <ChevronUp className={`w-5 h-5 transition-transform duration-300 ${isAnimating ? 'rotate-180' : ''}`} />
+                ) : (
+                  <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${isAnimating ? 'rotate-180' : ''}`} />
+                )}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Motion elements */}
@@ -158,8 +200,6 @@ function Klien() {
         }`} style={{ transitionDelay: '400ms' }}>
           <span className="text-3xl font-light text-gray-300 animate-pulse" style={{ animationDelay: '2s' }}>innovation</span>
         </div>
-
-     
       </div>
     </div>
   );

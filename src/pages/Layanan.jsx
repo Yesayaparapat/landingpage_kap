@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from "framer-motion";
 
 // 1. Service Data Configuration
 const servicesData = [
@@ -110,13 +111,17 @@ const ServiceCard = ({ service, isHovered, onHover, onLeave, isDesktop = true })
     boxShadow: isHovered 
       ? '0 20px 40px -10px rgba(0, 0, 0, 0.2), 0 0 25px rgba(0, 0, 0, 0.06)'
       : '0 8px 20px -2px rgba(0, 0, 0, 0.12), 0 0 12px rgba(0, 0, 0, 0.04)',
-    ...service.position // Apply position from service data
+    ...service.position
   } : {
     boxShadow: '0 6px 20px -4px rgba(0, 0, 0, 0.12), 0 0 12px rgba(0, 0, 0, 0.04)'
   };
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ scale: 1.05, y: -5 }}
+      transition={{ duration: 0.3 }}
       className={cardClasses}
       style={shadowStyle}
       onMouseEnter={onHover}
@@ -146,7 +151,7 @@ const ServiceCard = ({ service, isHovered, onHover, onLeave, isDesktop = true })
           ))}
         </ul>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -297,9 +302,8 @@ const ServiceNodeCircles = ({ services, hoveredService, setHoveredService, getCo
 
 // 9. Central Rotating Mechanism Component
 const CentralRotatingMechanism = ({ services, hoveredService, setHoveredService, rotation, getColorValue }) => (
-  <div className='hidden lg:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
+  <div className='hidden lg:block absolute top-[60%] left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
     <div className='relative w-[400px] h-[400px]'>
-      
       {/* Outer Ring */}
       <div 
         className='absolute inset-0 rounded-full border-2 border-gray-300/60 shadow-inner backdrop-blur-lg'
@@ -308,7 +312,6 @@ const CentralRotatingMechanism = ({ services, hoveredService, setHoveredService,
           boxShadow: 'inset 0 3px 12px rgba(0, 0, 0, 0.06), 0 6px 24px rgba(0, 0, 0, 0.03)'
         }}
       />
-      
       {/* Rotating Container */}
       <div 
         className='absolute inset-0 transition-transform duration-75 ease-linear'
@@ -333,14 +336,17 @@ const CentralRotatingMechanism = ({ services, hoveredService, setHoveredService,
 
 // 10. Main Title Component
 const MainTitle = () => (
-  <h1 
+  <motion.h1 
+    initial={{ opacity: 0, y: -20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5 }}
     className='text-center text-2xl md:text-3xl font-bold text-gray-800 uppercase mb-8 lg:mb-0 lg:absolute lg:left-1/2 lg:transform lg:-translate-x-1/2 px-2'
     style={{
       textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
     }}
   >
     our range of services 
-  </h1>
+  </motion.h1>
 );
 
 // 11. Main Services Diagram Component
@@ -372,27 +378,31 @@ function ModularServicesDiagram() {
   };
 
   return (
-    <div 
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
       className="relative py-4 lg:py-8 overflow-hidden pt-16 lg:pt-28 px-4"
       style={{
-        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.92) 30%, rgba(241, 245, 249, 0.88) 70%, rgba(226, 232, 240, 0.85) 100%)',
+        background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.92) 30%, rgba(241,245,249,0.88) 70%, #fff 99%, #fff 100%)',
         backdropFilter: 'blur(20px)',
-        minHeight: '100vh'
+        minHeight: 'calc(100vh + 120px)'
       }}
     >
       <AnimatedBackground />
-
-      <div className='relative w-full max-w-6xl mx-auto px-2 lg:h-[550px]'>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className='relative w-full max-w-6xl mx-auto px-2 lg:h-[550px]'
+      >
         <MainTitle />
-        
         <DesktopServiceCards 
           services={servicesData} 
           hoveredService={hoveredService} 
           setHoveredService={setHoveredService} 
         />
-
         <MobileServiceCards services={servicesData} />
-
         <CentralRotatingMechanism 
           services={servicesData}
           hoveredService={hoveredService}
@@ -400,8 +410,8 @@ function ModularServicesDiagram() {
           rotation={rotation}
           getColorValue={getColorValue}
         />
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 

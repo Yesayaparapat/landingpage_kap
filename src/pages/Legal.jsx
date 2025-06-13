@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 function Legal() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-6 px-4 pt-16 lg:pt-25">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-6 px-4 pt-16 lg:pt-25 overflow-x-hidden">
       <div className="max-w-6xl mx-auto">
         {/* Header Section */}
         <motion.div
@@ -11,7 +11,7 @@ function Legal() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.2, margin: "-100px" }}
           transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="text-center mb-8"
+          className="text-center mb-8 px-4"
         >
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -37,20 +37,19 @@ function Legal() {
             }}
             className="text-gray-600 text-sm max-w-xl mx-auto"
           >
-            Informasi legal dan sertifikasi resmi Kantor Akuntan Publik Jamaster
-            Simanullang
+            Informasi legal dan sertifikasi resmi Kantor Akuntan Publik Jamaster Simanullang
           </motion.p>
         </motion.div>
 
         {/* Main Content Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2  max-w-4xl mx-auto">
-          {/* Detail Perusahaan Card - Left to Right */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-5xl mx-auto px-4">
+          {/* Detail Perusahaan Card */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: false, amount: 0.1, margin: "-50px" }}
             transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="group relative flex justify-center"
+            className="group relative flex justify-center w-full"
           >
             <motion.div
               whileHover={{ scale: 1.02, y: -5 }}
@@ -68,9 +67,7 @@ function Legal() {
                 }}
                 className="mb-6"
               >
-                <h2 className="text-xl font-bold text-gray-800 mb-2">
-                  Detail Perusahaan
-                </h2>
+                <h2 className="text-xl font-bold text-gray-800 mb-2">Detail Perusahaan</h2>
                 <motion.div
                   initial={{ scaleX: 0, originX: 0 }}
                   whileInView={{ scaleX: 1 }}
@@ -188,21 +185,18 @@ function Legal() {
             </motion.div>
           </motion.div>
 
-          {/* Our Difference Card - Right to Left */}
+          {/* Our Difference Card */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: false, amount: 0.1, margin: "-50px" }}
-            transition={{
-              duration: 0.6,
-              ease: [0.25, 0.46, 0.45, 0.94],
-            }}
-            className="group relative flex justify-center w-[600px]"
+            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="group relative flex justify-center w-full"
           >
             <motion.div
               whileHover={{ scale: 1.02, y: -5 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
-              className="relative w-full max-w-md flex flex-col ml-20"
+              className="relative w-full max-w-md flex flex-col lg:ml-20"
             >
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -215,7 +209,7 @@ function Legal() {
                 }}
                 className="mb-6"
               >
-                <h2 className="text-xl font-bold text-gray-800 mb-2 ">
+                <h2 className="text-xl font-bold text-gray-800 mb-2">
                   Our Difference
                 </h2>
                 <motion.div
@@ -275,9 +269,7 @@ function Legal() {
                     }}
                     className="flex flex-col space-y-1 p-2 rounded-lg transition-colors duration-200"
                   >
-                    <motion.span
-                      className="text-sm font-bold text-blue-600 uppercase tracking-wide"
-                    >
+                    <motion.span className="text-sm font-bold text-blue-600 uppercase tracking-wide">
                       {item.title}
                     </motion.span>
                     <motion.p
