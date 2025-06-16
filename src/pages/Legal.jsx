@@ -98,8 +98,8 @@ function Legal() {
                     value: "Kantor Akuntan Publik Jamaster Simanullang",
                   },
                   { label: "Izin Menteri", value: "KEP 1147/KM.1/2017" },
-                  { label: "NPWP", value: "59.963.311.2-413.001", mono: true },
-                  { label: "NITKU", value: "3275112601740003000001", mono: true },
+                  { label: "NPWP", value: "59.963.311.2-413.001 / 3275112601740003", mono: true },
+                  
                 ].map((item, index) => (
                   <motion.div
                     key={index}
