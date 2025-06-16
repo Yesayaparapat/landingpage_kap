@@ -27,9 +27,7 @@ function KlienIntegrated() {
 
   useEffect(() => {
     const checkMobile = () => {
-      // Ubah breakpoint: hanya mobile (< 640px) yang akan menggunakan show/hide
-      // Tablet (640px - 1024px) dan desktop (> 1024px) akan menampilkan semua
-      setIsMobile(window.innerWidth < 640);
+      setIsMobile(window.innerWidth < 768);
     };
     
     checkMobile();
@@ -287,34 +285,39 @@ function KlienIntegrated() {
     ]
   };
 
-  // Hanya mobile yang akan menggunakan slice, tablet dan desktop menampilkan semua
-  const displayedClients = isMobile && !showAll ? clients.slice(0, 6) : clients;
+  const displayedClients = isMobile && !showAll ? clients.slice(0, 8) : clients;
 
-  // Jika sektor dipilih, tampilkan halaman detail
   if (selectedSector) {
     const selectedClient = clients.find(client => client.name === selectedSector);
     const IconComponent = selectedClient ? selectedClient.icon : Factory;
     const companies = clientData[selectedSector] || [];
 
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-6xl mx-auto px-6">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
             <button
               onClick={handleBackClick}
-              className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 transition-colors mb-6 group"
+              className="flex items-center space-x-3 text-blue-600 hover:text-blue-800 transition-all duration-300 mb-8 group bg-white px-4 py-3 rounded-xl shadow-sm hover:shadow-md border border-blue-100 hover:border-blue-200"
             >
-              <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-              <span>Kembali ke Daftar Sektor</span>
+              <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-300" />
+              <span className="font-medium">Kembali ke Daftar Sektor</span>
             </button>
             
-            <div className="flex items-center space-x-4 mb-8">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center shadow-lg">
-                <IconComponent className="w-8 h-8 text-blue-600" />
-              </div>
-              <div>
-                <h1 className="text-4xl font-bold text-gray-800 mb-2">{selectedSector}</h1>
-                <p className="text-gray-600 text-lg">Total: <span className="font-semibold text-blue-600">{companies.length}</span> perusahaan</p>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
+              <div className="flex items-center space-x-6">
+                <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <IconComponent className="w-10 h-10 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-4xl font-bold text-gray-900 mb-2">{selectedSector}</h1>
+                  <div className="flex items-center space-x-4">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                      {companies.length} perusahaan
+                    </span>
+                    <span className="text-gray-500">Klien terdaftar</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -323,24 +326,32 @@ function KlienIntegrated() {
             {companies.map((company, index) => (
               <div
                 key={index}
-                className="bg-white rounded-lg p-4 hover:bg-blue-50 hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-blue-300 group"
+                className="bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-blue-200 group animate-fade-in"
                 style={{
                   animationDelay: `${index * 50}ms`,
                 }}
               >
-                <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-blue-500 rounded-full flex-shrink-0 group-hover:bg-blue-600 transition-colors"></div>
-                  <span className="text-gray-800 font-medium text-sm leading-relaxed group-hover:text-blue-800 transition-colors">
-                    {company}
-                  </span>
+                <div className="flex items-start space-x-4">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-2 group-hover:bg-blue-600 transition-colors"></div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-gray-900 font-medium text-sm leading-relaxed group-hover:text-blue-900 transition-colors">
+                      {company}
+                    </h3>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
 
           {companies.length === 0 && (
-            <div className="text-center py-12">
-              <div className="text-gray-400 text-lg">Belum ada data perusahaan untuk sektor ini</div>
+            <div className="text-center py-16">
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 max-w-md mx-auto">
+                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Package className="w-8 h-8 text-gray-400" />
+                </div>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">Belum Ada Data</h3>
+                <p className="text-gray-500">Belum ada perusahaan terdaftar untuk sektor ini</p>
+              </div>
             </div>
           )}
         </div>
@@ -348,83 +359,97 @@ function KlienIntegrated() {
     );
   }
 
-  // Halaman utama dengan daftar sektor
   return (
-    <div className="min-h-screen bg-gray-50 py-12 relative overflow-hidden">
-      <div className="max-w-6xl mx-auto px-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-12 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
           ref={headerRef}
           className={`text-center mb-16 transition-all duration-1200 ease-out ${
             (isVisible && headerVisible) ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-16'
           }`}
         >
-          <h1 className={`text-4xl font-bold text-gray-800 mb-4 transition-all duration-1000 ease-out ${
-            (isVisible && headerVisible) ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-          }`}>
-            KLIEN BISNIS KAMI
-          </h1>
-          <div className="flex justify-center">
-            <div className={`h-1 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full transition-all duration-1500 ease-out ${
-              (isVisible && headerVisible) ? 'w-24 opacity-100' : 'w-0 opacity-0'
-            }`}></div>
+          <div className="max-w-2xl mx-auto">
+            <h1 className={`text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-6 transition-all duration-1000 ease-out ${
+              (isVisible && headerVisible) ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+            }`}>
+              KLIEN BISNIS KAMI
+            </h1>
+            <div className="flex justify-center">
+              <div className={`h-1 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full transition-all duration-1500 ease-out ${
+                (isVisible && headerVisible) ? 'w-24 opacity-100' : 'w-0 opacity-0'
+              }`}></div>
+            </div>
           </div>
         </div>
 
         <div className="relative">
           <div 
             ref={gridRef} 
-            className="relative z-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 md:gap-6 max-w-7xl mx-auto"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 max-w-none mx-auto"
           >
             {displayedClients.map((client, index) => {
               const IconComponent = client.icon;
               const isItemVisible = visibleItems.has(index);
-              const isAdditionalItem = isMobile && index >= 6;
+              const isAdditionalItem = isMobile && index >= 8;
+              const companyCount = clientData[client.name]?.length || 0;
 
               return (
                 <button
                   key={index}
                   ref={el => itemRefs.current[index] = el}
                   onClick={() => handleSectorClick(client.name)}
-                  className={`group flex flex-col sm:flex-row items-center sm:space-x-3 space-y-2 sm:space-y-0 p-4 bg-white rounded-xl shadow-sm hover:shadow-2xl hover:scale-[1.03] hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-100 border border-gray-100 hover:border-blue-300 cursor-pointer transform hover:-translate-y-3 text-center sm:text-left ${
+                  className={`group bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 hover:border-blue-200 cursor-pointer transform hover:-translate-y-2 hover:scale-[1.02] transition-all duration-500 ease-out p-6 text-left ${
                     (isVisible && isItemVisible) ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-12 scale-90'
                   } ${
                     isAdditionalItem ? 'transition-all duration-500 ease-in-out' : ''
                   }`}
                   style={{
-                    transitionDelay: (isVisible && isItemVisible) ? `${(index % 8) * 100}ms` : '0ms',
+                    transitionDelay: (isVisible && isItemVisible) ? `${(index % 10) * 100}ms` : '0ms',
                     transitionDuration: '800ms',
                     transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
-                    height: '100%',
-                    minHeight: '100px'
+                    minHeight: '140px'
                   }}
                 >
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-gradient-to-br group-hover:from-blue-500 group-hover:to-indigo-600 group-hover:scale-125 group-hover:rotate-[15deg] transition-all duration-500 ease-out shadow-sm group-hover:shadow-lg">
-                    <IconComponent className="w-6 h-6 text-blue-600 group-hover:text-white transition-all duration-500 ease-out group-hover:scale-110" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <span className="text-gray-700 font-medium text-sm group-hover:text-blue-800 group-hover:font-semibold transition-all duration-300 ease-out leading-tight group-hover:translate-x-1 block">
-                      {client.name}
-                    </span>
-                    <span className="text-xs text-gray-500 group-hover:text-blue-600 transition-colors">
-                      {clientData[client.name]?.length || 0} perusahaan
-                    </span>
+                  <div className="flex flex-col h-full">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="w-14 h-14 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-gradient-to-br group-hover:from-blue-500 group-hover:to-indigo-600 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 ease-out shadow-sm group-hover:shadow-lg">
+                        <IconComponent className="w-7 h-7 text-blue-600 group-hover:text-white transition-all duration-500 ease-out" />
+                      </div>
+                      <div className="text-right">
+                        <div className="text-2xl font-bold text-blue-600 group-hover:text-blue-700 transition-colors">
+                          {companyCount}
+                        </div>
+                        <div className="text-xs text-gray-500 group-hover:text-gray-600 transition-colors">
+                          perusahaan
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex-1 flex flex-col justify-end">
+                      <h3 className="text-gray-900 font-semibold text-base group-hover:text-blue-900 transition-all duration-300 ease-out leading-tight mb-2">
+                        {client.name}
+                      </h3>
+                      <div className="flex items-center text-sm text-gray-500 group-hover:text-blue-600 transition-colors">
+                        <span>Lihat detail</span>
+                        <ArrowLeft className="w-4 h-4 ml-2 rotate-180 group-hover:translate-x-1 transition-transform duration-300" />
+                      </div>
+                    </div>
                   </div>
                 </button>
               );
             })}
           </div>
 
-          {/* Tombol "Lihat Lainnya" hanya muncul di mobile */}
           {isMobile && (
-            <div className="flex justify-center mt-6">
+            <div className="flex justify-center mt-10">
               <button
                 onClick={handleShowAll}
                 disabled={isAnimating}
-                className={`flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1 ${
+                className={`flex items-center space-x-3 px-8 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-medium ${
                   isAnimating ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
               >
-                <span>{showAll ? 'Tampilkan Sedikit' : 'Lihat Lainnya'}</span>
+                <span>{showAll ? 'Tampilkan Sedikit' : 'Lihat Semua Sektor'}</span>
                 {showAll ? (
                   <ChevronUp className={`w-5 h-5 transition-transform duration-300 ${isAnimating ? 'rotate-180' : ''}`} />
                 ) : (
@@ -435,23 +460,41 @@ function KlienIntegrated() {
           )}
         </div>
 
-        {/* Motion elements */}
-        <div className={`absolute top-1/4 left-10 pointer-events-none transition-all duration-1200 ease-out ${
-          (isVisible && headerVisible) ? 'opacity-10 translate-x-0 scale-100' : 'opacity-0 -translate-x-16 scale-75'
+        {/* Decorative elements */}
+        <div className={`absolute top-1/4 left-8 pointer-events-none transition-all duration-1200 ease-out ${
+          (isVisible && headerVisible) ? 'opacity-5 translate-x-0 scale-100' : 'opacity-0 -translate-x-16 scale-75'
         }`}>
-          <span className="text-4xl font-light text-gray-300 animate-pulse">future</span>
+          <div className="text-6xl font-extralight text-gray-300 select-none">innovation</div>
         </div>
-        <div className={`absolute top-1/3 right-10 pointer-events-none transition-all duration-1400 ease-out ${
-          (isVisible && headerVisible) ? 'opacity-10 translate-x-0 scale-100' : 'opacity-0 translate-x-16 scale-75'
+        <div className={`absolute top-1/3 right-8 pointer-events-none transition-all duration-1400 ease-out ${
+          (isVisible && headerVisible) ? 'opacity-5 translate-x-0 scale-100' : 'opacity-0 translate-x-16 scale-75'
         }`} style={{ transitionDelay: '200ms' }}>
-          <span className="text-3xl font-light text-gray-300 animate-pulse" style={{ animationDelay: '1s' }}>solution</span>
+          <div className="text-5xl font-extralight text-gray-300 select-none">partnership</div>
         </div>
-        <div className={`absolute bottom-1/4 left-20 pointer-events-none transition-all duration-1600 ease-out ${
-          (isVisible && headerVisible) ? 'opacity-10 translate-x-0 scale-100' : 'opacity-0 -translate-x-16 scale-75'
+        <div className={`absolute bottom-1/4 left-16 pointer-events-none transition-all duration-1600 ease-out ${
+          (isVisible && headerVisible) ? 'opacity-5 translate-x-0 scale-100' : 'opacity-0 -translate-x-16 scale-75'
         }`} style={{ transitionDelay: '400ms' }}>
-          <span className="text-3xl font-light text-gray-300 animate-pulse" style={{ animationDelay: '2s' }}>innovation</span>
+          <div className="text-4xl font-extralight text-gray-300 select-none">excellence</div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        .animate-fade-in {
+          animation: fade-in 0.6s ease-out forwards;
+          opacity: 0;
+        }
+      `}</style>
     </div>
   );
 }
