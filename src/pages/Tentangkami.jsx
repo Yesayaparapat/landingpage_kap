@@ -17,7 +17,6 @@ import Nella from "../assets/nella.jpg";
 import Fransiscus from "../assets/fransiscus.jpg";
 import Ahmad from "../assets/ahmad.jpg";
 import Rohaida from "../assets/rohaida.jpg";
-import Aciko from "../assets/aciko.jpg";
 import Intan from "../assets/intan.png";
 
 function Tentangkami() {
@@ -120,11 +119,6 @@ function Tentangkami() {
         image: Rohaida
       },
       {
-        name: "Achiko Anatola Andoko, S.Ak",
-        position: "AUDITOR",
-        image: Aciko
-      },
-      {
         name: "Intan Nurbaety, Amd",
         position: "AUDITOR/ADM",
         image: Intan
@@ -169,15 +163,67 @@ function Tentangkami() {
     );
   };
 
+  // Staff list data
+  const staffList = [
+    "Ida Mulyani, SE",
+    "Nuke Monica Kristi, SE", 
+    "Nur Azmi Kolbi, SE",
+    "Friska Alehanda, S.Ak",
+    "Meli Kadarsih, Amd.S.I.Ak",
+    "Widya Jana Rutika, S.Ak",
+    "Ira Afri Setianti, S.Ak",
+    "Wialdo, Amd",
+    "Dwi Apriliyani, SE",
+    "Atika Mumtaz W, SE",
+    "Lius Yuliana, SE",
+    "Adiel Grina, S.Ak",
+    "Satya Budi Prianutama, S.Ak",
+    "Tiara Chantika, S.Ak",
+    "Ahmad Andrean Pratama, A.Md",
+    "Rohaida Saputri, A.Md",
+    "Nur Azizah, S.Ak",
+    "Siti Aisyah, S.Ak",
+    "Cut Riezka Sakinah, S.AK",
+    "Hastuti Selmi Rahmah, S.Tr.Ak.",
+    "Angel Kiki .T, S.Ak",
+    "Winda Marwani, Amd",
+    "Ibnu Kharis Fadilla, SE",
+    "Rita Martianingsih, S.E",
+  ];
+
+  // Function to create columns with horizontal numbering (horizontal flow)
+  const createStaffColumns = (staffArray, numColumns = 3) => {
+    const itemsPerColumn = Math.ceil(staffArray.length / numColumns);
+    const columns = [];
+    
+    for (let col = 0; col < numColumns; col++) {
+      const columnItems = [];
+      const startIndex = col * itemsPerColumn;
+      const endIndex = Math.min(startIndex + itemsPerColumn, staffArray.length);
+      
+      for (let i = startIndex; i < endIndex; i++) {
+        columnItems.push({
+          number: i + 1,
+          name: staffArray[i]
+        });
+      }
+      columns.push(columnItems);
+    }
+    
+    return columns;
+  };
+
+  const staffColumns = createStaffColumns(staffList, 3);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Header Section */}
       <div className="relative w-full h-80 md:h-96 bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 overflow-hidden">
         <img
-                  src={Lukas}
-                  alt="Office workspace"
-                  className="w-full h-full object-cover"
-                />
+          src={Lukas}
+          alt="Office workspace"
+          className="w-full h-full object-cover"
+        />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-2 tracking-tight">
@@ -277,36 +323,17 @@ function Tentangkami() {
           </div>
         </div>
 
-        {/* Staff List Section */}
+        {/* Staff List Section - Updated with horizontal numbering */}
         <div className="mt-16 bg-white rounded-2xl shadow-lg p-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Our Staff:</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
-            {[
-              "1. Ida Mulyani, SE",
-              "2. Made Monica Kristi, SE", 
-              "3. Nur Azmi Kolbi, SE",
-              "4. Friska Alemania, S.Ak",
-              "5. Meli Kadarsih, Amd.S.I.Ak",
-              "6. Widya Jana Rutika, S.Ak",
-              "7. Ira Afri Setianti, S.Ak",
-              "8. Fransiscus, S.Ak",
-              "9. Wy Widdo, Amd",
-              "10. Dwi Apriliyani, SE",
-              "11. Atika Mumtaz W, SE",
-              "12. Lius Yuliana, SE",
-              "13. Nella Evasari, SE",
-              "14. Adiel Grina, S.Ak",
-              "15. Satya Budi Priantama, S.Ak",
-              "16. Titra Dindang, S.Ak",
-              "17. Ahmad Andrean Pratama, A.Md",
-              "18. Rohaida Saputri, A.Md",
-              "19. Nur Azizah, S.Ak",
-              "20. Siti Aisyah, S.Ak",
-              "21. Cut Riezka Sakinah, S.AK",
-              "22. Achiko Anatola Andoko, S.AK"
-            ].map((staff, index) => (
-              <div key={index} className="text-gray-700">
-                {staff}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {staffColumns.map((column, colIndex) => (
+              <div key={colIndex} className="space-y-2">
+                {column.map((item, itemIndex) => (
+                  <div key={itemIndex} className="text-sm text-gray-700">
+                    {item.number}. {item.name}
+                  </div>
+                ))}
               </div>
             ))}
           </div>

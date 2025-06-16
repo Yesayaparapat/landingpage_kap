@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -17,6 +17,7 @@ import Tentangkami from "./pages/Tentangkami";
 import Legal from "./pages/Legal";
 import Klien from "./pages/Klien";
 import Hubungi from "./pages/Hubungi";
+import KlienBagian from "./pages/KlienBagian";
 
 // Komponen untuk halaman utama (single page)
 function HomePage() {
@@ -47,7 +48,6 @@ function HomePage() {
     layanan: () => scrollToSection(layananRef),
     legal: () => scrollToSection(legalRef),
     klien: () => scrollToSection(klienRef),
-
     hubungi: () => scrollToSection(hubungiRef),
   };
 
@@ -128,6 +128,18 @@ function App() {
               <>
                 <Navbar />
                 <Tentangkami />
+                <Footer />
+              </>
+            }
+          />
+          
+          {/* Route untuk halaman klien bagian */}
+          <Route
+            path="/klien-bagian"
+            element={
+              <>
+                <Navbar />
+                <KlienBagian />
                 <Footer />
               </>
             }
