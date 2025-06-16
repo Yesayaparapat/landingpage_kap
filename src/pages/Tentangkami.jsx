@@ -119,7 +119,7 @@ function Tentangkami() {
         image: Rohaida
       },
       {
-        name: "Intan Nurbaety, Amd",
+        name: "Intan Nurbaety, AMd",
         position: "AUDITOR/ADM",
         image: Intan
       }
@@ -169,24 +169,22 @@ function Tentangkami() {
     "Nuke Monica Kristi, SE", 
     "Nur Azmi Kolbi, SE",
     "Friska Alehanda, S.Ak",
-    "Meli Kadarsih, Amd.S.I.Ak",
+    "Meli Kadarsih, AMd.S.I.Ak",
     "Widya Jana Rutika, S.Ak",
     "Ira Afri Setianti, S.Ak",
-    "Wialdo, Amd",
+    "Wialdo, AMd",
     "Dwi Apriliyani, SE",
     "Atika Mumtaz W, SE",
     "Lius Yuliana, SE",
     "Adiel Grina, S.Ak",
     "Satya Budi Prianutama, S.Ak",
     "Tiara Chantika, S.Ak",
-    "Ahmad Andrean Pratama, A.Md",
-    "Rohaida Saputri, A.Md",
     "Nur Azizah, S.Ak",
     "Siti Aisyah, S.Ak",
     "Cut Riezka Sakinah, S.AK",
     "Hastuti Selmi Rahmah, S.Tr.Ak.",
     "Angel Kiki .T, S.Ak",
-    "Winda Marwani, Amd",
+    "Winda Marwanis, AMd",
     "Ibnu Kharis Fadilla, SE",
     "Rita Martianingsih, S.E",
   ];
