@@ -17,7 +17,7 @@ function HubungiKami() {
   ];
 
   return (
-    <section className="py-16 bg-gradient-to-br from-blue-50 via-white to-indigo-50 pt-2 lg:pt-25 px-6">
+    <section className="py-16 bg-gradient-to-br from-blue-50 via-white to-indigo-50 pt-29 lg:pt-25 px-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">

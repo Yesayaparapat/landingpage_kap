@@ -154,7 +154,7 @@ function Tentang() {
   return (
     <>
       <div
-        className="h-screen overflow-hidden lg:pt-15 "
+        className="h-screen overflow-hidden lg:pt-15 pt-20"
         style={{ backgroundColor: "#3c4c5c" }}
       >
         {/* Main Content */}

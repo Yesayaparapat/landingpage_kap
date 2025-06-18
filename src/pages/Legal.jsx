@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 function Legal() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-6 px-4 pt-16 md:pt-20 lg:pt-25 overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-6 px-4 pt-25 md:pt-20 lg:pt-25 overflow-x-hidden">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <motion.div

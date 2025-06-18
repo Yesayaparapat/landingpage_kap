@@ -56,7 +56,7 @@ function Profil() {
   };
 
   return (
-    <div className="min-h-screen max-w-6xl mx-auto p-6 bg-white overflow-hidden pt-2 lg:pt-25 px-6">
+    <div className="min-h-screen max-w-6xl mx-auto p-6 bg-white overflow-hidden pt-18 lg:pt-25 px-6">
       {/* Header dengan efek motion */}
       <motion.div
         className="text-center mt-12"
