@@ -18,6 +18,7 @@ import Legal from "./pages/Legal";
 import Klien from "./pages/Klien";
 import Hubungi from "./pages/Hubungi";
 import KlienBagian from "./pages/KlienBagian";
+import LayananKami from "./pages/LayananKami";
 
 // Komponen untuk halaman utama (single page)
 function HomePage() {
@@ -140,6 +141,18 @@ function App() {
               <>
                 <Navbar />
                 <KlienBagian />
+                <Footer />
+              </>
+            }
+          />
+
+          {/* Route untuk halaman layanan kami */}
+          <Route
+            path="/layanan-kami"
+            element={
+              <>
+                <Navbar />
+                <LayananKami />
                 <Footer />
               </>
             }

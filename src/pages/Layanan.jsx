@@ -1,418 +1,496 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from "framer-motion";
+import React, { useState, useEffect, useRef } from 'react';
+import { ArrowRight, CheckCircle, Star, TrendingUp, Shield, Briefcase, Calculator, MousePointer2 } from 'lucide-react';
 
-// 1. Service Data Configuration
-const servicesData = [
+const assuranceImg = 'https://images.unsplash.com/photo-1556742044-3c52d6e88c62?w=400&h=250&fit=crop';
+const advisoryImg = 'https://images.unsplash.com/photo-1513258496099-48168024aec0?w=400&h=250&fit=crop';
+const financeImg = 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=400&h=250&fit=crop';
+const advisorImg = 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=250&fit=crop';
+const taxationImg = 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=250&fit=crop';
+
+const layananUtama = [
   {
     id: 'audit',
     title: 'AUDIT',
-    color: 'bg-green-500',
-    dotColor: 'bg-gray-500',
-    textColor: 'text-white',
-    contentColor: 'text-gray-600',
-    position: { top: '70%', right: '2%' },
-    items: [
+    hash: 'audit',
+    img: assuranceImg,
+    desc: 'Layanan audit adalah pemeriksaan independen atas laporan keuangan atau informasi lainnya untuk memberikan opini mengenai kewajaran dan keakuratannya. Ini membantu memastikan transparansi dan keandalan informasi finansial.',
+    color: 'from-blue-600 to-cyan-500',
+    bgColor: 'bg-blue-50',
+    borderColor: 'border-blue-200',
+    icon: Shield,
+    features: [
       'General Audit',
       'Due Diligence',
       'Management Audit',
-      'Other Attestation Services'
-    ]
+      'Other Attestation Services',
+    ],
+    badge: 'Most Popular'
   },
   {
     id: 'ppl',
-    title: 'PPL',
-    subtitle: '(Pendidikan & Pelatihan)',
-    color: 'bg-orange-500',
-    dotColor: 'bg-gray-500',
-    textColor: 'text-white',
-    contentColor: 'text-gray-600',
-    position: { top: '0%', right: '2%' },
-    items: [
-      'Akuntansi (Penyusunan Laporan Keuangan)',
-      'Perpajakan'
+    title: 'PPL (Pendidikan & Pelatihan)',
+    hash: 'ppl',
+    img: advisoryImg,
+    desc: 'Layanan pendidikan dan pelatihan dirancang untuk meningkatkan pengetahuan dan keterampilan individu atau tim dalam bidang tertentu.',
+    color: 'from-emerald-600 to-teal-500',
+    bgColor: 'bg-emerald-50',
+    borderColor: 'border-emerald-200',
+    icon: TrendingUp,
+    features: [
+      'Akuntansi',
+      'Perpajakan',
+      'Audit Laporan Keuangan',
     ]
   },
   {
     id: 'accounting',
     title: 'ACCOUNTING ADVISOR',
-    color: 'bg-gray-600',
-    dotColor: 'bg-gray-500',
-    textColor: 'text-white',
-    contentColor: 'text-gray-600',
-    position: { top: '38.5%', right: '2%' },
-    items: [
+    hash: 'accounting',
+    img: advisorImg,
+    desc: 'Layanan penasihat akuntansi memberikan saran dan panduan ahli terkait masalah akuntansi dan pelaporan keuangan.',
+    color: 'from-orange-600 to-red-500',
+    bgColor: 'bg-orange-50',
+    borderColor: 'border-orange-200',
+    icon: Star,
+    features: [
       'IFRS Convergence',
-      'Accounting Advice'
+      'Accounting Advice',
     ]
   },
   {
-    id: 'business',
+    id: 'finance',
     title: 'BUSINESS MANAGEMENT CONSULT',
-    color: 'bg-red-500',
-    dotColor: 'bg-gray-500',
-    textColor: 'text-white',
-    contentColor: 'text-gray-600',
-    position: { bottom: '-22%', left: '2%' },
-    items: [
+    hash: 'finance',
+    img: financeImg,
+    desc: 'Layanan konsultasi manajemen bisnis membantu perusahaan meningkatkan kinerja, efisiensi, dan pertumbuhan melalui analisis, strategi, dan implementasi solusi.',
+    color: 'from-purple-600 to-indigo-500',
+    bgColor: 'bg-purple-50',
+    borderColor: 'border-purple-200',
+    icon: Briefcase,
+    features: [
       'Financial Consulting',
       'Capital Restriction',
       'Merger (Acquisition)',
-      'Design Information Accounting System'
+      'Design Information Accounting System',
     ]
   },
   {
     id: 'taxation',
     title: 'TAXATION',
-    color: 'bg-cyan-500',
-    dotColor: 'bg-gray-500',
-    textColor: 'text-white',
-    contentColor: 'text-gray-600',
-    position: { bottom: '36%', left: '2%' },
-    items: [
+    hash: 'taxation',
+    img: taxationImg,
+    desc: 'Layanan perpajakan mencakup semua aspek yang berkaitan dengan kepatuhan, perencanaan, dan penyelesaian masalah pajak.',
+    color: 'from-rose-600 to-pink-500',
+    bgColor: 'bg-rose-50',
+    borderColor: 'border-rose-200',
+    icon: Calculator,
+    features: [
       'Tax Advisor',
       'Examination of Tax Compliance',
       'Tax Administration',
       'Tax Planning',
       'Transfer Pricing',
-      'Legal Tax'
+      'Legal Tax',
     ]
-  }
+  },
 ];
 
-// 2. Background Component
-const AnimatedBackground = () => (
-  <div className="absolute inset-0 overflow-hidden">
-    <div className="absolute top-6 left-6 w-12 h-12 bg-gray-200/30 rounded-full backdrop-blur-sm border border-gray-300/40" />
-    <div className="absolute top-20 right-12 w-10 h-10 bg-gray-100/40 rounded-lg rotate-45 backdrop-blur-sm border border-gray-300/30" />
-    <div className="absolute bottom-16 left-12 w-8 h-8 bg-slate-200/35 rounded-full backdrop-blur-sm border border-slate-300/45" />
-    <div className="absolute bottom-20 right-20 w-16 h-16 bg-gray-50/50 rounded-lg backdrop-blur-sm border border-gray-200/35" />
-    
-    <div 
-      className="absolute inset-0 opacity-15"
-      style={{
-        backgroundImage: `radial-gradient(circle at 1px 1px, rgba(148, 163, 184, 0.25) 1px, transparent 0)`,
-        backgroundSize: '20px 20px'
-      }}
-    />
-    
-    <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-gray-100/15 backdrop-blur-[1px]" />
-  </div>
-);
+// Tambahkan fungsi easing smooth
+const easeInOutCubic = t => t < 0.5
+  ? 4 * t * t * t
+  : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
-// 3. Service Card Component
-const ServiceCard = ({ service, isHovered, onHover, onLeave, isDesktop = true }) => {
-  const cardClasses = isDesktop
-    ? `absolute bg-white mt-20 rounded-xl shadow-lg border border-gray-200 p-4 cursor-pointer w-64 backdrop-blur-lg transition-all duration-300 ${
-        isHovered ? 'shadow-xl z-30 transform scale-105 -translate-y-1' : 'z-10'
-      }`
-    : `bg-white rounded-lg shadow-md border border-gray-200 p-0 hover:shadow-lg transition-all duration-300 backdrop-blur-lg hover:scale-102 overflow-hidden`;
+const Layanan = () => {
+  const [hoveredCard, setHoveredCard] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+  const [hasScrolled, setHasScrolled] = useState(false);
+  const [cardAnimationProgress, setCardAnimationProgress] = useState(0);
+  const [showParticles, setShowParticles] = useState(true);
+  const [animationKey, setAnimationKey] = useState(0);
+  const containerRef = useRef(null);
+  const cardsRef = useRef([]);
+  
+  useEffect(() => {
+    setIsVisible(true);
+    
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setScrollY(currentScrollY);
+      
+      // Calculate animation progress based on scroll
+      const maxScroll = 600;
+      const progress = Math.min(currentScrollY / maxScroll, 1);
+      setCardAnimationProgress(progress);
+      
+      // Detect if user has scrolled
+      if (currentScrollY > 50 && !hasScrolled) {
+        setHasScrolled(true);
+        setShowParticles(false);
+      } else if (currentScrollY <= 50 && hasScrolled) {
+        setHasScrolled(false);
+        setShowParticles(true);
+      }
+    };
 
-  const shadowStyle = isDesktop ? {
-    boxShadow: isHovered 
-      ? '0 20px 40px -10px rgba(0, 0, 0, 0.2), 0 0 25px rgba(0, 0, 0, 0.06)'
-      : '0 8px 20px -2px rgba(0, 0, 0, 0.12), 0 0 12px rgba(0, 0, 0, 0.04)',
-    ...service.position
-  } : {
-    boxShadow: '0 6px 20px -4px rgba(0, 0, 0, 0.12), 0 0 12px rgba(0, 0, 0, 0.04)'
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    // Intersection Observer untuk reset animasi saat section masuk viewport
+    const observer = new window.IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+          setCardAnimationProgress(0);
+          setShowParticles(true);
+          setAnimationKey(prev => prev + 1);
+        }
+      },
+      { threshold: 0.5 }
+    );
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (containerRef.current) observer.unobserve(containerRef.current);
+    };
+  }, []);
+  
+  const handleNavigation = (path) => {
+    window.location.assign(path);
+  };
+
+  // Calculate transform for each card based on scroll with easing
+  const getCardTransform = (index) => {
+    const progress = cardAnimationProgress;
+    const ease = easeInOutCubic(progress);
+
+    if (progress === 0) {
+      const positions = [
+        { x: 80, y: 40, rotate: 6 },
+        { x: 40, y: 20, rotate: -4 },
+        { x: 0, y: 0, rotate: 0 },
+        { x: -40, y: 20, rotate: 4 },
+        { x: -80, y: 40, rotate: -6 }
+      ];
+      const pos = positions[index] || { x: 0, y: 0, rotate: 0 };
+      return {
+        transform: `translate(${pos.x}px, ${pos.y}px) scale(0.9) rotate(${pos.rotate}deg)`,
+        opacity: 0.9,
+        filter: 'blur(0.3px)',
+        transition: 'all 0.6s cubic-bezier(0.77,0,0.175,1)'
+      };
+    } else {
+      const translateX = 80 * (1 - ease) * (index - 2) * 0.25;
+      const translateY = 40 * (1 - ease) * Math.sin(index * 0.5);
+      const rotation = 6 * (1 - ease) * (index % 2 === 0 ? 1 : -1);
+      const scale = 0.9 + 0.1 * ease;
+      const opacity = 0.9 + 0.1 * ease;
+      const blur = 0.3 * (1 - ease);
+      return {
+        transform: `translate(${translateX}px, ${translateY}px) scale(${scale}) rotate(${rotation}deg)`,
+        opacity: opacity,
+        filter: `blur(${blur}px)`,
+        zIndex: progress > 0.8 ? 'auto' : 10 - index,
+        transition: 'all 0.6s cubic-bezier(0.77,0,0.175,1)'
+      };
+    }
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.05, y: -5 }}
-      transition={{ duration: 0.3 }}
-      className={cardClasses}
-      style={shadowStyle}
-      onMouseEnter={onHover}
-      onMouseLeave={onLeave}
-    >
-      <div className={`${isDesktop ? 'mb-3 -m-4 m' : 'mb-0'} ${service.color} p-4 ${isDesktop ? 'rounded-t-xl' : ''}`}>
-        <h3 className={`font-bold ${service.textColor} ${isDesktop ? 'text-base' : 'text-sm'} mb-1 tracking-wide ${isDesktop ? '' : 'leading-tight'}`}>
-          {service.title}
-        </h3>
-        {service.subtitle && (
-          <div className={`text-xs ${service.textColor} opacity-90 font-medium`}>
-            {service.subtitle}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 relative overflow-hidden">
+      {/* Background Decorations */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-20 -right-20 w-60 h-60 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full opacity-40 blur-2xl"></div>
+        <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full opacity-40 blur-2xl"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-full opacity-25 blur-2xl"></div>
+      </div>
+
+      <div className="relative z-10 py-12 px-4 sm:px-6 lg:px-8">
+        {/* Floating Particles */}
+        {showParticles && (
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {[...Array(10)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute animate-float"
+                style={{
+                  left: Math.random() * 100 + '%',
+                  top: Math.random() * 100 + '%',
+                  animationDelay: Math.random() * 3 + 's',
+                  animationDuration: (3 + Math.random() * 4) + 's'
+                }}
+              >
+                <div className="w-1.5 h-1.5 bg-blue-400 rounded-full opacity-25"></div>
+              </div>
+            ))}
           </div>
         )}
+        
+        {/* Header Section */}
+        <div className={`max-w-6xl mx-auto text-center mb-12 mt-16 transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+          <h1 className="text-4xl lg:text-5xl font-black mb-4">
+            <span className="bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent">
+              Layanan
+            </span>
+            <br />
+            <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+              Unggulan Kami
+            </span>
+          </h1>
+          
+          <p className="text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-light">
+            Solusi profesional dan terpercaya untuk kebutuhan bisnis Anda dengan standar kualitas internasional
+          </p>
+          
+          <div className="mt-6 flex justify-center">
+            <div className="w-16 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
+          </div>
+        </div>
+
+        {/* Progress Bar */}
+        <div className="fixed top-0 left-0 w-full h-0.5 bg-gray-200/30 z-50">
+          <div 
+            className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 transition-all duration-300 ease-out"
+            style={{ width: `${cardAnimationProgress * 100}%` }}
+          ></div>
+        </div>
+
+        {/* Services Grid */}
+        <div className="max-w-6xl mx-auto" ref={containerRef}>
+          <div className="relative transition-all duration-1000 ease-out">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 lg:gap-6" key={animationKey}>
+              {layananUtama.map((layanan, index) => {
+                const IconComponent = layanan.icon;
+                const cardTransform = getCardTransform(index);
+                
+                return (
+                  <div
+                    key={layanan.id}
+                    ref={el => cardsRef.current[index] = el}
+                    className={`group relative bg-white/80 backdrop-blur-md rounded-2xl shadow-lg hover:shadow-xl transform transition-all duration-600 overflow-hidden border border-white/30 hover:border-white/50 ${hoveredCard === layanan.id ? 'scale-105 -translate-y-2 rotate-1' : ''}`}
+                    onMouseEnter={() => setHoveredCard(layanan.id)}
+                    onMouseLeave={() => setHoveredCard(null)}
+                    style={{
+                      ...cardTransform,
+                      transitionDelay: `${index * 60}ms`,
+                      willChange: 'transform',
+                    }}
+                  >
+                    {/* Glowing Border Effect */}
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/15 to-purple-500/15 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-lg"></div>
+                    
+                    {/* Content */}
+                    <div className="relative p-6 h-full flex flex-col items-center">
+                      <div className="relative mb-4 w-full">
+                        <div className={`absolute inset-0 ${layanan.bgColor} rounded-xl transform rotate-1 group-hover:rotate-3 transition-transform duration-500 opacity-50`} />
+                        <div className="relative">
+                          <img
+                            src={layanan.img}
+                            alt={layanan.title}
+                            className="w-full h-24 object-cover rounded-xl shadow-md group-hover:shadow-lg transition-all duration-500 border border-white/50"
+                          />
+                          {/* Icon Overlay with Pulse Effect */}
+                          <div className={`absolute -bottom-2 -right-2 w-8 h-8 bg-gradient-to-r ${layanan.color} rounded-lg shadow-md flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300`}>
+                            <IconComponent className="w-4 h-4 text-white" />
+                            <div className="absolute inset-0 rounded-lg bg-white/20 animate-ping group-hover:animate-none"></div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Badge with Animation */}
+                      {layanan.badge && (
+                        <div className="absolute top-3 right-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md animate-bounce-slow">
+                          {layanan.badge}
+                        </div>
+                      )}
+                      
+                      {/* Judul dengan Text Effect */}
+                      <h3 className="text-lg font-bold text-gray-800 mb-3 group-hover:text-gray-900 transition-colors duration-300 text-center relative">
+                        {layanan.title}
+                      </h3>
+                      <ul className="mb-4 text-left px-2 w-full">
+                        {layanan.features.map((feature, idx) => (
+                          <li key={idx} className="flex items-center text-sm text-gray-700 font-medium leading-tight mb-1">
+                            <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0" />
+                            <span>{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      
+                      {/* Button with Hover Effects */}
+                      <button
+                        onClick={() => handleNavigation(`/layanan-kami#${layanan.hash}`)}
+                        className={`cursor-pointer mt-auto group/btn relative bg-gradient-to-r ${layanan.color} hover:shadow-lg text-white font-bold py-2.5 px-6 rounded-xl transition-all duration-500 flex items-center justify-center transform hover:scale-105 overflow-hidden text-sm`}
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 ease-in-out"></div>
+                        <span className="mr-1.5 relative z-10">Selengkapnya</span>
+                        <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300 relative z-10" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Additional content to enable scrolling */}
+        <div className="mt-20 max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl font-bold text-gray-800 mb-6">Mengapa Memilih Kami?</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6 shadow-md">
+              <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                <Shield className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-800 mb-3">Profesional Bersertifikat</h3>
+              <p className="text-gray-600 text-sm">Tim ahli dengan sertifikasi internasional dan pengalaman bertahun-tahun</p>
+            </div>
+            <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6 shadow-md">
+              <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                <TrendingUp className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-800 mb-3">Hasil Terukur</h3>
+              <p className="text-gray-600 text-sm">Komitmen memberikan hasil yang dapat diukur dan sesuai dengan target bisnis</p>
+            </div>
+            <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6 shadow-md">
+              <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                <Star className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-800 mb-3">Kepercayaan Klien</h3>
+              <p className="text-gray-600 text-sm">Dipercaya oleh ratusan perusahaan dari berbagai industri di Indonesia</p>
+            </div>
+          </div>
+        </div>
       </div>
-      
-      <div className={isDesktop ? '' : 'p-4'}>
-        <ul className='space-y-2'>
-          {service.items.map((item, idx) => (
-            <li 
-              key={idx} 
-              className={`text-xs ${service.contentColor} flex items-start leading-relaxed`}
-            >
-              <span className={`w-1.5 h-1.5 ${service.dotColor} rounded-full mt-1.5 mr-2 flex-shrink-0 shadow-sm`} />
-              <span className='font-medium'>{item}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </motion.div>
+
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          33% { transform: translateY(-8px) rotate(3deg); }
+          66% { transform: translateY(4px) rotate(-2deg); }
+        }
+        
+        @keyframes scroll-indicator {
+          0% { transform: translateX(-50%) translateY(0); opacity: 1; }
+          50% { transform: translateX(-50%) translateY(12px); opacity: 0.5; }
+          100% { transform: translateX(-50%) translateY(18px); opacity: 0; }
+        }
+        
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.8; transform: scale(1.03); }
+        }
+        
+        @keyframes bounce-slow {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-3px); }
+        }
+        
+        @keyframes shimmer {
+          0% { transform: translateX(-100%) skewX(-12deg); }
+          100% { transform: translateX(200%) skewX(-12deg); }
+        }
+        
+        @keyframes fade-in-up {
+          0% { opacity: 0; transform: translateY(8px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-float {
+          animation: float 5s ease-in-out infinite;
+        }
+        
+        .animate-scroll-indicator {
+          animation: scroll-indicator 1.5s ease-in-out infinite;
+        }
+        
+        .animate-pulse-slow {
+          animation: pulse-slow 2.5s ease-in-out infinite;
+        }
+        
+        .animate-bounce-slow {
+          animation: bounce-slow 1.5s ease-in-out infinite;
+        }
+        
+        .animate-shimmer {
+          animation: shimmer 1.5s ease-in-out;
+        }
+        
+        .animate-fade-in-up {
+          animation: fade-in-up 0.5s ease-out forwards;
+          opacity: 0;
+        }
+        
+        /* Glassmorphism effects */
+        .backdrop-blur-md {
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+          width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 8px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+          background: linear-gradient(45deg, #3b82f6, #06b6d4);
+          border-radius: 8px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(45deg, #2563eb, #0891b2);
+        }
+        
+        /* Smooth scroll behavior */
+        html {
+          scroll-behavior: smooth;
+        }
+        
+        /* Performance optimizations */
+        .group {
+          transform-style: preserve-3d;
+          backface-visibility: hidden;
+        }
+        
+        /* Shadow effects */
+        .shadow-xl {
+          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 1280px) {
+          .xl\\:grid-cols-5 {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+          }
+        }
+        
+        @media (max-width: 768px) {
+          .animate-float {
+            animation: none;
+          }
+          
+          .backdrop-blur-md {
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+          }
+        }
+        
+        /* Reduce motion for accessibility */
+        @media (prefers-reduced-motion: reduce) {
+          *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+          }
+        }
+      `}</style>
+    </div>
   );
 };
 
-// 4. Desktop Service Cards Component
-const DesktopServiceCards = ({ services, hoveredService, setHoveredService }) => (
-  <div className='hidden lg:block relative h-[500px]'>
-    {services.map((service) => (
-      <ServiceCard
-        key={service.id}
-        service={service}
-        isHovered={hoveredService === service.id}
-        onHover={() => setHoveredService(service.id)}
-        onLeave={() => setHoveredService(null)}
-        isDesktop={true}
-      />
-    ))}
-  </div>
-);
-
-// 5. Mobile Service Cards Component
-const MobileServiceCards = ({ services }) => (
-  <div className='lg:hidden max-w-3xl mx-auto px-2'>
-    <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-      {services.map((service) => (
-        <ServiceCard
-          key={service.id}
-          service={service}
-          isHovered={false}
-          onHover={() => {}}
-          onLeave={() => {}}
-          isDesktop={false}
-        />
-      ))}
-    </div>
-  </div>
-);
-
-// 6. Central Hub Component
-const CentralHub = () => (
-  <div 
-    className='absolute top-1/2 left-1/2 w-16 h-16 bg-blue-800 rounded-full transform -translate-x-1/2 -translate-y-1/2 z-30'
-    style={{
-      boxShadow: '0 8px 16px rgba(0,0,0,0.15), 0 0 15px rgba(59, 130, 246, 0.3)'
-    }}
-  >
-    <div className='absolute inset-2 bg-white rounded-full flex items-center justify-center'>
-      <div className='w-6 h-6 bg-red-500 rounded-full'></div>
-    </div>
-  </div>
-);
-
-// 7. Connection Arms Component
-const ConnectionArms = ({ services, hoveredService, getColorValue }) => (
-  <svg className='absolute inset-0 w-full h-full' viewBox="0 0 400 400">
-    {services.map((service, index) => {
-      const centerX = 200;
-      const centerY = 200;
-      const angle = (index * (360 / services.length)) * (Math.PI / 180);
-      const radius = 140;
-      const x = centerX + radius * Math.cos(angle);
-      const y = centerY + radius * Math.sin(angle);
-      
-      const lineColor = hoveredService === service.id 
-                        ? getColorValue(service.color)
-                        : 'rgba(100, 116, 139, 0.6)';
-      const lineStrokeWidth = hoveredService === service.id ? "4" : "2";
-
-      return (
-        <g key={service.id}>
-          <line
-            x1={centerX}
-            y1={centerY}
-            x2={x}
-            y2={y}
-            stroke={lineColor}
-            strokeWidth={lineStrokeWidth}
-            className='transition-all duration-300'
-            style={{
-              filter: hoveredService === service.id ? `drop-shadow(0 0 6px ${lineColor})` : 'none'
-            }}
-          />
-          <circle
-            cx={x}
-            cy={y}
-            r="4"
-            fill={lineColor}
-            className='transition-all duration-300'
-          />
-        </g>
-      );
-    })}
-  </svg>
-);
-
-// 8. Service Node Circles Component
-const ServiceNodeCircles = ({ services, hoveredService, setHoveredService, getColorValue }) => (
-  <>
-    {services.map((service, index) => {
-      const angle = (index * (360 / services.length)) * (Math.PI / 180);
-      const radius = 140;
-      const x = 200 + radius * Math.cos(angle);
-      const y = 200 + radius * Math.sin(angle);
-      
-      const getAbbreviation = (serviceId) => {
-        const abbreviations = {
-          'business': 'BMC',
-          'accounting': 'ACC',
-          'audit': 'AUD',
-          'taxation': 'TAX',
-          'ppl': 'PPL'
-        };
-        return abbreviations[serviceId] || serviceId.substring(0,3).toUpperCase();
-      };
-      
-      return (
-        <div
-          key={service.id}
-          className={`absolute w-20 h-20 ${service.color} rounded-full flex items-center justify-center text-white cursor-pointer z-20 transition-all duration-300 ${
-            hoveredService === service.id ? 'transform scale-110' : ''
-          }`}
-          style={{
-            left: `${x - 40}px`,
-            top: `${y - 40}px`,
-            boxShadow: hoveredService === service.id 
-              ? `0 12px 28px rgba(0, 0, 0, 0.18), 0 0 20px ${getColorValue(service.color)}30`
-              : '0 6px 18px rgba(0, 0, 0, 0.12), 0 0 12px rgba(0, 0, 0, 0.04)',
-          }}
-          onMouseEnter={() => setHoveredService(service.id)}
-          onMouseLeave={() => setHoveredService(null)}
-        >
-          <div className='text-center'>
-            <div className='font-bold text-sm leading-tight px-1'>
-              {getAbbreviation(service.id)}
-            </div>
-          </div>
-          
-          {hoveredService === service.id && (
-            <>
-              <div className='absolute inset-0 rounded-full border-2 border-white opacity-60' />
-              <div className='absolute -inset-2 rounded-full border-2 border-current opacity-30' />
-            </>
-          )}
-        </div>
-      );
-    })}
-  </>
-);
-
-// 9. Central Rotating Mechanism Component
-const CentralRotatingMechanism = ({ services, hoveredService, setHoveredService, rotation, getColorValue }) => (
-  <div className='hidden lg:block absolute top-[60%] left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
-    <div className='relative w-[400px] h-[400px]'>
-      {/* Outer Ring */}
-      <div 
-        className='absolute inset-0 rounded-full border-2 border-gray-300/60 shadow-inner backdrop-blur-lg'
-        style={{
-          background: 'linear-gradient(145deg, rgba(255,255,255,0.4), rgba(248,250,252,0.2))',
-          boxShadow: 'inset 0 3px 12px rgba(0, 0, 0, 0.06), 0 6px 24px rgba(0, 0, 0, 0.03)'
-        }}
-      />
-      {/* Rotating Container */}
-      <div 
-        className='absolute inset-0 transition-transform duration-75 ease-linear'
-        style={{ transform: `rotate(${rotation}deg)` }}
-      >
-        <CentralHub />
-        <ConnectionArms 
-          services={services} 
-          hoveredService={hoveredService} 
-          getColorValue={getColorValue} 
-        />
-        <ServiceNodeCircles 
-          services={services} 
-          hoveredService={hoveredService} 
-          setHoveredService={setHoveredService}
-          getColorValue={getColorValue}
-        />
-      </div>
-    </div>
-  </div>
-);
-
-// 10. Main Title Component
-const MainTitle = () => (
-  <motion.h1 
-    initial={{ opacity: 0, y: -20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5 }}
-    className='text-center text-2xl md:text-3xl font-bold text-gray-800 uppercase mb-8 lg:mb-0 lg:absolute lg:left-1/2 lg:transform lg:-translate-x-1/2 px-2'
-    style={{
-      textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
-    }}
-  >
-    our range of services 
-  </motion.h1>
-);
-
-// 11. Main Services Diagram Component
-function ModularServicesDiagram() {
-  const [hoveredService, setHoveredService] = useState(null);
-  const [rotation, setRotation] = useState(0);
-
-  // Auto rotation effect
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (!hoveredService) {
-        setRotation(prev => prev + 0.4);
-      }
-    }, 30);
-
-    return () => clearInterval(interval);
-  }, [hoveredService]);
-
-  // Helper function to get Tailwind color values for SVG
-  const getColorValue = (bgClass) => {
-    const colorMap = {
-      'bg-green-500': '#10b981',
-      'bg-orange-500': '#f97316',
-      'bg-gray-600': '#4b5563',
-      'bg-red-500': '#ef4444',
-      'bg-cyan-500': '#06b6d4'
-    };
-    return colorMap[bgClass] || '#d1d5db';
-  };
-
-  return (
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="relative py-4 lg:py-8 overflow-hidden pt-16 lg:pt-28 px-4"
-      style={{
-        background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.92) 30%, rgba(241,245,249,0.88) 70%, #fff 99%, #fff 100%)',
-        backdropFilter: 'blur(20px)',
-        minHeight: 'calc(100vh + 120px)'
-      }}
-    >
-      <AnimatedBackground />
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className='relative w-full max-w-6xl mx-auto px-2 lg:h-[550px]'
-      >
-        <MainTitle />
-        <DesktopServiceCards 
-          services={servicesData} 
-          hoveredService={hoveredService} 
-          setHoveredService={setHoveredService} 
-        />
-        <MobileServiceCards services={servicesData} />
-        <CentralRotatingMechanism 
-          services={servicesData}
-          hoveredService={hoveredService}
-          setHoveredService={setHoveredService}
-          rotation={rotation}
-          getColorValue={getColorValue}
-        />
-      </motion.div>
-    </motion.div>
-  );
-}
-
-export default ModularServicesDiagram;
+export default Layanan;
