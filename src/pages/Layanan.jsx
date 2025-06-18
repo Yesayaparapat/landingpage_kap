@@ -108,10 +108,19 @@ const Layanan = () => {
   const [cardAnimationProgress, setCardAnimationProgress] = useState(0);
   const [showParticles, setShowParticles] = useState(true);
   const [animationKey, setAnimationKey] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef(null);
   const cardsRef = useRef([]);
   
   useEffect(() => {
+    // Check if mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
     setIsVisible(true);
     
     const handleScroll = () => {
@@ -151,6 +160,7 @@ const Layanan = () => {
     }
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', checkMobile);
       if (containerRef.current) observer.unobserve(containerRef.current);
     };
   }, []);
@@ -159,8 +169,17 @@ const Layanan = () => {
     window.location.assign(path);
   };
 
-  // Calculate transform for each card based on scroll with easing
+  // Calculate transform for each card based on scroll with easing - disable on mobile
   const getCardTransform = (index) => {
+    if (isMobile) {
+      return {
+        transform: 'none',
+        opacity: 1,
+        filter: 'none',
+        transition: 'all 0.3s ease'
+      };
+    }
+
     const progress = cardAnimationProgress;
     const ease = easeInOutCubic(progress);
 
@@ -197,17 +216,17 @@ const Layanan = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 relative overflow-x-hidden">
       {/* Background Decorations */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-20 -right-20 w-60 h-60 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full opacity-40 blur-2xl"></div>
-        <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full opacity-40 blur-2xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-full opacity-25 blur-2xl"></div>
+        <div className="absolute -top-20 -right-20 w-40 h-40 md:w-60 md:h-60 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full opacity-40 blur-2xl"></div>
+        <div className="absolute -bottom-20 -left-20 w-40 h-40 md:w-60 md:h-60 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full opacity-40 blur-2xl"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 md:w-72 md:h-72 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-full opacity-25 blur-2xl"></div>
       </div>
 
-      <div className="relative z-10 py-12 px-4 sm:px-6 lg:px-8">
-        {/* Floating Particles */}
-        {showParticles && (
+      <div className="relative z-10 py-6 md:py-8 lg:py-12 px-4 md:px-4 lg:px-8">
+        {/* Floating Particles - disabled on mobile */}
+        {showParticles && !isMobile && (
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             {[...Array(10)].map((_, i) => (
               <div
@@ -227,8 +246,8 @@ const Layanan = () => {
         )}
         
         {/* Header Section */}
-        <div className={`max-w-6xl mx-auto text-center mb-12 mt-16 transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-          <h1 className="text-4xl lg:text-5xl font-black mb-4">
+        <div className={`max-w-6xl mx-auto text-center mb-8 md:mb-12 mt-4 md:mt-8 lg:mt-16 transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-black mb-3 md:mb-4 px-2">
             <span className="bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent">
               Layanan
             </span>
@@ -238,12 +257,12 @@ const Layanan = () => {
             </span>
           </h1>
           
-          <p className="text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-light">
+          <p className="text-base md:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-light px-4">
             Solusi profesional dan terpercaya untuk kebutuhan bisnis Anda dengan standar kualitas internasional
           </p>
           
-          <div className="mt-6 flex justify-center">
-            <div className="w-16 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
+          <div className="mt-4 md:mt-6 flex justify-center">
+            <div className="w-12 md:w-16 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
           </div>
         </div>
 
@@ -256,9 +275,9 @@ const Layanan = () => {
         </div>
 
         {/* Services Grid */}
-        <div className="max-w-6xl mx-auto" ref={containerRef}>
+        <div className="max-w-6xl mx-auto px-2 md:px-4" ref={containerRef}>
           <div className="relative transition-all duration-1000 ease-out">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 lg:gap-6" key={animationKey}>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 md:gap-6" key={animationKey}>
               {layananUtama.map((layanan, index) => {
                 const IconComponent = layanan.icon;
                 const cardTransform = getCardTransform(index);
@@ -267,63 +286,70 @@ const Layanan = () => {
                   <div
                     key={layanan.id}
                     ref={el => cardsRef.current[index] = el}
-                    className={`group relative bg-white/80 backdrop-blur-md rounded-2xl shadow-lg hover:shadow-xl transform transition-all duration-600 overflow-hidden border border-white/30 hover:border-white/50 ${hoveredCard === layanan.id ? 'scale-105 -translate-y-2 rotate-1' : ''}`}
-                    onMouseEnter={() => setHoveredCard(layanan.id)}
-                    onMouseLeave={() => setHoveredCard(null)}
+                    className={`group relative bg-white/80 backdrop-blur-md rounded-2xl shadow-lg hover:shadow-xl transform transition-all duration-300 md:duration-600 overflow-hidden border border-white/30 hover:border-white/50 min-w-0 ${!isMobile && hoveredCard === layanan.id ? 'scale-105 -translate-y-2 rotate-1' : ''}`}
+                    onMouseEnter={() => !isMobile && setHoveredCard(layanan.id)}
+                    onMouseLeave={() => !isMobile && setHoveredCard(null)}
                     style={{
                       ...cardTransform,
                       transitionDelay: `${index * 60}ms`,
-                      willChange: 'transform',
                     }}
                   >
-                    {/* Glowing Border Effect */}
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/15 to-purple-500/15 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-lg"></div>
+                    {/* Glowing Border Effect - disabled on mobile */}
+                    {!isMobile && (
+                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/15 to-purple-500/15 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-lg"></div>
+                    )}
                     
                     {/* Content */}
-                    <div className="relative p-6 h-full flex flex-col items-center">
+                    <div className="relative p-4 md:p-6 h-full flex flex-col items-center">
                       <div className="relative mb-4 w-full">
-                        <div className={`absolute inset-0 ${layanan.bgColor} rounded-xl transform rotate-1 group-hover:rotate-3 transition-transform duration-500 opacity-50`} />
+                        <div className={`absolute inset-0 ${layanan.bgColor} rounded-xl transform rotate-1 ${!isMobile ? 'group-hover:rotate-3' : ''} transition-transform duration-500 opacity-50`} />
                         <div className="relative">
                           <img
                             src={layanan.img}
                             alt={layanan.title}
-                            className="w-full h-24 object-cover rounded-xl shadow-md group-hover:shadow-lg transition-all duration-500 border border-white/50"
+                            className="w-full h-32 md:h-36 object-cover rounded-xl shadow-md group-hover:shadow-lg transition-all duration-500 border border-white/50"
                           />
-                          {/* Icon Overlay with Pulse Effect */}
-                          <div className={`absolute -bottom-2 -right-2 w-8 h-8 bg-gradient-to-r ${layanan.color} rounded-lg shadow-md flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300`}>
+                          {/* Icon Overlay */}
+                          <div className={`absolute -bottom-2 -right-2 w-8 h-8 bg-gradient-to-r ${layanan.color} rounded-lg shadow-md flex items-center justify-center transform ${!isMobile ? 'group-hover:scale-110' : ''} transition-transform duration-300`}>
                             <IconComponent className="w-4 h-4 text-white" />
-                            <div className="absolute inset-0 rounded-lg bg-white/20 animate-ping group-hover:animate-none"></div>
+                            {!isMobile && (
+                              <div className="absolute inset-0 rounded-lg bg-white/20 animate-ping group-hover:animate-none"></div>
+                            )}
                           </div>
                         </div>
                       </div>
                       
-                      {/* Badge with Animation */}
+                      {/* Badge */}
                       {layanan.badge && (
-                        <div className="absolute top-3 right-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md animate-bounce-slow">
+                        <div className="absolute top-3 right-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md">
                           {layanan.badge}
                         </div>
                       )}
                       
-                      {/* Judul dengan Text Effect */}
-                      <h3 className="text-lg font-bold text-gray-800 mb-3 group-hover:text-gray-900 transition-colors duration-300 text-center relative">
+                      {/* Title */}
+                      <h3 className="text-lg md:text-lg font-bold text-gray-800 mb-3 group-hover:text-gray-900 transition-colors duration-300 text-center relative leading-tight">
                         {layanan.title}
                       </h3>
-                      <ul className="mb-4 text-left px-2 w-full">
+                      
+                      {/* Features List */}
+                      <ul className="mb-4 text-left w-full flex-grow">
                         {layanan.features.map((feature, idx) => (
-                          <li key={idx} className="flex items-center text-sm text-gray-700 font-medium leading-tight mb-1">
-                            <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0" />
-                            <span>{feature}</span>
+                          <li key={idx} className="flex items-start text-sm text-gray-700 font-medium leading-relaxed mb-2">
+                            <CheckCircle className="w-4 h-4 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
+                            <span className="break-words">{feature}</span>
                           </li>
                         ))}
                       </ul>
                       
-                      {/* Button with Hover Effects */}
+                      {/* Button */}
                       <button
                         onClick={() => handleNavigation(`/layanan-kami#${layanan.hash}`)}
-                        className={`cursor-pointer mt-auto group/btn relative bg-gradient-to-r ${layanan.color} hover:shadow-lg text-white font-bold py-2.5 px-6 rounded-xl transition-all duration-500 flex items-center justify-center transform hover:scale-105 overflow-hidden text-sm`}
+                        className={`cursor-pointer mt-auto group/btn relative bg-gradient-to-r ${layanan.color} hover:shadow-lg text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 md:duration-500 flex items-center justify-center transform hover:scale-105 overflow-hidden text-sm w-full`}
                       >
-                        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 ease-in-out"></div>
-                        <span className="mr-1.5 relative z-10">Selengkapnya</span>
+                        {!isMobile && (
+                          <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 ease-in-out"></div>
+                        )}
+                        <span className="mr-2 relative z-10">Selengkapnya</span>
                         <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300 relative z-10" />
                       </button>
                     </div>
@@ -334,30 +360,30 @@ const Layanan = () => {
           </div>
         </div>
 
-        {/* Additional content to enable scrolling */}
-        <div className="mt-20 max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6">Mengapa Memilih Kami?</h2>
+        {/* Additional content */}
+        <div className="mt-12 md:mt-20 max-w-4xl mx-auto text-center px-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6">Mengapa Memilih Kami?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6 shadow-md">
               <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-3">
                 <Shield className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-bold text-gray-800 mb-3">Profesional Bersertifikat</h3>
-              <p className="text-gray-600 text-sm">Tim ahli dengan sertifikasi internasional dan pengalaman bertahun-tahun</p>
+              <p className="text-gray-600 text-sm leading-relaxed">Tim ahli dengan sertifikasi internasional dan pengalaman bertahun-tahun</p>
             </div>
             <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6 shadow-md">
               <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-3">
                 <TrendingUp className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-bold text-gray-800 mb-3">Hasil Terukur</h3>
-              <p className="text-gray-600 text-sm">Komitmen memberikan hasil yang dapat diukur dan sesuai dengan target bisnis</p>
+              <p className="text-gray-600 text-sm leading-relaxed">Komitmen memberikan hasil yang dapat diukur dan sesuai dengan target bisnis</p>
             </div>
             <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6 shadow-md">
               <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-3">
                 <Star className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-bold text-gray-800 mb-3">Kepercayaan Klien</h3>
-              <p className="text-gray-600 text-sm">Dipercaya oleh ratusan perusahaan dari berbagai industri di Indonesia</p>
+              <p className="text-gray-600 text-sm leading-relaxed">Dipercaya oleh ratusan perusahaan dari berbagai industri di Indonesia</p>
             </div>
           </div>
         </div>
@@ -370,55 +396,8 @@ const Layanan = () => {
           66% { transform: translateY(4px) rotate(-2deg); }
         }
         
-        @keyframes scroll-indicator {
-          0% { transform: translateX(-50%) translateY(0); opacity: 1; }
-          50% { transform: translateX(-50%) translateY(12px); opacity: 0.5; }
-          100% { transform: translateX(-50%) translateY(18px); opacity: 0; }
-        }
-        
-        @keyframes pulse-slow {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.8; transform: scale(1.03); }
-        }
-        
-        @keyframes bounce-slow {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-3px); }
-        }
-        
-        @keyframes shimmer {
-          0% { transform: translateX(-100%) skewX(-12deg); }
-          100% { transform: translateX(200%) skewX(-12deg); }
-        }
-        
-        @keyframes fade-in-up {
-          0% { opacity: 0; transform: translateY(8px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-        
         .animate-float {
           animation: float 5s ease-in-out infinite;
-        }
-        
-        .animate-scroll-indicator {
-          animation: scroll-indicator 1.5s ease-in-out infinite;
-        }
-        
-        .animate-pulse-slow {
-          animation: pulse-slow 2.5s ease-in-out infinite;
-        }
-        
-        .animate-bounce-slow {
-          animation: bounce-slow 1.5s ease-in-out infinite;
-        }
-        
-        .animate-shimmer {
-          animation: shimmer 1.5s ease-in-out;
-        }
-        
-        .animate-fade-in-up {
-          animation: fade-in-up 0.5s ease-out forwards;
-          opacity: 0;
         }
         
         /* Glassmorphism effects */
@@ -457,18 +436,7 @@ const Layanan = () => {
           backface-visibility: hidden;
         }
         
-        /* Shadow effects */
-        .shadow-xl {
-          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        
-        /* Responsive adjustments */
-        @media (max-width: 1280px) {
-          .xl\\:grid-cols-5 {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-          }
-        }
-        
+        /* Mobile optimizations */
         @media (max-width: 768px) {
           .animate-float {
             animation: none;
@@ -478,6 +446,16 @@ const Layanan = () => {
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
           }
+          
+          /* Disable complex animations on mobile */
+          .group:hover {
+            transform: none !important;
+          }
+          
+          /* Ensure proper touch targets */
+          button {
+            min-height: 44px;
+          }
         }
         
         /* Reduce motion for accessibility */
@@ -486,6 +464,14 @@ const Layanan = () => {
             animation-duration: 0.01ms !important;
             animation-iteration-count: 1 !important;
             transition-duration: 0.01ms !important;
+          }
+        }
+        
+        /* Improve text readability on mobile */
+        @media (max-width: 480px) {
+          .text-3xl {
+            font-size: 1.75rem;
+            line-height: 2rem;
           }
         }
       `}</style>
