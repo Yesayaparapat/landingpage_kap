@@ -24,7 +24,7 @@ const layananUtama = [
       'Management Audit',
       'Other Attestation Services',
     ],
-    badge: 'Most Popular'
+    badge: undefined
   },
   {
     id: 'ppl',
