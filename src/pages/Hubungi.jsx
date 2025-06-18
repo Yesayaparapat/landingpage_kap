@@ -60,12 +60,20 @@ function HubungiKami() {
                 </div>
                 <div className="min-w-0">
                   <h3 className="text-lg lg:text-xl font-bold text-gray-900 mb-1">Telepon</h3>
-                  <a 
-                    href="tel:(021)89774251" 
-                    className="text-green-600 text-base lg:text-lg font-semibold hover:text-green-700 transition-colors"
-                  >
-                    (021) 89774251
-                  </a>
+                  <div className="flex flex-col space-y-1">
+                    <a 
+                      href="tel:(021)89774251" 
+                      className="text-green-600 text-base lg:text-lg font-semibold hover:text-green-700 transition-colors"
+                    >
+                      (021) 89774251
+                    </a>
+                    <a 
+                      href="tel:+622189774253" 
+                      className="text-green-600 text-base lg:text-lg font-semibold hover:text-green-700 transition-colors"
+                    >
+                      (021) 89774253
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -212,27 +220,27 @@ function HubungiKami() {
         {/* Bottom CTA */}
         <div className="mt-12 lg:mt-16">
           <div className="w-full max-w-7xl mx-auto px-4 py-6 bg-white rounded-2xl shadow-lg">
-            <div className="flex flex-row flex-wrap gap-4 justify-center items-stretch w-full">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
               <a
                 href="tel:(021)89774251"
-                className="group bg-white rounded-xl shadow-md p-4 flex items-center transform transition-transform duration-300 hover:scale-105 hover:bg-green-100"
+                className="group bg-white rounded-xl shadow-md p-4 flex flex-col items-center justify-center h-full min-h-[120px] transform transition-transform duration-300 hover:scale-105 hover:bg-green-100"
               >
-                <div className="bg-green-100 p-2 rounded-xl mr-3 group-hover:bg-green-200 transition-all duration-300">
+                <div className="bg-green-100 p-2 rounded-xl mb-2 group-hover:bg-green-200 transition-all duration-300">
                   <FaPhone className="w-8 h-8 text-green-600" />
                 </div>
-                <div className="text-left">
+                <div className="text-center">
                   <div className="text-xs text-gray-500 mb-0.5">Telepon</div>
-                  <div className="font-bold text-base text-gray-800">(021) 89774251/89774251</div>
+                  <div className="font-bold text-base text-gray-800">(021) 89774251<br/>(021) 89774251</div>
                 </div>
               </a>
               <a
                 href="mailto:kap.jamasterjams@gmail.com"
-                className="group bg-white rounded-xl shadow-md p-4 flex items-center transform transition-transform duration-300 hover:scale-105 hover:bg-red-100"
+                className="group bg-white rounded-xl shadow-md p-4 flex flex-col items-center justify-center h-full min-h-[120px] transform transition-transform duration-300 hover:scale-105 hover:bg-red-100"
               >
-                <div className="bg-red-100 p-2 rounded-xl mr-3 group-hover:bg-red-200 transition-all duration-300">
+                <div className="bg-red-100 p-2 rounded-xl mb-2 group-hover:bg-red-200 transition-all duration-300">
                   <FaEnvelope className="w-8 h-8 text-red-600" />
                 </div>
-                <div className="text-left">
+                <div className="text-center">
                   <div className="text-xs text-gray-500 mb-0.5">Email</div>
                   <div className="font-bold text-base text-gray-800">kap.jamasterjams@gmail.com</div>
                 </div>
@@ -241,12 +249,12 @@ function HubungiKami() {
                 href="https://www.instagram.com/kap_jamastersimanullang/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group bg-white rounded-xl shadow-md p-4 flex items-center transform transition-transform duration-300 hover:scale-105 hover:bg-pink-100"
+                className="group bg-white rounded-xl shadow-md p-4 flex flex-col items-center justify-center h-full min-h-[120px] transform transition-transform duration-300 hover:scale-105 hover:bg-pink-100"
               >
-                <div className="bg-pink-100 p-2 rounded-xl mr-3 group-hover:bg-pink-200 transition-all duration-300">
+                <div className="bg-pink-100 p-2 rounded-xl mb-2 group-hover:bg-pink-200 transition-all duration-300">
                   <FaInstagram className="w-8 h-8 text-pink-600" />
                 </div>
-                <div className="text-left">
+                <div className="text-center">
                   <div className="text-xs text-gray-500 mb-0.5">Instagram</div>
                   <div className="font-bold text-base text-gray-800">@kap_jamastersimanullang</div>
                 </div>

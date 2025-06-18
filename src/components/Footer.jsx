@@ -308,9 +308,10 @@ function Footer() {
                 >
                   <span className="text-xs">📞</span>
                 </motion.div>
-                <p className="text-gray-300 text-sm">
-                  +62 21 -8977 4253/ 8977 4251
-                </p>
+                <div className="text-gray-300 text-sm flex flex-col">
+                  <span>+62 21 -8977 4253</span>
+                  <span>+62 21 -8977 4251</span>
+                </div>
               </motion.div>
             </motion.div>
           </motion.div>
