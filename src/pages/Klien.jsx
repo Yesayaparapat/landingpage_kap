@@ -365,12 +365,12 @@ function KlienIntegrated() {
         <div
           ref={headerRef}
           className={`text-center mb-16 transition-all duration-1200 ease-out ${
-            (isVisible && headerVisible) ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-16'
+            isMobile ? 'opacity-100 translate-y-0' : (isVisible && headerVisible) ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-16'
           }`}
         >
           <div className="max-w-2xl mx-auto">
-            <h1 className={`text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-6 transition-all duration-1000 ease-out ${
-              (isVisible && headerVisible) ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+            <h1 className={`text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-6 transition-all duration-1000 ease-out ${
+              isMobile ? 'opacity-100 scale-100' : (isVisible && headerVisible) ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
             }`}>
               KLIEN BISNIS KAMI
             </h1>
