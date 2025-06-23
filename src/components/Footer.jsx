@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import logoKap from "../assets/logo kap.png";
 import Iai from "../assets/iai.png";
 import Ifac from "../assets/ifac.png";
@@ -14,8 +14,38 @@ import LinkedIcon from "../assets/linked.jpeg";
 import WhatsappIcon from "../assets/whatsapp.jpeg";
 
 function Footer() {
+  const [isHovered, setIsHovered] = useState(false);
   const footerRef = useRef(null);
   const isFooterInView = useInView(footerRef, { once: true, margin: "-50px" });
+  const navigate = useNavigate();
+
+  // Fungsi untuk navigasi ke halaman layanan dengan section tertentu
+  const navigateToService = (sectionId) => {
+    navigate(`/layanan-kami#${sectionId}`);
+    // Scroll ke section setelah navigasi dengan delay yang lebih lama
+    setTimeout(() => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 300);
+  };
+
+  // Fungsi untuk membuka Google Maps dengan petunjuk arah
+  const openGoogleMaps = () => {
+    const address = "JL. Raya Cibarusah KM. 10 Ruko Cikarang Central City Blok E NO. 8 Cikarang Selatan - Kab. BEKASI 17530";
+    const encodedAddress = encodeURIComponent(address);
+    window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}`, '_blank');
+  };
+
+  // Mapping layanan ke section ID
+  const serviceMapping = {
+    "AUDIT": "audit",
+    "PPL (Pendidikan & Pelatihan)": "ppl", 
+    "ACCOUNTING ADVISOR": "accounting",
+    "BUSINESS MANAGEMENT CONSULT": "finance",
+    "TAXATION": "taxation"
+  };
 
   // Handler untuk email click dengan fallback
   const handleEmailClick = (e, email) => {
@@ -138,6 +168,12 @@ function Footer() {
         },
       },
     },
+    paused: {
+      // Ketika di-hover, animasi akan pause di posisi saat ini
+      transition: {
+        duration: 0,
+      },
+    },
   };
 
   const dividerVariants = {
@@ -219,11 +255,11 @@ function Footer() {
             </motion.h4>
             <motion.ul className="space-y-2">
               {[
-                "Audit Laporan Keuangan",
-                "Konsultasi Perpajakan",
-                "Penyusunan Laporan Keuangan",
-                "Review Laporan Keuangan",
-                "Konsultasi Bisnis",
+                "AUDIT",
+                "PPL (Pendidikan & Pelatihan)",
+                "ACCOUNTING ADVISOR",
+                "BUSINESS MANAGEMENT CONSULT",
+                "TAXATION",
               ].map((service, index) => (
                 <motion.li
                   key={index}
@@ -241,6 +277,7 @@ function Footer() {
                       },
                     },
                   }}
+                  onClick={() => navigateToService(serviceMapping[service])}
                 >
                   • {service}
                 </motion.li>
@@ -259,9 +296,10 @@ function Footer() {
             </motion.h4>
             <motion.div className="space-y-3">
               <motion.div
-                className="flex items-start"
+                className="flex items-start cursor-pointer"
                 whileHover={{ x: 5 }}
                 transition={{ duration: 0.2 }}
+                onClick={openGoogleMaps}
               >
                 <motion.div
                   className="w-5 h-5 bg-blue-500 rounded mr-3 mt-1 flex items-center justify-center"
@@ -271,9 +309,12 @@ function Footer() {
                   <span className="text-xs">📍</span>
                 </motion.div>
                 <div>
-                  <p className="text-gray-300 text-sm">
+                  <p className="text-gray-300 text-sm hover:text-blue-200 transition-colors">
                     JL. Raya Cibarusah KM. 10 Ruko Cikarang Central City Blok E
                     NO. 8 Cikarang Selatan - Kab. BEKASI 17530
+                  </p>
+                  <p className="text-xs text-blue-400 mt-1 opacity-75 hover:opacity-100 transition-opacity">
+                    📍 Klik untuk petunjuk arah
                   </p>
                 </div>
               </motion.div>
@@ -339,11 +380,15 @@ function Footer() {
                 </motion.h5>
                 
                 {/* Sliding Container dengan overflow hidden */}
-                <div className="overflow-hidden relative">
+                <div 
+                  className="overflow-hidden relative"
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                >
                   <motion.div
                     className="flex gap-3"
                     variants={slidingContainerVariants}
-                    animate="animate"
+                    animate={isHovered ? "paused" : "animate"}
                     style={{ width: 'fit-content' }}
                   >
                     {/* Set pertama logo */}
@@ -353,11 +398,18 @@ function Footer() {
                       whileTap={{ scale: 0.95 }}
                       className="flex-shrink-0"
                     >
-                      <img
-                        src={Iapi}
-                        alt="IAPI"
-                        className="w-90 h-20 object-contain"
-                      />
+                      <a
+                        href="https://iapi.or.id/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <img
+                          src={Iapi}
+                          alt="IAPI"
+                          className="w-90 h-20 object-contain"
+                        />
+                      </a>
                     </motion.div>
 
                     <motion.div
@@ -366,11 +418,18 @@ function Footer() {
                       whileTap={{ scale: 0.95 }}
                       className="flex-shrink-0"
                     >
-                      <img
-                        src={Iai}
-                        alt="IAI"
-                        className="w-40 h-20 object-contain"
-                      />
+                      <a
+                        href="https://web.iaiglobal.or.id/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <img
+                          src={Iai}
+                          alt="IAI"
+                          className="w-40 h-20 object-contain"
+                        />
+                      </a>
                     </motion.div>
 
                     <motion.div
@@ -379,11 +438,18 @@ function Footer() {
                       whileTap={{ scale: 0.95 }}
                       className="flex-shrink-0"
                     >
-                      <img
-                        src={Ifac}
-                        alt="IFAC"
-                        className="w-40 h-20 object-contain"
-                      />
+                      <a
+                        href="https://www.ifac.org/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <img
+                          src={Ifac}
+                          alt="IFAC"
+                          className="w-40 h-20 object-contain"
+                        />
+                      </a>
                     </motion.div>
 
                     <motion.div
@@ -392,11 +458,18 @@ function Footer() {
                       whileTap={{ scale: 0.95 }}
                       className="flex-shrink-0"
                     >
-                      <img
-                        src={Cpa}
-                        alt="ASEAN CPA"
-                        className="w-40 h-20 object-contain"
-                      />
+                      <a
+                        href="https://iapi.or.id/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <img
+                          src={Cpa}
+                          alt="ASEAN CPA"
+                          className="w-40 h-20 object-contain"
+                        />
+                      </a>
                     </motion.div>
 
                     <motion.div
@@ -405,11 +478,18 @@ function Footer() {
                       whileTap={{ scale: 0.95 }}
                       className="flex-shrink-0"
                     >
-                      <img
-                        src={Ikapi}
-                        alt="ISO"
-                        className="w-40 h-20 object-contain"
-                      />
+                      <a
+                        href="https://www.ikhapi.co.id/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <img
+                          src={Ikapi}
+                          alt="IKHAPI"
+                          className="w-40 h-20 object-contain"
+                        />
+                      </a>
                     </motion.div>
 
                     {/* Set kedua logo untuk seamless loop */}
@@ -419,11 +499,18 @@ function Footer() {
                       whileTap={{ scale: 0.95 }}
                       className="flex-shrink-0"
                     >
-                      <img
-                        src={Iapi}
-                        alt="IAPI"
-                        className="w-90 h-20 object-contain"
-                      />
+                      <a
+                        href="https://iapi.or.id/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <img
+                          src={Iapi}
+                          alt="IAPI"
+                          className="w-90 h-20 object-contain"
+                        />
+                      </a>
                     </motion.div>
 
                     <motion.div
@@ -432,11 +519,18 @@ function Footer() {
                       whileTap={{ scale: 0.95 }}
                       className="flex-shrink-0"
                     >
-                      <img
-                        src={Iai}
-                        alt="IAI"
-                        className="w-40 h-20 object-contain"
-                      />
+                      <a
+                        href="https://web.iaiglobal.or.id/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <img
+                          src={Iai}
+                          alt="IAI"
+                          className="w-40 h-20 object-contain"
+                        />
+                      </a>
                     </motion.div>
 
                     <motion.div
@@ -445,11 +539,18 @@ function Footer() {
                       whileTap={{ scale: 0.95 }}
                       className="flex-shrink-0"
                     >
-                      <img
-                        src={Ifac}
-                        alt="IFAC"
-                        className="w-40 h-20 object-contain"
-                      />
+                      <a
+                        href="https://www.ifac.org/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <img
+                          src={Ifac}
+                          alt="IFAC"
+                          className="w-40 h-20 object-contain"
+                        />
+                      </a>
                     </motion.div>
 
                     <motion.div
@@ -458,11 +559,18 @@ function Footer() {
                       whileTap={{ scale: 0.95 }}
                       className="flex-shrink-0"
                     >
-                      <img
-                        src={Cpa}
-                        alt="ASEAN CPA"
-                        className="w-40 h-20 object-contain"
-                      />
+                      <a
+                        href="https://iapi.or.id/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <img
+                          src={Cpa}
+                          alt="ASEAN CPA"
+                          className="w-40 h-20 object-contain"
+                        />
+                      </a>
                     </motion.div>
 
                     <motion.div
@@ -471,11 +579,18 @@ function Footer() {
                       whileTap={{ scale: 0.95 }}
                       className="flex-shrink-0"
                     >
-                      <img
-                        src={Ikapi}
-                        alt="ISO"
-                        className="w-40 h-20 object-contain"
-                      />
+                      <a
+                        href="https://www.ikhapi.co.id/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <img
+                          src={Ikapi}
+                          alt="IKHAPI"
+                          className="w-40 h-20 object-contain"
+                        />
+                      </a>
                     </motion.div>
                   </motion.div>
                 </div>

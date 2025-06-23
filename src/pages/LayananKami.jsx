@@ -35,15 +35,27 @@ function LayananKami() {
 
   // Scroll ke section sesuai hash jika ada di URL saat halaman dibuka
   useEffect(() => {
-    if (window.location.hash) {
-      const sectionId = window.location.hash.replace('#', '');
-      const el = document.getElementById(sectionId);
-      if (el) {
-        setTimeout(() => {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 200);
+    const handleHashChange = () => {
+      if (window.location.hash) {
+        const sectionId = window.location.hash.replace('#', '');
+        const el = document.getElementById(sectionId);
+        if (el) {
+          setTimeout(() => {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 200);
+        }
       }
-    }
+    };
+
+    // Handle hash saat pertama kali load
+    handleHashChange();
+
+    // Listen untuk perubahan hash
+    window.addEventListener('hashchange', handleHashChange);
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
   }, []);
 
   const scrollToSection = (sectionId) => {

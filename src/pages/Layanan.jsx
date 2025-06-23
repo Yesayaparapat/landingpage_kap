@@ -231,10 +231,11 @@ const Layanan = () => {
             {[...Array(10)].map((_, i) => (
               <div
                 key={i}
-                className="absolute animate-float"
+                className="absolute"
                 style={{
                   left: Math.random() * 100 + '%',
                   top: Math.random() * 100 + '%',
+                  animation: `floatAnimation 5s ease-in-out infinite`,
                   animationDelay: Math.random() * 3 + 's',
                   animationDuration: (3 + Math.random() * 4) + 's'
                 }}
@@ -389,92 +390,7 @@ const Layanan = () => {
         </div>
       </div>
 
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          33% { transform: translateY(-8px) rotate(3deg); }
-          66% { transform: translateY(4px) rotate(-2deg); }
-        }
-        
-        .animate-float {
-          animation: float 5s ease-in-out infinite;
-        }
-        
-        /* Glassmorphism effects */
-        .backdrop-blur-md {
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-        }
-        
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-          width: 6px;
-        }
-        
-        ::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 8px;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-          background: linear-gradient(45deg, #3b82f6, #06b6d4);
-          border-radius: 8px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(45deg, #2563eb, #0891b2);
-        }
-        
-        /* Smooth scroll behavior */
-        html {
-          scroll-behavior: smooth;
-        }
-        
-        /* Performance optimizations */
-        .group {
-          transform-style: preserve-3d;
-          backface-visibility: hidden;
-        }
-        
-        /* Mobile optimizations */
-        @media (max-width: 768px) {
-          .animate-float {
-            animation: none;
-          }
-          
-          .backdrop-blur-md {
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-          }
-          
-          /* Disable complex animations on mobile */
-          .group:hover {
-            transform: none !important;
-          }
-          
-          /* Ensure proper touch targets */
-          button {
-            min-height: 44px;
-          }
-        }
-        
-        /* Reduce motion for accessibility */
-        @media (prefers-reduced-motion: reduce) {
-          *, *::before, *::after {
-            animation-duration: 0.01ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: 0.01ms !important;
-          }
-        }
-        
-        /* Improve text readability on mobile */
-        @media (max-width: 480px) {
-          .text-3xl {
-            font-size: 1.75rem;
-            line-height: 2rem;
-          }
-        }
-      `}</style>
+
     </div>
   );
 };
