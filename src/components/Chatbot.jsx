@@ -15,6 +15,7 @@ const Chatbot = () => {
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [showFixedIcon, setShowFixedIcon] = useState(false);
+  const [conversationContext, setConversationContext] = useState(null);
   const messagesEndRef = useRef(null);
   const location = useLocation();
 
@@ -23,10 +24,48 @@ const Chatbot = () => {
     // Layanan
     'layanan': 'Kami menyediakan layanan: 📋 AUDIT, 📚 PPL (Pendidikan & Pelatihan), 💼 ACCOUNTING ADVISOR, 🏢 BUSINESS MANAGEMENT CONSULT, dan 💰 TAXATION. Layanan mana yang Anda butuhkan?',
     'audit': 'Layanan Audit kami meliputi audit laporan keuangan, audit internal, dan review terbatas. Tim kami terdiri dari auditor bersertifikat dengan pengalaman bertahun-tahun. Ingin konsultasi lebih lanjut?',
-    'pajak': 'Layanan Taxation kami mencakup perencanaan pajak, konsultasi pajak, pembuatan SPT, dan pendampingan pemeriksaan pajak. Kami siap membantu optimalisasi pajak perusahaan Anda.',
-    'akuntansi': 'Sebagai Accounting Advisor, kami membantu penyusunan laporan keuangan, implementasi sistem akuntansi, dan konsultasi standar akuntansi terbaru.',
-    'pelatihan': 'Program PPL (Pendidikan & Pelatihan) kami meliputi pelatihan akuntansi, audit, pajak, dan manajemen bisnis. Tersedia pelatihan in-house dan public training.',
-    'konsultasi': 'Business Management Consult kami membantu perencanaan strategis, analisis keuangan, dan optimalisasi operasional bisnis Anda.',
+    'audit laporan keuangan': 'Layanan Audit kami meliputi audit laporan keuangan, audit internal, dan review terbatas. Tim kami terdiri dari auditor bersertifikat dengan pengalaman bertahun-tahun. Ingin konsultasi lebih lanjut?',
+    'audit internal': 'Layanan Audit kami meliputi audit laporan keuangan, audit internal, dan review terbatas. Tim kami terdiri dari auditor bersertifikat dengan pengalaman bertahun-tahun. Ingin konsultasi lebih lanjut?',
+    'review terbatas': 'Layanan Audit kami meliputi audit laporan keuangan, audit internal, dan review terbatas. Tim kami terdiri dari auditor bersertifikat dengan pengalaman bertahun-tahun. Ingin konsultasi lebih lanjut?',
+    'auditor': 'Layanan Audit kami meliputi audit laporan keuangan, audit internal, dan review terbatas. Tim kami terdiri dari auditor bersertifikat dengan pengalaman bertahun-tahun. Ingin konsultasi lebih lanjut?',
+    'pajak': 'Layanan Taxation kami mencakup perencanaan pajak, konsultasi pajak, pembuatan SPT, pendampingan pemeriksaan pajak, dan optimalisasi beban pajak perusahaan. Tim kami berpengalaman menangani PPh, PPN, dan pajak daerah. Ingin konsultasi lebih lanjut?',
+    'taxation': 'Layanan Taxation kami mencakup perencanaan pajak, konsultasi pajak, pembuatan SPT, pendampingan pemeriksaan pajak, dan optimalisasi beban pajak perusahaan. Tim kami berpengalaman menangani PPh, PPN, dan pajak daerah. Ingin konsultasi lebih lanjut?',
+    'spt': 'Kami membantu pembuatan dan pelaporan SPT Tahunan maupun Bulanan (PPh, PPN) yang akurat dan tepat waktu. Tim kami memastikan compliance dengan regulasi terbaru. Ingin konsultasi lebih lanjut?',
+    'pph': 'Layanan Taxation kami mencakup perencanaan pajak, konsultasi pajak, pembuatan SPT, pendampingan pemeriksaan pajak, dan optimalisasi beban pajak perusahaan. Tim kami berpengalaman menangani PPh, PPN, dan pajak daerah. Ingin konsultasi lebih lanjut?',
+    'ppn': 'Layanan Taxation kami mencakup perencanaan pajak, konsultasi pajak, pembuatan SPT, pendampingan pemeriksaan pajak, dan optimalisasi beban pajak perusahaan. Tim kami berpengalaman menangani PPh, PPN, dan pajak daerah. Ingin konsultasi lebih lanjut?',
+    'pajak penghasilan': 'Layanan Taxation kami mencakup perencanaan pajak, konsultasi pajak, pembuatan SPT, pendampingan pemeriksaan pajak, dan optimalisasi beban pajak perusahaan. Tim kami berpengalaman menangani PPh, PPN, dan pajak daerah. Ingin konsultasi lebih lanjut?',
+    'pajak pertambahan nilai': 'Layanan Taxation kami mencakup perencanaan pajak, konsultasi pajak, pembuatan SPT, pendampingan pemeriksaan pajak, dan optimalisasi beban pajak perusahaan. Tim kami berpengalaman menangani PPh, PPN, dan pajak daerah. Ingin konsultasi lebih lanjut?',
+    'perencanaan pajak': 'Layanan Taxation kami mencakup perencanaan pajak, konsultasi pajak, pembuatan SPT, pendampingan pemeriksaan pajak, dan optimalisasi beban pajak perusahaan. Tim kami berpengalaman menangani PPh, PPN, dan pajak daerah. Ingin konsultasi lebih lanjut?',
+    'pemeriksaan pajak': 'Layanan Taxation kami mencakup perencanaan pajak, konsultasi pajak, pembuatan SPT, pendampingan pemeriksaan pajak, dan optimalisasi beban pajak perusahaan. Tim kami berpengalaman menangani PPh, PPN, dan pajak daerah. Ingin konsultasi lebih lanjut?',
+    'akuntansi': 'Sebagai Accounting Advisor, kami membantu penyusunan laporan keuangan, implementasi sistem akuntansi, konsultasi standar akuntansi terbaru, dan setup chart of accounts yang sesuai bisnis Anda. Ingin konsultasi lebih lanjut?',
+    'accounting': 'Sebagai Accounting Advisor, kami membantu penyusunan laporan keuangan, implementasi sistem akuntansi, konsultasi standar akuntansi terbaru, dan setup chart of accounts yang sesuai bisnis Anda. Ingin konsultasi lebih lanjut?',
+    'accounting advisor': 'Sebagai Accounting Advisor, kami membantu penyusunan laporan keuangan, implementasi sistem akuntansi, konsultasi standar akuntansi terbaru, dan setup chart of accounts yang sesuai bisnis Anda. Ingin konsultasi lebih lanjut?',
+    'laporan keuangan': 'Kami membantu penyusunan laporan keuangan yang akurat dan sesuai standar. Tim kami berpengalaman dalam menyusun Neraca, Laba Rugi, Arus Kas, dan Perubahan Ekuitas. Ingin konsultasi lebih lanjut?',
+    'sistem akuntansi': 'Kami membantu implementasi dan optimalisasi sistem akuntansi untuk bisnis Anda, termasuk pemilihan software yang tepat dan training tim. Ingin konsultasi lebih lanjut?',
+    'chart of accounts': 'Kami membantu setup chart of accounts (bagan akun) yang sesuai dengan jenis bisnis dan kebutuhan pelaporan Anda. Ingin konsultasi lebih lanjut?',
+    'bagan akun': 'Kami membantu setup chart of accounts (bagan akun) yang sesuai dengan jenis bisnis dan kebutuhan pelaporan Anda. Ingin konsultasi lebih lanjut?',
+    'standar akuntansi': 'Kami menyediakan konsultasi standar akuntansi terbaru (SAK, IFRS, ETAP) dan membantu implementasinya dalam bisnis Anda. Ingin konsultasi lebih lanjut?',
+    'neraca': 'Kami membantu penyusunan laporan keuangan yang akurat dan sesuai standar. Tim kami berpengalaman dalam menyusun Neraca, Laba Rugi, Arus Kas, dan Perubahan Ekuitas. Ingin konsultasi lebih lanjut?',
+    'laba rugi': 'Kami membantu penyusunan laporan keuangan yang akurat dan sesuai standar. Tim kami berpengalaman dalam menyusun Neraca, Laba Rugi, Arus Kas, dan Perubahan Ekuitas. Ingin konsultasi lebih lanjut?',
+    'arus kas': 'Kami membantu penyusunan laporan keuangan yang akurat dan sesuai standar. Tim kami berpengalaman dalam menyusun Neraca, Laba Rugi, Arus Kas, dan Perubahan Ekuitas. Ingin konsultasi lebih lanjut?',
+    'advisor': 'Sebagai Accounting Advisor, kami membantu penyusunan laporan keuangan, implementasi sistem akuntansi, konsultasi standar akuntansi terbaru, dan setup chart of accounts yang sesuai bisnis Anda. Ingin konsultasi lebih lanjut?',
+    'pelatihan': 'Program PPL (Pendidikan & Pelatihan) kami meliputi pelatihan akuntansi, audit, pajak, manajemen bisnis, dan soft skills. Tersedia program in-house training dan public training dengan instruktur berpengalaman. Ingin konsultasi program pelatihan?',
+    'ppl': 'Program PPL (Pendidikan & Pelatihan) kami meliputi pelatihan akuntansi, audit, pajak, manajemen bisnis, dan soft skills. Tersedia program in-house training dan public training dengan instruktur berpengalaman. Ingin konsultasi program pelatihan?',
+    'pendidikan': 'Program PPL (Pendidikan & Pelatihan) kami meliputi pelatihan akuntansi, audit, pajak, manajemen bisnis, dan soft skills. Tersedia program in-house training dan public training dengan instruktur berpengalaman. Ingin konsultasi program pelatihan?',
+    'training': 'Program PPL (Pendidikan & Pelatihan) kami meliputi pelatihan akuntansi, audit, pajak, manajemen bisnis, dan soft skills. Tersedia program in-house training dan public training dengan instruktur berpengalaman. Ingin konsultasi program pelatihan?',
+    'in-house': 'Program PPL (Pendidikan & Pelatihan) kami meliputi pelatihan akuntansi, audit, pajak, manajemen bisnis, dan soft skills. Tersedia program in-house training dan public training dengan instruktur berpengalaman. Ingin konsultasi program pelatihan?',
+    'public training': 'Program PPL (Pendidikan & Pelatihan) kami meliputi pelatihan akuntansi, audit, pajak, manajemen bisnis, dan soft skills. Tersedia program in-house training dan public training dengan instruktur berpengalaman. Ingin konsultasi program pelatihan?',
+    'seminar': 'Program PPL (Pendidikan & Pelatihan) kami meliputi pelatihan akuntansi, audit, pajak, manajemen bisnis, dan soft skills. Tersedia program in-house training dan public training dengan instruktur berpengalaman. Ingin konsultasi program pelatihan?',
+    'workshop': 'Program PPL (Pendidikan & Pelatihan) kami meliputi pelatihan akuntansi, audit, pajak, manajemen bisnis, dan soft skills. Tersedia program in-house training dan public training dengan instruktur berpengalaman. Ingin konsultasi program pelatihan?',
+    'konsultasi': 'Business Management Consult kami membantu perencanaan strategis, analisis keuangan, optimalisasi operasional bisnis, implementasi SOP, dan pengembangan strategi pertumbuhan. Tim konsultan kami berpengalaman dalam berbagai industri. Ingin konsultasi bisnis?',
+    'business management': 'Business Management Consult kami membantu perencanaan strategis, analisis keuangan, optimalisasi operasional bisnis, implementasi SOP, dan pengembangan strategi pertumbuhan. Tim konsultan kami berpengalaman dalam berbagai industri. Ingin konsultasi bisnis?',
+    'manajemen': 'Business Management Consult kami membantu perencanaan strategis, analisis keuangan, optimalisasi operasional bisnis, implementasi SOP, dan pengembangan strategi pertumbuhan. Tim konsultan kami berpengalaman dalam berbagai industri. Ingin konsultasi bisnis?',
+    'manajemen bisnis': 'Business Management Consult kami membantu perencanaan strategis, analisis keuangan, optimalisasi operasional bisnis, implementasi SOP, dan pengembangan strategi pertumbuhan. Tim konsultan kami berpengalaman dalam berbagai industri. Ingin konsultasi bisnis?',
+    'perencanaan strategis': 'Business Management Consult kami membantu perencanaan strategis, analisis keuangan, optimalisasi operasional bisnis, implementasi SOP, dan pengembangan strategi pertumbuhan. Tim konsultan kami berpengalaman dalam berbagai industri. Ingin konsultasi bisnis?',
+    'strategi bisnis': 'Business Management Consult kami membantu perencanaan strategis, analisis keuangan, optimalisasi operasional bisnis, implementasi SOP, dan pengembangan strategi pertumbuhan. Tim konsultan kami berpengalaman dalam berbagai industri. Ingin konsultasi bisnis?',
+    'sop': 'Business Management Consult kami membantu perencanaan strategis, analisis keuangan, optimalisasi operasional bisnis, implementasi SOP, dan pengembangan strategi pertumbuhan. Tim konsultan kami berpengalaman dalam berbagai industri. Ingin konsultasi bisnis?',
+    'operasional': 'Business Management Consult kami membantu perencanaan strategis, analisis keuangan, optimalisasi operasional bisnis, implementasi SOP, dan pengembangan strategi pertumbuhan. Tim konsultan kami berpengalaman dalam berbagai industri. Ingin konsultasi bisnis?',
+    'optimalisasi': 'Business Management Consult kami membantu perencanaan strategis, analisis keuangan, optimalisasi operasional bisnis, implementasi SOP, dan pengembangan strategi pertumbuhan. Tim konsultan kami berpengalaman dalam berbagai industri. Ingin konsultasi bisnis?',
 
     // Kontak & Lokasi
     'kontak': 'Anda bisa menghubungi kami melalui:\n📞 Telepon: (021) 89774251 / (021) 89774253\n📧 Email: kap.jamasterjams@gmail.com\n📱 Instagram: @kap_jamastersimanullang\n📍 Alamat: Ruko Cikarang Central City Blok E No.08, Ciantra, Cikarang Sel., Kabupaten Bekasi, Jawa Barat 17530',
@@ -100,10 +139,13 @@ const Chatbot = () => {
   // Quick reply buttons
   const quickReplies = [
     { text: '📋 Layanan Kami', key: 'layanan' },
-    { text: '📍 Alamat & Kontak', key: 'kontak' },
-    { text: '🕐 Jam Operasional', key: 'jam' },
-    { text: '💰 Informasi Harga', key: 'harga' },
-    { text: '🏢 Tentang Kami', key: 'profil' },
+    { text: '🔍 Layanan Audit', key: 'audit' },
+    { text: '💼 Accounting Advisor', key: 'accounting' },
+    { text: '💰 Taxation', key: 'pajak' },
+    { text: '📚 PPL Training', key: 'pelatihan' },
+    { text: '🏢 Business Consult', key: 'konsultasi' },
+    { text: '📍 Kontak', key: 'kontak' },
+    { text: '💵 Harga', key: 'harga' },
   ];
 
   const scrollToBottom = () => {
@@ -148,9 +190,108 @@ const Chatbot = () => {
   const getBotResponse = (userMessage) => {
     const message = userMessage.toLowerCase().trim();
     
+         // Check for consultation follow-up responses
+     if (conversationContext === 'audit_consultation') {
+       if (message.includes('ya') || message.includes('lanjut') || message.includes('iya') || 
+           message.includes('yes') || message.includes('mau') || message.includes('ingin') ||
+           message.includes('saya tertarik') || message.includes('tertarik')) {
+         setConversationContext(null); // Reset context
+         return `Bagus! 🎉 Kami siap membantu konsultasi audit Anda. Silakan hubungi tim kami melalui:\n\n📞 Telepon: (021) 89774251 / (021) 89774253\n📧 Email: kap.jamasterjams@gmail.com\n📍 Kantor: Ruko Cikarang Central City Blok E No.08\n\nAtau Anda bisa menceritakan kebutuhan audit spesifik Anda di sini, dan saya akan memberikan informasi awal yang relevan! 💼`;
+       } else if (message.includes('tidak') || message.includes('no') || message.includes('nggak') || 
+                  message.includes('engga') || message.includes('belum')) {
+         setConversationContext(null); // Reset context
+         return `Tidak masalah! 😊 Jika sewaktu-waktu Anda membutuhkan konsultasi audit, kami siap membantu. Ada pertanyaan lain tentang layanan KAP kami yang bisa saya jawab?`;
+       }
+     }
+
+     // Check for accounting consultation follow-up responses
+     if (conversationContext === 'accounting_consultation') {
+       if (message.includes('ya') || message.includes('lanjut') || message.includes('iya') || 
+           message.includes('yes') || message.includes('mau') || message.includes('ingin') ||
+           message.includes('saya tertarik') || message.includes('tertarik')) {
+         setConversationContext(null); // Reset context
+         return `Excellent! 🎯 Tim Accounting Advisor kami siap membantu Anda. Untuk konsultasi lebih lanjut:\n\n📞 Telepon: (021) 89774251 / (021) 89774253\n📧 Email: kap.jamasterjams@gmail.com\n📍 Kantor: Ruko Cikarang Central City Blok E No.08\n\nAtau ceritakan tantangan akuntansi apa yang sedang Anda hadapi? Kami bisa memberikan solusi awal yang tepat! 📊💡`;
+       } else if (message.includes('tidak') || message.includes('no') || message.includes('nggak') || 
+                  message.includes('engga') || message.includes('belum')) {
+         setConversationContext(null); // Reset context
+         return `Baik, tidak masalah! 😊 Jika di masa depan Anda membutuhkan bantuan accounting, jangan ragu untuk menghubungi kami. Ada layanan lain yang ingin Anda ketahui?`;
+       }
+     }
+
+     // Check for taxation consultation follow-up responses
+     if (conversationContext === 'taxation_consultation') {
+       if (message.includes('ya') || message.includes('lanjut') || message.includes('iya') || 
+           message.includes('yes') || message.includes('mau') || message.includes('ingin') ||
+           message.includes('saya tertarik') || message.includes('tertarik')) {
+         setConversationContext(null); // Reset context
+         return `Fantastic! 💰 Tim Taxation kami siap membantu optimalisasi pajak Anda. Hubungi kami untuk konsultasi:\n\n📞 Telepon: (021) 89774251 / (021) 89774253\n📧 Email: kap.jamasterjams@gmail.com\n📍 Kantor: Ruko Cikarang Central City Blok E No.08\n\nCeritakan jenis pajak atau masalah perpajakan apa yang sedang Anda hadapi? Kami akan berikan solusi terbaik! 🏛️📋`;
+       } else if (message.includes('tidak') || message.includes('no') || message.includes('nggak') || 
+                  message.includes('engga') || message.includes('belum')) {
+         setConversationContext(null); // Reset context
+         return `Oke, tidak masalah! 😊 Kapan saja Anda butuh bantuan perpajakan, kami siap membantu. Ada layanan lain yang ingin Anda tanyakan?`;
+       }
+     }
+
+     // Check for PPL training consultation follow-up responses
+     if (conversationContext === 'ppl_consultation') {
+       if (message.includes('ya') || message.includes('lanjut') || message.includes('iya') || 
+           message.includes('yes') || message.includes('mau') || message.includes('ingin') ||
+           message.includes('saya tertarik') || message.includes('tertarik')) {
+         setConversationContext(null); // Reset context
+         return `Great! 📚 Tim PPL (Pendidikan & Pelatihan) kami siap membantu pengembangan SDM Anda. Untuk informasi program training:\n\n📞 Telepon: (021) 89774251 / (021) 89774253\n📧 Email: kap.jamasterjams@gmail.com\n📍 Kantor: Ruko Cikarang Central City Blok E No.08\n\nProgram pelatihan apa yang Anda butuhkan? In-house training atau public training? Ceritakan kebutuhan tim Anda! 🎓👥`;
+       } else if (message.includes('tidak') || message.includes('no') || message.includes('nggak') || 
+                  message.includes('engga') || message.includes('belum')) {
+         setConversationContext(null); // Reset context
+         return `Tidak apa-apa! 😊 Jika suatu saat membutuhkan program pelatihan untuk tim, jangan ragu hubungi kami. Ada pertanyaan lain?`;
+       }
+     }
+
+     // Check for business management consultation follow-up responses
+     if (conversationContext === 'business_consultation') {
+       if (message.includes('ya') || message.includes('lanjut') || message.includes('iya') || 
+           message.includes('yes') || message.includes('mau') || message.includes('ingin') ||
+           message.includes('saya tertarik') || message.includes('tertarik')) {
+         setConversationContext(null); // Reset context
+         return `Perfect! 🏢 Tim Business Management Consultant kami siap membantu mengoptimalkan bisnis Anda. Untuk konsultasi strategis:\n\n📞 Telepon: (021) 89774251 / (021) 89774253\n📧 Email: kap.jamasterjams@gmail.com\n📍 Kantor: Ruko Cikarang Central City Blok E No.08\n\nCeritakan tantangan bisnis atau area mana yang ingin dioptimalkan? Kami akan buatkan strategi yang tepat! 📈🎯`;
+       } else if (message.includes('tidak') || message.includes('no') || message.includes('nggak') || 
+                  message.includes('engga') || message.includes('belum')) {
+         setConversationContext(null); // Reset context
+         return `Baik! 😊 Jika sewaktu-waktu memerlukan konsultasi manajemen bisnis, kami siap membantu. Ada layanan lain yang menarik bagi Anda?`;
+       }
+     }
+    
     // Cari kata kunci yang cocok
     for (const [key, response] of Object.entries(faqData)) {
       if (message.includes(key)) {
+        // Set context jika pertanyaan tentang audit
+        if (key === 'audit' || key === 'audit laporan keuangan' || key === 'audit internal' || 
+            key === 'review terbatas' || key === 'auditor') {
+          setConversationContext('audit_consultation');
+        }
+        // Set context jika pertanyaan tentang accounting
+        else if (key === 'akuntansi' || key === 'accounting' || key === 'accounting advisor' || 
+                 key === 'laporan keuangan' || key === 'sistem akuntansi' || key === 'chart of accounts' ||
+                 key === 'bagan akun' || key === 'standar akuntansi' || key === 'neraca' || 
+                 key === 'laba rugi' || key === 'arus kas' || key === 'advisor') {
+          setConversationContext('accounting_consultation');
+        }
+        // Set context jika pertanyaan tentang taxation
+        else if (key === 'pajak' || key === 'taxation' || key === 'spt' || key === 'pph' || 
+                 key === 'ppn' || key === 'pajak penghasilan' || key === 'pajak pertambahan nilai' ||
+                 key === 'perencanaan pajak' || key === 'pemeriksaan pajak') {
+          setConversationContext('taxation_consultation');
+        }
+        // Set context jika pertanyaan tentang PPL
+        else if (key === 'pelatihan' || key === 'ppl' || key === 'pendidikan' || key === 'training' ||
+                 key === 'in-house' || key === 'public training' || key === 'seminar' || key === 'workshop') {
+          setConversationContext('ppl_consultation');
+        }
+        // Set context jika pertanyaan tentang business management
+        else if (key === 'konsultasi' || key === 'business management' || key === 'manajemen' || 
+                 key === 'manajemen bisnis' || key === 'perencanaan strategis' || key === 'strategi bisnis' ||
+                 key === 'sop' || key === 'operasional' || key === 'optimalisasi') {
+          setConversationContext('business_consultation');
+        }
         return response;
       }
     }
@@ -359,15 +500,92 @@ const Chatbot = () => {
             {/* Quick Replies */}
             <div className="px-4 py-2 bg-gray-50 border-t border-gray-200">
               <div className="flex flex-wrap gap-2">
-                {quickReplies.map((reply, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleQuickReply(reply.key)}
-                    className="bg-white hover:bg-blue-50 text-blue-600 text-xs px-3 py-1 rounded-full border border-blue-200 hover:border-blue-300 transition-all duration-200 transform hover:scale-105"
-                  >
-                    {reply.text}
-                  </button>
-                ))}
+                {conversationContext === 'audit_consultation' ? (
+                  <>
+                    <button
+                      onClick={() => handleQuickReply('ya')}
+                      className="bg-green-500 hover:bg-green-600 text-white text-xs px-3 py-1 rounded-full border border-green-500 hover:border-green-600 transition-all duration-200 transform hover:scale-105"
+                    >
+                      ✅ Ya, Saya Tertarik
+                    </button>
+                    <button
+                      onClick={() => handleQuickReply('tidak')}
+                      className="bg-gray-500 hover:bg-gray-600 text-white text-xs px-3 py-1 rounded-full border border-gray-500 hover:border-gray-600 transition-all duration-200 transform hover:scale-105"
+                    >
+                      ❌ Tidak, Terima Kasih
+                    </button>
+                  </>
+                ) : conversationContext === 'accounting_consultation' ? (
+                  <>
+                    <button
+                      onClick={() => handleQuickReply('ya')}
+                      className="bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1 rounded-full border border-blue-500 hover:border-blue-600 transition-all duration-200 transform hover:scale-105"
+                    >
+                      ✅ Ya, Saya Butuh Bantuan
+                    </button>
+                    <button
+                      onClick={() => handleQuickReply('tidak')}
+                      className="bg-gray-500 hover:bg-gray-600 text-white text-xs px-3 py-1 rounded-full border border-gray-500 hover:border-gray-600 transition-all duration-200 transform hover:scale-105"
+                    >
+                      ❌ Tidak, Terima Kasih
+                    </button>
+                  </>
+                ) : conversationContext === 'taxation_consultation' ? (
+                  <>
+                    <button
+                      onClick={() => handleQuickReply('ya')}
+                      className="bg-yellow-500 hover:bg-yellow-600 text-white text-xs px-3 py-1 rounded-full border border-yellow-500 hover:border-yellow-600 transition-all duration-200 transform hover:scale-105"
+                    >
+                      ✅ Ya, Butuh Konsultasi Pajak
+                    </button>
+                    <button
+                      onClick={() => handleQuickReply('tidak')}
+                      className="bg-gray-500 hover:bg-gray-600 text-white text-xs px-3 py-1 rounded-full border border-gray-500 hover:border-gray-600 transition-all duration-200 transform hover:scale-105"
+                    >
+                      ❌ Tidak, Terima Kasih
+                    </button>
+                  </>
+                ) : conversationContext === 'ppl_consultation' ? (
+                  <>
+                    <button
+                      onClick={() => handleQuickReply('ya')}
+                      className="bg-purple-500 hover:bg-purple-600 text-white text-xs px-3 py-1 rounded-full border border-purple-500 hover:border-purple-600 transition-all duration-200 transform hover:scale-105"
+                    >
+                      ✅ Ya, Tertarik Training
+                    </button>
+                    <button
+                      onClick={() => handleQuickReply('tidak')}
+                      className="bg-gray-500 hover:bg-gray-600 text-white text-xs px-3 py-1 rounded-full border border-gray-500 hover:border-gray-600 transition-all duration-200 transform hover:scale-105"
+                    >
+                      ❌ Tidak, Terima Kasih
+                    </button>
+                  </>
+                ) : conversationContext === 'business_consultation' ? (
+                  <>
+                    <button
+                      onClick={() => handleQuickReply('ya')}
+                      className="bg-indigo-500 hover:bg-indigo-600 text-white text-xs px-3 py-1 rounded-full border border-indigo-500 hover:border-indigo-600 transition-all duration-200 transform hover:scale-105"
+                    >
+                      ✅ Ya, Perlu Konsultasi Bisnis
+                    </button>
+                    <button
+                      onClick={() => handleQuickReply('tidak')}
+                      className="bg-gray-500 hover:bg-gray-600 text-white text-xs px-3 py-1 rounded-full border border-gray-500 hover:border-gray-600 transition-all duration-200 transform hover:scale-105"
+                    >
+                      ❌ Tidak, Terima Kasih
+                    </button>
+                  </>
+                ) : (
+                  quickReplies.map((reply, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleQuickReply(reply.key)}
+                      className="bg-white hover:bg-blue-50 text-blue-600 text-xs px-3 py-1 rounded-full border border-blue-200 hover:border-blue-300 transition-all duration-200 transform hover:scale-105"
+                    >
+                      {reply.text}
+                    </button>
+                  ))
+                )}
               </div>
             </div>
 
