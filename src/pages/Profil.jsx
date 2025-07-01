@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion"; // Mengimpor framer-motion untuk efek gerakan
 import Gambarkantor from "../assets/logo kap.png";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "../context/LanguageContext";
 
 function Profil() {
   const [inView, setInView] = useState(false); // State untuk mengecek apakah elemen ada di dalam viewport
   const navigate = useNavigate();
+  const { getText } = useLanguage();
   // Fungsi untuk menangani event scroll
   const handleScroll = () => {
     const scrollPosition = window.scrollY;
@@ -65,9 +67,9 @@ function Profil() {
         transition={{ duration: 0.5 }} // Durasi transisi
       >
         <h1 className="text-4xl font-bold">
-          Kantor Akuntan Publik <br />
+          {getText('profil.mainTitle')} <br />
           <span className="text-blue-900 inline-block">
-            Jamaster Simanullang
+            {getText('profil.subtitle')}
           </span>
         </h1>
       </motion.div>
@@ -94,7 +96,7 @@ function Profil() {
               animate={{ opacity: inView ? 1 : 0, x: inView ? 0 : -100 }} // Memicu animasi saat elemen muncul
               transition={{ duration: 0.6, delay: 0.3 }} // Durasi transisi dengan penundaan
             >
-              Profile kami
+              {getText('profil.sectionTitle')}
             </motion.h2>
 
             {/* Paragraf pertama dengan efek motion */}
@@ -104,14 +106,7 @@ function Profil() {
               animate={{ opacity: inView ? 1 : 0, x: inView ? 0 : -100 }} // Memicu animasi saat elemen muncul
               transition={{ duration: 0.6, delay: 0.5 }} // Durasi transisi dengan penundaan
             >
-              <strong>
-                Kantor Akuntan Publik Jamaster Simanullang (KAP Jamaster
-                Simanullang)
-              </strong>{" "}
-              berdiri sejak November 2017. Sejak awal berdiri, kami telah
-              berkomitmen untuk berperan serta dalam meningkatkan kemajuan
-              perekonomian nasional dengan menjalankan setiap layanan akuntansi
-              dengan penuh independensi, integritas, dan kompetensi.
+              {getText('profil.description1')}
             </motion.p>
 
             {/* Paragraf kedua dengan efek motion */}
@@ -121,11 +116,7 @@ function Profil() {
               animate={{ opacity: inView ? 1 : 0, x: inView ? 0 : -100 }} // Memicu animasi saat elemen muncul
               transition={{ duration: 0.6, delay: 0.7 }} // Durasi transisi dengan penundaan
             >
-              Kami menyediakan berbagai layanan seperti audit laporan keuangan,
-              konsultasi perpajakan, dan penyusunan laporan keuangan yang
-              handal, terpercaya, serta tertib administrasi perpajakan. Semua
-              layanan kami berpedoman pada Standar Akuntansi Keuangan (SAK),
-              yang diakui secara luas di Indonesia.
+              {getText('profil.description2')}
             </motion.p>
 
             {/* Tombol dengan efek motion */}
@@ -154,7 +145,7 @@ function Profil() {
                 delay: 0.3, // Tambahan delay sebelum animasi dimulai
               }}
             >
-              Selengkapnya
+              {getText('profil.readMore')}
               <motion.svg
                 className="w-5 h-5 ml-2"
                 fill="none"
@@ -191,7 +182,7 @@ function Profil() {
           >
             <div>
               {/* Logo KAP Jamaster Simanullang */}
-              <div className="flex justify-center items-center ">
+              <div className="flex justify-center items-center">
                 <img
                   className="w-[400px] mt-10 hidden lg:block"
                   src={Gambarkantor}

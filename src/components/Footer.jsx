@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "../context/LanguageContext";
 import logoKap from "../assets/logo kap.png";
 import Iai from "../assets/iai.png";
 import Ifac from "../assets/ifac.png";
@@ -14,6 +15,7 @@ import LinkedIcon from "../assets/linked.jpeg";
 import WhatsappIcon from "../assets/whatsapp.jpeg";
 
 function Footer() {
+  const { getText } = useLanguage();
   const [isHovered, setIsHovered] = useState(false);
   const footerRef = useRef(null);
   const isFooterInView = useInView(footerRef, { once: true, margin: "-50px" });
@@ -219,17 +221,15 @@ function Footer() {
                 <img src={logoKap} alt="logo kap" />
               </motion.div>
               <div>
-                <h3 className="text-xl font-bold">KAP Jamaster Simanullang</h3>
-                <p className="text-blue-200 text-sm">Kantor Akuntan Publik</p>
+                <h3 className="text-xl font-bold">{getText('footer.companyName')}</h3>
+                <p className="text-blue-200 text-sm">{getText('footer.companySubtitle')}</p>
               </div>
             </motion.div>
             <motion.p
               className="text-gray-300 leading-relaxed mb-4"
               variants={itemVariants}
             >
-              Memberikan layanan audit, konsultasi perpajakan, dan penyusunan
-              laporan keuangan yang handal dengan menjunjung tinggi prinsip
-              independensi, integritas, dan kompetensi.
+              {getText('footer.description')}
             </motion.p>
             <motion.div
               className="flex items-center text-blue-200"
@@ -240,7 +240,7 @@ function Footer() {
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               />
-              Berdiri sejak November 2017
+              {getText('footer.establishedSince')}
             </motion.div>
           </motion.div>
 
@@ -251,7 +251,7 @@ function Footer() {
               whileHover={{ x: 5 }}
               transition={{ duration: 0.2 }}
             >
-              Layanan Kami
+              {getText('footer.ourServices')}
             </motion.h4>
             <motion.ul className="space-y-2">
               {[
@@ -292,7 +292,7 @@ function Footer() {
               whileHover={{ x: 5 }}
               transition={{ duration: 0.2 }}
             >
-              Hubungi Kami
+              {getText('footer.contactUs')}
             </motion.h4>
             <motion.div className="space-y-3">
               <motion.div
@@ -376,7 +376,7 @@ function Footer() {
                   whileHover={{ x: 5 }}
                   transition={{ duration: 0.2 }}
                 >
-                  Member of:
+                  {getText('footer.memberOf')}
                 </motion.h5>
                 
                 {/* Sliding Container dengan overflow hidden */}

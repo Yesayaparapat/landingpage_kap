@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { MapPin, Clock, Phone, Mail, Calendar, ChevronDown, ChevronUp } from 'lucide-react';
 import { FaEnvelope, FaInstagram } from 'react-icons/fa';
+import { useLanguage } from '../context/LanguageContext';
 
 function HubungiKami() {
+  const { getText } = useLanguage();
   const [isHoursExpanded, setIsHoursExpanded] = useState(false);
 
   const scheduleData = [
-    { day: 'Senin', hours: '08.00-17.00' },
-    { day: 'Selasa', hours: '08.00-17.00' },
-    { day: 'Rabu', hours: '08.00-17.00' },
-    { day: 'Kamis', hours: '08.00-17.00' },
-    { day: 'Jumat', hours: '08.00-17.00' },
-    { day: 'Sabtu', hours: 'Tutup' },
-    { day: 'Minggu', hours: 'Tutup' }
+    { day: getText('hubungi.monday'), hours: '08.00-17.00' },
+    { day: getText('hubungi.tuesday'), hours: '08.00-17.00' },
+    { day: getText('hubungi.wednesday'), hours: '08.00-17.00' },
+    { day: getText('hubungi.thursday'), hours: '08.00-17.00' },
+    { day: getText('hubungi.friday'), hours: '08.00-17.00' },
+    { day: getText('hubungi.saturday'), hours: getText('hubungi.closed') },
+    { day: getText('hubungi.sunday'), hours: getText('hubungi.closed') }
   ];
 
   return (
@@ -21,10 +23,10 @@ function HubungiKami() {
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
-            Hubungi Kami
+            {getText('hubungi.title')}
           </h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Kami siap melayani Anda dengan sepenuh hati. Kunjungi kantor kami atau hubungi melalui kontak di bawah ini.
+            {getText('hubungi.description')}
           </p>
         </div>
 
@@ -38,15 +40,18 @@ function HubungiKami() {
                   <MapPin className="w-7 h-7 text-white" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">Alamat Kantor</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{getText('hubungi.officeAddress')}</h3>
                   <p className="text-gray-600 leading-relaxed text-base mb-3">
-                    Ruko Cikarang Central City Blok E No.08<br />
-                    Ciantra, Cikarang Sel., Kabupaten Bekasi<br />
-                    Jawa Barat 17530
+                    {getText('hubungi.addressValue').split('\n').map((line, i) => (
+                      <span key={i}>
+                        {line}
+                        {i < getText('hubungi.addressValue').split('\n').length - 1 && <br />}
+                      </span>
+                    ))}
                   </p>
                   <div className="bg-blue-50 rounded-lg p-3 border-l-4 border-blue-400">
                     <p className="text-sm text-blue-700 font-medium">
-                      📍 Kode Plus: M459+F9 Ciantra, Kabupaten Bekasi, Jawa Barat
+                      {getText('hubungi.plusCode')}
                     </p>
                   </div>
                 </div>
@@ -60,13 +65,13 @@ function HubungiKami() {
                   <Clock className="w-7 h-7 text-white" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Jam Buka</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4">{getText('hubungi.businessHours')}</h3>
                   
                   {/* Current Status */}
                   <div className="mb-6">
                     <div className="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border border-green-200">
                       <div className="w-3 h-3 bg-green-500 rounded-full mr-3 animate-pulse shadow-lg"></div>
-                      Buka Sekarang
+                      {getText('hubungi.openNow')}
                     </div>
                   </div>
 
@@ -75,7 +80,7 @@ function HubungiKami() {
                     onClick={() => setIsHoursExpanded(!isHoursExpanded)}
                     className="flex items-center justify-between w-full text-left bg-gradient-to-r from-gray-50 to-gray-100 hover:from-gray-100 hover:to-gray-200 rounded-xl p-4 transition-all duration-300 border border-gray-200 hover:border-gray-300"
                   >
-                    <span className="font-semibold text-gray-700">Lihat Jadwal Lengkap</span>
+                    <span className="font-semibold text-gray-700">{getText('hubungi.seeFullSchedule')}</span>
                     <div className="bg-white p-1 rounded-full shadow-sm">
                       {isHoursExpanded ? (
                         <ChevronUp className="w-5 h-5 text-gray-600" />
@@ -91,7 +96,7 @@ function HubungiKami() {
                         <div key={index} className="flex justify-between items-center py-3 px-4 rounded-xl hover:bg-gray-50 transition-colors border border-gray-100">
                           <span className="font-semibold text-gray-700">{item.day}</span>
                           <span className={`font-bold px-3 py-1 rounded-full text-sm ${
-                            item.hours === 'Tutup' 
+                            item.hours === getText('hubungi.closed') 
                               ? 'text-red-600 bg-red-50 border border-red-200' 
                               : 'text-green-600 bg-green-50 border border-green-200'
                           }`}>
@@ -111,9 +116,9 @@ function HubungiKami() {
                 <div className="bg-white/20 backdrop-blur-sm p-4 rounded-2xl w-fit mx-auto mb-6">
                   <Calendar className="w-12 h-12 mx-auto text-white" />
                 </div>
-                <h3 className="text-2xl font-bold mb-3">Ingin Berkunjung?</h3>
+                <h3 className="text-2xl font-bold mb-3">{getText('hubungi.wantToVisit')}</h3>
                 <p className="text-blue-100 mb-6 text-base leading-relaxed">
-                  Kunjungi kantor kami untuk pelayanan terbaik dan konsultasi langsung dengan tim ahli kami.
+                  {getText('hubungi.visitDescription')}
                 </p>
                 <button 
                   onClick={() => {
@@ -123,7 +128,7 @@ function HubungiKami() {
                   }}
                   className="bg-white text-blue-700 px-8 py-4 rounded-full font-bold hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-base"
                 >
-                  🗺️ Dapatkan Petunjuk Arah
+                  {getText('hubungi.getDirections')}
                 </button>
               </div>
             </div>
@@ -137,9 +142,9 @@ function HubungiKami() {
                   <div className="bg-white/20 p-2 rounded-full mr-3">
                     <MapPin className="w-6 h-6 text-white" />
                   </div>
-                  Lokasi Kantor
+                  {getText('hubungi.officeLocation')}
                 </h3>
-                <p className="text-blue-100 text-base">📍 Ruko Cikarang Central City</p>
+                <p className="text-blue-100 text-base">{getText('hubungi.locationSubtitle')}</p>
               </div>
               
               <div className="relative">
@@ -185,7 +190,7 @@ function HubungiKami() {
                           Cikarang Central City, Bekasi
                         </p>
                         <p className="text-xs text-gray-600">
-                          Klik peta untuk membuka di Google Maps
+                          {getText('hubungi.clickMapText')}
                         </p>
                       </div>
                     </div>
@@ -197,13 +202,13 @@ function HubungiKami() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center p-3 bg-white rounded-xl shadow-sm">
                     <div className="text-2xl mb-1">🚗</div>
-                    <p className="text-sm font-semibold text-gray-700">Mudah Dijangkau</p>
-                    <p className="text-xs text-gray-500">Akses dari berbagai arah</p>
+                    <p className="text-sm font-semibold text-gray-700">{getText('hubungi.easyAccess')}</p>
+                    <p className="text-xs text-gray-500">{getText('hubungi.easyAccessDesc')}</p>
                   </div>
                   <div className="text-center p-3 bg-white rounded-xl shadow-sm">
                     <div className="text-2xl mb-1">🅿️</div>
-                    <p className="text-sm font-semibold text-gray-700">Parkir Luas</p>
-                    <p className="text-xs text-gray-500">Area parkir tersedia</p>
+                    <p className="text-sm font-semibold text-gray-700">{getText('hubungi.wideParking')}</p>
+                    <p className="text-xs text-gray-500">{getText('hubungi.wideParkingDesc')}</p>
                   </div>
                 </div>
               </div>
@@ -215,8 +220,8 @@ function HubungiKami() {
         <div className="mt-16">
           <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8">
             <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Hubungi Kami Sekarang</h3>
-              <p className="text-gray-600">Pilih cara yang paling nyaman untuk Anda</p>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">{getText('hubungi.contactNow')}</h3>
+              <p className="text-gray-600">{getText('hubungi.contactNowDesc')}</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -228,9 +233,9 @@ function HubungiKami() {
                   <FaEnvelope className="w-8 h-8 text-white" />
                 </div>
                 <div className="text-center">
-                  <div className="text-sm text-red-600 font-medium mb-1">Email</div>
+                  <div className="text-sm text-red-600 font-medium mb-1">{getText('hubungi.emailLabel')}</div>
                   <div className="font-bold text-lg text-gray-800">kap.jamasterjams@gmail.com</div>
-                  <div className="text-xs text-gray-500 mt-1">Kirim email untuk pertanyaan detail</div>
+                  <div className="text-xs text-gray-500 mt-1">{getText('hubungi.emailDesc')}</div>
                 </div>
               </a>
               
@@ -244,9 +249,9 @@ function HubungiKami() {
                   <FaInstagram className="w-8 h-8 text-white" />
                 </div>
                 <div className="text-center">
-                  <div className="text-sm text-pink-600 font-medium mb-1">Instagram</div>
+                  <div className="text-sm text-pink-600 font-medium mb-1">{getText('hubungi.instagramLabel')}</div>
                   <div className="font-bold text-lg text-gray-800">@kap_jamastersimanullang</div>
-                  <div className="text-xs text-gray-500 mt-1">Follow untuk update terbaru</div>
+                  <div className="text-xs text-gray-500 mt-1">{getText('hubungi.instagramDesc')}</div>
                 </div>
               </a>
             </div>

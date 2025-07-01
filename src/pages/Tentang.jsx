@@ -2,9 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom'; // Import untuk navigasi
 import Pakjams from "../assets/gambar pakjams.jpg";
 import Rotua from "../assets/rotua.jpg";
+import { useLanguage } from "../context/LanguageContext";
 
 function Tentang() {
   const navigate = useNavigate(); // Hook untuk navigasi
+  const { getText } = useLanguage();
   const [scrollY, setScrollY] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [descriptionVisible, setDescriptionVisible] = useState(false);
@@ -15,12 +17,12 @@ function Tentang() {
   const profiles = [
     {
       name: "Jamaster Simanullang, SE., Ak., M.Ak., CPA., ASEAN CPA",
-      position: "Managing Partner",
+      position: getText('tentang.managingPartner'),
       image: Pakjams,
     },
     {
       name: "Rotua Manullang, SE., MM",
-      position: "AUDIT MANAGER",
+      position: getText('tentang.auditManager'),
       image: Rotua,
     },
   ];
@@ -162,7 +164,7 @@ function Tentang() {
           <div className="max-w-7xl mx-auto h-full flex flex-col">
             {/* Title Section */}
             <div className="text-center py-4">
-              <h1 className="text-4xl font-bold text-white mb-4">Tentang Kami</h1>
+              <h1 className="text-4xl font-bold text-white mb-4">{getText('tentang.title')}</h1>
               <div className="w-36 h-1 bg-indigo-600 mx-auto"></div>
             </div>
 
@@ -227,13 +229,14 @@ function Tentang() {
                         transitionDelay: "0.1s",
                       }}
                     >
-                      <span style={dropcapStyle}>B</span> erdiri sejak November
-                      2017, selama itu juga kami telah banyak menyelesaikan
-                      berbagai permasalahan terkait{" "}
+                      <span style={dropcapStyle}>
+                        {getText('tentang.description1').charAt(0)}
+                      </span>
+                      {getText('tentang.description1').slice(1).replace('akutansi, perpajakan, auditing', '')}
                       <span className="font-bold">
-                        akutansi, perpajakan, auditing
+                        {getText('tentang.accountingBold')}
                       </span>{" "}
-                      dan <span className="font-bold">konsultan manajemen</span>{" "}
+                      dan <span className="font-bold">{getText('tentang.consultantBold')}</span>{" "}
                       di berbagai core business Klien.
                     </h2>
                     <p
@@ -243,10 +246,7 @@ function Tentang() {
                         transitionDelay: "0.2s",
                       }}
                     >
-                      Lembaga kami diisi oleh para profesional dibidangnya yang
-                      mampu memberikan nilai tambah dmei terwujudnya efektifitas,
-                      efisiensi dan ekonomis bagi operasional bisnis klien yang
-                      lebih baik.
+                      {getText('tentang.description2')}
                     </p>
                     <p
                       className="text-white/90 leading-relaxed text-justify mb-6 text-base"
@@ -255,9 +255,7 @@ function Tentang() {
                         transitionDelay: "0.3s",
                       }}
                     >
-                      Kami adalah jawaban terhadap berbagai permasalahan bisnis
-                      anda dan kami adalah pihak yang tepat serta siap
-                      bekerjasama.
+                      {getText('tentang.description3')}
                     </p>
                   </div>
                   <div
@@ -271,7 +269,7 @@ function Tentang() {
                       onClick={handleSelengkapnya}
                       className="bg-white text-indigo-600 hover:bg-indigo-600 hover:text-white font-bold py-3 px-8 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl transform hover:-translate-y-1 text-base flex items-center cursor-pointer"
                     >
-                      Selengkapnya
+                      {getText('tentang.readMore')}
                       <svg
                         className="w-5 h-5 ml-2"
                         fill="none"

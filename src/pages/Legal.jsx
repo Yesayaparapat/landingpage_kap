@@ -1,7 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useLanguage } from "../context/LanguageContext";
 
 function Legal() {
+  const { getText } = useLanguage();
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-6 px-4 pt-25 md:pt-20 lg:pt-25 overflow-x-hidden">
       <div className="max-w-7xl mx-auto">
@@ -24,7 +27,7 @@ function Legal() {
             }}
             className="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2 md:mb-4"
           >
-            Informasi Legal
+            {getText('legal.title')}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -37,7 +40,7 @@ function Legal() {
             }}
             className="text-gray-600 text-sm md:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed"
           >
-            Informasi legal dan sertifikasi resmi Kantor Akuntan Publik Jamaster Simanullang
+            {getText('legal.description')}
           </motion.p>
         </motion.div>
 
@@ -67,7 +70,7 @@ function Legal() {
                 }}
                 className="mb-6 md:mb-8"
               >
-                <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-2 md:mb-3">Detail Perusahaan</h2>
+                <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-2 md:mb-3">{getText('legal.companyDetailsTitle')}</h2>
                 <motion.div
                   initial={{ scaleX: 0, originX: 0 }}
                   whileInView={{ scaleX: 1 }}
@@ -94,11 +97,11 @@ function Legal() {
               >
                 {[
                   {
-                    label: "Nama Badan",
-                    value: "Kantor Akuntan Publik Jamaster Simanullang",
+                    label: getText('legal.companyName'),
+                    value: getText('legal.companyNameValue'),
                   },
-                  { label: "Izin Menteri", value: "KEP 1147/KM.1/2017" },
-                  { label: "NPWP", value: "59.963.311.2-413.001 / 3275112601740003", mono: true },
+                  { label: getText('legal.ministerPermit'), value: getText('legal.ministerPermitValue') },
+                  { label: getText('legal.npwp'), value: getText('legal.npwpValue'), mono: true },
                   
                 ].map((item, index) => (
                   <motion.div
@@ -146,12 +149,12 @@ function Legal() {
                   className="flex flex-col space-y-1 md:space-y-2 p-2 md:p-3 rounded-lg transition-colors duration-200"
                 >
                   <span className="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide">
-                    Alamat
+                    {getText('legal.address')}
                   </span>
                   <div className="text-gray-800 font-medium leading-relaxed text-base md:text-lg">
-                    <div>JL. Raya Cibarusah KM. 10</div>
-                    <div>Ruko Cikarang Central City Blok E NO. 8</div>
-                    <div>Cikarang Selatan - Kab. BEKASI 17530</div>
+                    {getText('legal.addressValue').split('\n').map((line, i) => (
+                      <div key={i}>{line}</div>
+                    ))}
                   </div>
                 </motion.div>
 
@@ -171,15 +174,14 @@ function Legal() {
                   className="flex flex-col space-y-1 md:space-y-2 p-2 md:p-3 rounded-lg transition-colors duration-200"
                 >
                   <span className="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide">
-                    Kontak
+                    {getText('legal.contact')}
                   </span>
                   <div className="space-y-1">
-                    <div className="text-gray-800 font-medium font-mono text-base md:text-lg">
-                      021 - 8977 4253
-                    </div>
-                    <div className="text-gray-800 font-medium font-mono text-base md:text-lg">
-                      021 - 8977 4251
-                    </div>
+                    {getText('legal.contactValue').split('\n').map((line, i) => (
+                      <div key={i} className="text-gray-800 font-medium font-mono text-base md:text-lg">
+                        {line}
+                      </div>
+                    ))}
                   </div>
                 </motion.div>
               </motion.div>
@@ -211,7 +213,7 @@ function Legal() {
                 className="mb-6 md:mb-8"
               >
                 <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-2 md:mb-3">
-                  Our Difference
+                  {getText('legal.ourDifferenceTitle')}
                 </h2>
                 <motion.div
                   initial={{ scaleX: 0, originX: 0 }}
@@ -239,19 +241,16 @@ function Legal() {
               >
                 {[
                   {
-                    title: "KOLABORASI YANG LEBIH EFEKTIF",
-                    content:
-                      "Struktur budaya global dan regional memungkinkan kita untuk memberikan keterampilan lebih pada organisasi anda. Pendekatan serta kedisiplinan dalam memberikan pelayanan kepada klien.",
+                    title: getText('legal.effectiveCollaboration'),
+                    content: getText('legal.effectiveCollaborationDesc'),
                   },
                   {
-                    title: "MEMBERIKAN SOLUSI SECARA MENYELURUH",
-                    content:
-                      "Kami membantu anda dalam melihat implikasi pada setiap pengambilan keputusan. Sehingga memperoleh kepercayaan dari stakeholder dengan penuh keyakinan.",
+                    title: getText('legal.comprehensiveSolution'),
+                    content: getText('legal.comprehensiveSolutionDesc'),
                   },
                   {
-                    title: "MEMAHAMI KEBUTUHAN ANDA",
-                    content:
-                      "Kami memberikan input dalam memahami tentang peluang dan tantangan yang akan dihadapi dalam bisnis anda.",
+                    title: getText('legal.understandNeeds'),
+                    content: getText('legal.understandNeedsDesc'),
                   },
                 ].map((item, index) => (
                   <motion.div

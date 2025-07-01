@@ -8,6 +8,7 @@ import {
 import Beranda from "./pages/Beranda";
 import Profil from "./pages/Profil";
 import Navbar from "./components/Navbar";
+import Chatbot from "./components/Chatbot";
 import "./App.css";
 import Layanan from "./pages/Layanan";
 import Tentang from "./pages/Tentang";
@@ -19,6 +20,7 @@ import Klien from "./pages/Klien";
 import Hubungi from "./pages/Hubungi";
 import KlienBagian from "./pages/KlienBagian";
 import LayananKami from "./pages/LayananKami";
+import { LanguageProvider } from "./context/LanguageContext";
 
 // Komponen untuk halaman utama (single page)
 function HomePage() {
@@ -98,6 +100,9 @@ function HomePage() {
 
       {/* Footer di bagian paling bawah */}
       <Footer />
+
+      {/* Chatbot untuk halaman utama */}
+      <Chatbot />
     </>
   );
 }
@@ -105,8 +110,9 @@ function HomePage() {
 function App() {
   return (
     <div className="App">
-      <Router>
-        <Routes>
+      <LanguageProvider>
+        <Router>
+          <Routes>
           {/* Route untuk halaman utama */}
           <Route path="/" element={<HomePage />} />
 
@@ -118,6 +124,7 @@ function App() {
                 <Navbar />
                 <ProfilKami />
                 <Footer />
+                <Chatbot />
               </>
             }
           />
@@ -130,6 +137,7 @@ function App() {
                 <Navbar />
                 <Tentangkami />
                 <Footer />
+                <Chatbot />
               </>
             }
           />
@@ -142,6 +150,7 @@ function App() {
                 <Navbar />
                 <KlienBagian />
                 <Footer />
+                <Chatbot />
               </>
             }
           />
@@ -154,6 +163,7 @@ function App() {
                 <Navbar />
                 <LayananKami />
                 <Footer />
+                <Chatbot />
               </>
             }
           />
@@ -168,8 +178,9 @@ function App() {
               </div>
             }
           />
-        </Routes>
-      </Router>
+          </Routes>
+        </Router>
+      </LanguageProvider>
     </div>
   );
 }

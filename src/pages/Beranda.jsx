@@ -1,8 +1,11 @@
 import Navbar from "../components/Navbar";
 import GambarBG from "../assets/gambar bg.png";
 import { motion } from "framer-motion";
+import { useLanguage } from "../context/LanguageContext";
 
 function Beranda() {
+  const { getText } = useLanguage();
+  
   return (
     <div className="h-screen w-full overflow-hidden relative">
       {/* Background Image */}
@@ -33,7 +36,7 @@ function Beranda() {
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <span className=" text-white px-6 py-2  text-3xl font-medium tracking-wider uppercase">
-                Kantor Akuntan Publik
+                {getText('beranda.badge')}
               </span>
             </motion.div>
 
@@ -65,7 +68,7 @@ function Beranda() {
               transition={{ duration: 0.8, delay: 1.8 }}
             >
               <p className="text-xl md:text-2xl text-yellow-400 font-light tracking-wide">
-                Integrity • Independent • Competent
+                {getText('beranda.tagline')}
               </p>
             </motion.div>
           </div>

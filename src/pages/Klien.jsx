@@ -4,8 +4,10 @@ import {
   Handshake, ShoppingCart, Car, Factory, Wheat, Building2, HardHat, Fuel, Beef,
   Radio, Package, UserCheck, Truck, Recycle, Home, Landmark, ChevronDown, ChevronUp, ArrowLeft
 } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 function KlienIntegrated() {
+  const { getText } = useLanguage();
   const [isVisible, setIsVisible] = useState(false);
   const [visibleItems, setVisibleItems] = useState(new Set());
   const [headerVisible, setHeaderVisible] = useState(false);
@@ -301,7 +303,7 @@ function KlienIntegrated() {
               className="flex items-center space-x-3 text-blue-600 hover:text-blue-800 transition-all duration-300 mb-8 group bg-white px-4 py-3 rounded-xl shadow-sm hover:shadow-md border border-blue-100 hover:border-blue-200"
             >
               <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-300" />
-              <span className="font-medium">Kembali ke Daftar Sektor</span>
+              <span className="font-medium">{getText('klien.backToList')}</span>
             </button>
             
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
@@ -310,12 +312,12 @@ function KlienIntegrated() {
                   <IconComponent className="w-10 h-10 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-4xl font-bold text-gray-900 mb-2">{selectedSector}</h1>
+                  <h1 className="text-4xl font-bold text-gray-900 mb-2">{getText(`klien.sectors.${selectedSector}`) || selectedSector}</h1>
                   <div className="flex items-center space-x-4">
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                      {companies.length} perusahaan
+                      {companies.length} {getText('klien.companies')}
                     </span>
-                    <span className="text-gray-500">Klien terdaftar</span>
+                    <span className="text-gray-500">{getText('klien.registeredClients')}</span>
                   </div>
                 </div>
               </div>
@@ -349,8 +351,8 @@ function KlienIntegrated() {
                 <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Package className="w-8 h-8 text-gray-400" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Belum Ada Data</h3>
-                <p className="text-gray-500">Belum ada perusahaan terdaftar untuk sektor ini</p>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">{getText('klien.noData')}</h3>
+                <p className="text-gray-500">{getText('klien.noDataDesc')}</p>
               </div>
             </div>
           )}
@@ -372,7 +374,7 @@ function KlienIntegrated() {
             <h1 className={`text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-6 transition-all duration-1000 ease-out ${
               isMobile ? 'opacity-100 scale-100' : (isVisible && headerVisible) ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
             }`}>
-              KLIEN BISNIS KAMI
+              {getText('klien.title')}
             </h1>
             <div className="flex justify-center">
               <div className={`h-1 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full transition-all duration-1500 ease-out ${
@@ -420,17 +422,17 @@ function KlienIntegrated() {
                           {companyCount}
                         </div>
                         <div className="text-xs text-gray-500 group-hover:text-gray-600 transition-colors">
-                          perusahaan
+                          {getText('klien.companies')}
                         </div>
                       </div>
                     </div>
                     
                     <div className="flex-1 flex flex-col justify-end">
                       <h3 className="text-gray-900 font-semibold text-base group-hover:text-blue-900 transition-all duration-300 ease-out leading-tight mb-2">
-                        {client.name}
+                        {getText(`klien.sectors.${client.name}`) || client.name}
                       </h3>
                       <div className="flex items-center text-sm text-gray-500 group-hover:text-blue-600 transition-colors">
-                        <span>Lihat detail</span>
+                        <span>{getText('klien.seeDetail')}</span>
                         <ArrowLeft className="w-4 h-4 ml-2 rotate-180 group-hover:translate-x-1 transition-transform duration-300" />
                       </div>
                     </div>
@@ -449,7 +451,7 @@ function KlienIntegrated() {
                   isAnimating ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
               >
-                <span>{showAll ? 'Tampilkan Sedikit' : 'Lihat Semua Sektor'}</span>
+                <span>{showAll ? getText('klien.showLess') : getText('klien.seeAll')}</span>
                 {showAll ? (
                   <ChevronUp className={`w-5 h-5 transition-transform duration-300 ${isAnimating ? 'rotate-180' : ''}`} />
                 ) : (

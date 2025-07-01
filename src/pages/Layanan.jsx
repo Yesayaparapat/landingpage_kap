@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowRight, CheckCircle, Star, TrendingUp, Shield, Briefcase, Calculator, MousePointer2 } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 const assuranceImg = 'https://images.unsplash.com/photo-1556742044-3c52d6e88c62?w=400&h=250&fit=crop';
 const advisoryImg = 'https://images.unsplash.com/photo-1513258496099-48168024aec0?w=400&h=250&fit=crop';
@@ -7,13 +8,13 @@ const financeImg = 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=
 const advisorImg = 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=250&fit=crop';
 const taxationImg = 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=250&fit=crop';
 
-const layananUtama = [
+const layananUtama = (getText) => [
   {
     id: 'audit',
-    title: 'AUDIT',
+    title: getText('layanan.auditTitle'),
     hash: 'audit',
     img: assuranceImg,
-    desc: 'Layanan audit adalah pemeriksaan independen atas laporan keuangan atau informasi lainnya untuk memberikan opini mengenai kewajaran dan keakuratannya. Ini membantu memastikan transparansi dan keandalan informasi finansial.',
+    desc: getText('layanan.auditDesc'),
     color: 'from-blue-600 to-cyan-500',
     bgColor: 'bg-blue-50',
     borderColor: 'border-blue-200',
@@ -28,10 +29,10 @@ const layananUtama = [
   },
   {
     id: 'ppl',
-    title: 'PPL (Pendidikan & Pelatihan)',
+    title: getText('layanan.pplTitle'),
     hash: 'ppl',
     img: advisoryImg,
-    desc: 'Layanan pendidikan dan pelatihan dirancang untuk meningkatkan pengetahuan dan keterampilan individu atau tim dalam bidang tertentu.',
+    desc: getText('layanan.pplDesc'),
     color: 'from-emerald-600 to-teal-500',
     bgColor: 'bg-emerald-50',
     borderColor: 'border-emerald-200',
@@ -44,10 +45,10 @@ const layananUtama = [
   },
   {
     id: 'accounting',
-    title: 'ACCOUNTING ADVISOR',
+    title: getText('layanan.accountingTitle'),
     hash: 'accounting',
     img: advisorImg,
-    desc: 'Layanan penasihat akuntansi memberikan saran dan panduan ahli terkait masalah akuntansi dan pelaporan keuangan.',
+    desc: getText('layanan.accountingDesc'),
     color: 'from-orange-600 to-red-500',
     bgColor: 'bg-orange-50',
     borderColor: 'border-orange-200',
@@ -59,10 +60,10 @@ const layananUtama = [
   },
   {
     id: 'finance',
-    title: 'BUSINESS MANAGEMENT CONSULT',
+    title: getText('layanan.financeTitle'),
     hash: 'finance',
     img: financeImg,
-    desc: 'Layanan konsultasi manajemen bisnis membantu perusahaan meningkatkan kinerja, efisiensi, dan pertumbuhan melalui analisis, strategi, dan implementasi solusi.',
+    desc: getText('layanan.financeDesc'),
     color: 'from-purple-600 to-indigo-500',
     bgColor: 'bg-purple-50',
     borderColor: 'border-purple-200',
@@ -76,10 +77,10 @@ const layananUtama = [
   },
   {
     id: 'taxation',
-    title: 'TAXATION',
+    title: getText('layanan.taxationTitle'),
     hash: 'taxation',
     img: taxationImg,
-    desc: 'Layanan perpajakan mencakup semua aspek yang berkaitan dengan kepatuhan, perencanaan, dan penyelesaian masalah pajak.',
+    desc: getText('layanan.taxationDesc'),
     color: 'from-rose-600 to-pink-500',
     bgColor: 'bg-rose-50',
     borderColor: 'border-rose-200',
@@ -101,6 +102,7 @@ const easeInOutCubic = t => t < 0.5
   : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
 const Layanan = () => {
+  const { getText } = useLanguage();
   const [hoveredCard, setHoveredCard] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const [scrollY, setScrollY] = useState(0);
@@ -250,16 +252,12 @@ const Layanan = () => {
         <div className={`max-w-6xl mx-auto text-center mb-8 md:mb-12 mt-4 md:mt-8 lg:mt-16 transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-black mb-3 md:mb-4 px-2">
             <span className="bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent">
-              Layanan
-            </span>
-            <br />
-            <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-              Unggulan Kami
+              {getText('layanan.title')}
             </span>
           </h1>
           
           <p className="text-base md:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-light px-4">
-            Solusi profesional dan terpercaya untuk kebutuhan bisnis Anda dengan standar kualitas internasional
+            {getText('layanan.description')}
           </p>
           
           <div className="mt-4 md:mt-6 flex justify-center">
@@ -279,7 +277,7 @@ const Layanan = () => {
         <div className="max-w-6xl mx-auto px-2 md:px-4" ref={containerRef}>
           <div className="relative transition-all duration-1000 ease-out">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 md:gap-6" key={animationKey}>
-              {layananUtama.map((layanan, index) => {
+              {layananUtama(getText).map((layanan, index) => {
                 const IconComponent = layanan.icon;
                 const cardTransform = getCardTransform(index);
                 
@@ -350,7 +348,7 @@ const Layanan = () => {
                         {!isMobile && (
                           <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 ease-in-out"></div>
                         )}
-                        <span className="mr-2 relative z-10">Selengkapnya</span>
+                        <span className="mr-2 relative z-10">{getText('layanan.readMore')}</span>
                         <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300 relative z-10" />
                       </button>
                     </div>
@@ -363,28 +361,28 @@ const Layanan = () => {
 
         {/* Additional content */}
         <div className="mt-12 md:mt-20 max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6">Mengapa Memilih Kami?</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6">{getText('layanan.whyChooseUs')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6 shadow-md">
               <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-3">
                 <Shield className="w-6 h-6 text-white" />
               </div>
-              <h3 className="text-lg font-bold text-gray-800 mb-3">Profesional Bersertifikat</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">Tim ahli dengan sertifikasi internasional dan pengalaman bertahun-tahun</p>
+              <h3 className="text-lg font-bold text-gray-800 mb-3">{getText('layanan.professionalCertified')}</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">{getText('layanan.professionalCertifiedDesc')}</p>
             </div>
             <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6 shadow-md">
               <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-3">
                 <TrendingUp className="w-6 h-6 text-white" />
               </div>
-              <h3 className="text-lg font-bold text-gray-800 mb-3">Hasil Terukur</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">Komitmen memberikan hasil yang dapat diukur dan sesuai dengan target bisnis</p>
+              <h3 className="text-lg font-bold text-gray-800 mb-3">{getText('layanan.measurableResults')}</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">{getText('layanan.measurableResultsDesc')}</p>
             </div>
             <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6 shadow-md">
               <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-3">
                 <Star className="w-6 h-6 text-white" />
               </div>
-              <h3 className="text-lg font-bold text-gray-800 mb-3">Kepercayaan Klien</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">Dipercaya oleh ratusan perusahaan dari berbagai industri di Indonesia</p>
+              <h3 className="text-lg font-bold text-gray-800 mb-3">{getText('layanan.clientTrust')}</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">{getText('layanan.clientTrustDesc')}</p>
             </div>
           </div>
         </div>
