@@ -577,13 +577,13 @@ const Chatbot = () => {
                   </>
                 ) : (
                   quickReplies.map((reply, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleQuickReply(reply.key)}
-                      className="bg-white hover:bg-blue-50 text-blue-600 text-xs px-3 py-1 rounded-full border border-blue-200 hover:border-blue-300 transition-all duration-200 transform hover:scale-105"
-                    >
-                      {reply.text}
-                    </button>
+                  <button
+                    key={index}
+                    onClick={() => handleQuickReply(reply.key)}
+                    className="bg-white hover:bg-blue-50 text-blue-600 text-xs px-3 py-1 rounded-full border border-blue-200 hover:border-blue-300 transition-all duration-200 transform hover:scale-105"
+                  >
+                    {reply.text}
+                  </button>
                   ))
                 )}
               </div>

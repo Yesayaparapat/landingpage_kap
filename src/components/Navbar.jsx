@@ -185,7 +185,7 @@ const Navbar = ({ textColor = 'gray', bgColor = 'bg-white md:bg-transparent', sc
       </button>
       
       {/* Dropdown menu */}
-      <div className={`absolute ${isMobile ? 'left-0' : 'right-0'} mt-2 w-32 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300 transform ${
+      <div className={`${isMobile ? 'absolute left-0 mt-2 z-50' : 'absolute right-0'} w-32 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300 transform ${
         isLanguageOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'
       }`}>
         <button
@@ -416,7 +416,6 @@ const Navbar = ({ textColor = 'gray', bgColor = 'bg-white md:bg-transparent', sc
 
             {/* Mobile menu button and language switcher */}
             <div className="flex items-center space-x-3">
-              <LanguageSwitcher isMobile={true} />
               <button
                 onClick={toggleMenu}
                 className="p-2 rounded-md text-gray-800 hover:text-blue-400 hover:bg-gray-100 transition-all duration-300"
@@ -432,7 +431,7 @@ const Navbar = ({ textColor = 'gray', bgColor = 'bg-white md:bg-transparent', sc
         </div>
 
         {/* Mobile Menu */}
-        <div className={`transition-all duration-300 ease-in-out ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'} overflow-hidden bg-white border-t`}>
+        <div className={`transition-all duration-300 ease-in-out ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'} overflow-visible bg-white border-t`}>
           <div className="px-4 py-3 space-y-2">
             {menuItems.map((item, index) => (
               <div key={index}>
@@ -467,6 +466,9 @@ const Navbar = ({ textColor = 'gray', bgColor = 'bg-white md:bg-transparent', sc
                 )}
               </div>
             ))}
+            <div className="mt-4 flex justify-start relative">
+              <LanguageSwitcher isMobile={true} />
+            </div>
           </div>
         </div>
       </nav>
