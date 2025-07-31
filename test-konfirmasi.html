@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Konfirmasi Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button.positive {
+            background: #28a745;
+        }
+        .test-button.negative {
+            background: #dc3545;
+        }
+        .result {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        h2 {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <h1>✅ Test Balasan Konfirmasi Chatbot</h1>
+    
+    <div class="test-section">
+        <h2>👍 Konfirmasi Positif</h2>
+        <p>Test balasan untuk konfirmasi positif:</p>
+        
+        <button class="test-button positive" onclick="testResponse('iya')">Test: iya</button>
+        <button class="test-button positive" onclick="testResponse('ya')">Test: ya</button>
+        <button class="test-button positive" onclick="testResponse('yes')">Test: yes</button>
+        <button class="test-button positive" onclick="testResponse('yup')">Test: yup</button>
+        <button class="test-button positive" onclick="testResponse('yep')">Test: yep</button>
+        <button class="test-button positive" onclick="testResponse('betul')">Test: betul</button>
+        <button class="test-button positive" onclick="testResponse('benar')">Test: benar</button>
+        <button class="test-button positive" onclick="testResponse('setuju')">Test: setuju</button>
+        <button class="test-button positive" onclick="testResponse('sip')">Test: sip</button>
+        <button class="test-button positive" onclick="testResponse('oke deh')">Test: oke deh</button>
+        <button class="test-button positive" onclick="testResponse('baik deh')">Test: baik deh</button>
+        <button class="test-button positive" onclick="testResponse('lanjut')">Test: lanjut</button>
+        <button class="test-button positive" onclick="testResponse('lanjutkan')">Test: lanjutkan</button>
+        <button class="test-button positive" onclick="testResponse('terus')">Test: terus</button>
+        <button class="test-button positive" onclick="testResponse('teruskan')">Test: teruskan</button>
+        <button class="test-button positive" onclick="testResponse('mau')">Test: mau</button>
+        <button class="test-button positive" onclick="testResponse('ingin')">Test: ingin</button>
+        <button class="test-button positive" onclick="testResponse('saya tertarik')">Test: saya tertarik</button>
+        <button class="test-button positive" onclick="testResponse('tertarik')">Test: tertarik</button>
+        <button class="test-button positive" onclick="testResponse('saya mau')">Test: saya mau</button>
+        <button class="test-button positive" onclick="testResponse('saya ingin')">Test: saya ingin</button>
+        <button class="test-button positive" onclick="testResponse('saya butuh')">Test: saya butuh</button>
+        <button class="test-button positive" onclick="testResponse('saya perlu')">Test: saya perlu</button>
+        
+        <div id="positiveResult" class="result" style="display: none;">
+            <h3>🤖 Respons Chatbot:</h3>
+            <div id="positiveResponse"></div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>👎 Konfirmasi Negatif</h2>
+        <p>Test balasan untuk konfirmasi negatif:</p>
+        
+        <button class="test-button negative" onclick="testResponse('tidak')">Test: tidak</button>
+        <button class="test-button negative" onclick="testResponse('no')">Test: no</button>
+        <button class="test-button negative" onclick="testResponse('nggak')">Test: nggak</button>
+        <button class="test-button negative" onclick="testResponse('engga')">Test: engga</button>
+        <button class="test-button negative" onclick="testResponse('belum')">Test: belum</button>
+        <button class="test-button negative" onclick="testResponse('gak')">Test: gak</button>
+        <button class="test-button negative" onclick="testResponse('ga')">Test: ga</button>
+        <button class="test-button negative" onclick="testResponse('nope')">Test: nope</button>
+        <button class="test-button negative" onclick="testResponse('nop')">Test: nop</button>
+        <button class="test-button negative" onclick="testResponse('salah')">Test: salah</button>
+        <button class="test-button negative" onclick="testResponse('salah deh')">Test: salah deh</button>
+        <button class="test-button negative" onclick="testResponse('nggak deh')">Test: nggak deh</button>
+        <button class="test-button negative" onclick="testResponse('engga deh')">Test: engga deh</button>
+        <button class="test-button negative" onclick="testResponse('belum deh')">Test: belum deh</button>
+        <button class="test-button negative" onclick="testResponse('gak deh')">Test: gak deh</button>
+        <button class="test-button negative" onclick="testResponse('ga deh')">Test: ga deh</button>
+        
+        <div id="negativeResult" class="result" style="display: none;">
+            <h3>🤖 Respons Chatbot:</h3>
+            <div id="negativeResponse"></div>
+        </div>
+    </div>
+
+    <script>
+        // Data respons chatbot untuk konfirmasi
+        const chatbotResponses = {
+            // Konfirmasi Positif
+            'iya': 'Baik! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'ya': 'Baik! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'yes': 'Baik! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'yup': 'Baik! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'yep': 'Baik! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'betul': 'Betul! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'benar': 'Benar! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'setuju': 'Setuju! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'sip': 'Sip! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'oke deh': 'Oke deh! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'baik deh': 'Baik deh! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'lanjut': 'Lanjut! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'lanjutkan': 'Lanjutkan! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'terus': 'Terus! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'teruskan': 'Teruskan! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'mau': 'Mau! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'ingin': 'Ingin! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'saya tertarik': 'Bagus! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'tertarik': 'Bagus! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'saya mau': 'Bagus! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'saya ingin': 'Bagus! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'saya butuh': 'Bagus! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'saya perlu': 'Bagus! 😊 Ada yang bisa saya bantu lagi? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            
+            // Konfirmasi Negatif
+            'tidak': 'Tidak masalah! 😊 Ada yang lain yang bisa saya bantu? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'no': 'Tidak masalah! 😊 Ada yang lain yang bisa saya bantu? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'nggak': 'Tidak masalah! 😊 Ada yang lain yang bisa saya bantu? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'engga': 'Tidak masalah! 😊 Ada yang lain yang bisa saya bantu? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'belum': 'Tidak masalah! 😊 Ada yang lain yang bisa saya bantu? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'gak': 'Tidak masalah! 😊 Ada yang lain yang bisa saya bantu? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'ga': 'Tidak masalah! 😊 Ada yang lain yang bisa saya bantu? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'nope': 'Tidak masalah! 😊 Ada yang lain yang bisa saya bantu? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'nop': 'Tidak masalah! 😊 Ada yang lain yang bisa saya bantu? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'salah': 'Tidak masalah! 😊 Ada yang lain yang bisa saya bantu? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'salah deh': 'Tidak masalah! 😊 Ada yang lain yang bisa saya bantu? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'nggak deh': 'Tidak masalah! 😊 Ada yang lain yang bisa saya bantu? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'engga deh': 'Tidak masalah! 😊 Ada yang lain yang bisa saya bantu? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'belum deh': 'Tidak masalah! 😊 Ada yang lain yang bisa saya bantu? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'gak deh': 'Tidak masalah! 😊 Ada yang lain yang bisa saya bantu? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+            'ga deh': 'Tidak masalah! 😊 Ada yang lain yang bisa saya bantu? Silakan tanyakan apapun tentang layanan KAP Jamaster Simanullang.',
+        };
+
+        function testResponse(message) {
+            const response = chatbotResponses[message.toLowerCase()] || 
+                           `Maaf, saya belum memahami ucapan "${message}". Silakan coba dengan ucapan lain.`;
+            
+            // Tentukan apakah ini konfirmasi positif atau negatif
+            const isPositive = message.toLowerCase().includes('iya') || 
+                              message.toLowerCase().includes('ya') || 
+                              message.toLowerCase().includes('yes') ||
+                              message.toLowerCase().includes('betul') ||
+                              message.toLowerCase().includes('benar') ||
+                              message.toLowerCase().includes('setuju') ||
+                              message.toLowerCase().includes('sip') ||
+                              message.toLowerCase().includes('oke') ||
+                              message.toLowerCase().includes('baik') ||
+                              message.toLowerCase().includes('lanjut') ||
+                              message.toLowerCase().includes('terus') ||
+                              message.toLowerCase().includes('mau') ||
+                              message.toLowerCase().includes('ingin') ||
+                              message.toLowerCase().includes('tertarik') ||
+                              message.toLowerCase().includes('butuh') ||
+                              message.toLowerCase().includes('perlu');
+            
+            if (isPositive) {
+                document.getElementById('positiveResponse').innerHTML = `
+                    <p><strong>Input:</strong> "${message}"</p>
+                    <p><strong>Output:</strong> ${response}</p>
+                `;
+                document.getElementById('positiveResult').style.display = 'block';
+                document.getElementById('negativeResult').style.display = 'none';
+            } else {
+                document.getElementById('negativeResponse').innerHTML = `
+                    <p><strong>Input:</strong> "${message}"</p>
+                    <p><strong>Output:</strong> ${response}</p>
+                `;
+                document.getElementById('negativeResult').style.display = 'block';
+                document.getElementById('positiveResult').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html> 
